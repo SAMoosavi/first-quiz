@@ -18,7 +18,7 @@ class CreatUserQuizTable extends Migration
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreignId('quiz_id');
             $table->foreign('quiz_id')->references('id')->on('quizzes')->onDelete('cascade');
-            $table->primary(['user_id','quiz_id']);
+            $table->primary(['user_id', 'quiz_id']);
         });
     }
 

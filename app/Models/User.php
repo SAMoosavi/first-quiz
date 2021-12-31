@@ -9,6 +9,8 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use App\Models\Quiz;
+use App\Models\Answer;
 
 class User extends Authenticatable
 {
@@ -58,4 +60,18 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function quizzesMaker()
+    {
+        return $this->hasMany(Quiz::class);
+    }
+
+    public function quizzesParticipant()
+    {
+        return $this->belongsToMany(Quiz::class);
+    }
+
+    public function answers(){
+        return $this->belongsToMany(Answer::class);
+    }
 }
