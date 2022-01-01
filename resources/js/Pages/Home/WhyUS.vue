@@ -1,7 +1,7 @@
 <template>
     <div class="bg-sky-200 dark:bg-gray-700">
         <div class="block md:flex md:justify-center">
-            <h2 class="py-4 mb-4 text-3xl text-center text-gray-200 border-b-2 border-gray-200 dark:text-sky-600 dark:border-sky-600">
+            <h2 class="py-4 mb-4 text-3xl text-center text-gray-600 border-b-2 border-gray-600 dark:text-sky-600 dark:border-sky-600">
                 چرا باید از این سامانه استفاده کرد؟
             </h2>
         </div>
