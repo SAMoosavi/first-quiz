@@ -1,5 +1,5 @@
 <template>
-    <div @click="shiftMode" :class="classItem">
+    <div @click="shiftMode">
         <p class="hidden text-yellow-400 dark:block dark:hover:text-yellow-100">
             <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -32,9 +32,6 @@
 <script>
 import { defineComponent } from "vue";
 export default defineComponent({
-    props: {
-        classItem: String,
-    },
     methods: {
         shiftMode() {
             if (localStorage.getItem("them") == "dark") {
