@@ -1,26 +1,22 @@
 <template>
     <Head title="home" />
 
-    <div
-        class="min-h-screen bg-gray-100 dark:bg-gray-900 "
-    >
-        <div
-            class="flex w-full px-6 py-4 bg-sky-700 dark:bg-sky-400"
-        >
+    <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
+        <div class="flex w-full px-6 py-4 bg-sky-700 dark:bg-sky-400">
             <navbar-link v-if="$page.props.user" :href="route('dashboard')">
                 داشبورد
             </navbar-link>
 
             <template v-else>
                 <navbar-link :href="route('login')"> ورود </navbar-link>
-
                 <navbar-link :href="route('register')"> عضویت </navbar-link>
             </template>
             <on-off-dark-mode class="inline-block ml-4 mr-auto" />
             <Logo />
         </div>
+        
         <why-u-s />
-        Hi
+        <possibilities />
     </div>
 </template>
 
@@ -31,6 +27,7 @@ import OnOffDarkMode from "@/component/OnOffDarkMode.vue";
 import NavbarLink from "@/component/NavbarLink.vue";
 import Logo from "@/component/Logo.vue";
 import WhyUS from "./Home/WhyUS.vue";
+import Possibilities from "./Home/Possibilities.vue";
 
 export default defineComponent({
     components: {
@@ -39,6 +36,7 @@ export default defineComponent({
         NavbarLink,
         Logo,
         WhyUS,
+        Possibilities,
     },
 });
 </script>
