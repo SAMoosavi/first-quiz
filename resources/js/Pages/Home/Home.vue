@@ -14,7 +14,7 @@
             <on-off-dark-mode class="inline-block ml-4 mr-auto" />
             <Logo />
         </div>
-        
+
         <why-u-s />
         <possibilities />
     </div>
@@ -26,8 +26,8 @@ import { Head } from "@inertiajs/inertia-vue3";
 import OnOffDarkMode from "@/component/OnOffDarkMode.vue";
 import NavbarLink from "@/component/NavbarLink.vue";
 import Logo from "@/component/Logo.vue";
-import WhyUS from "./Home/WhyUS.vue";
-import Possibilities from "./Home/Possibilities.vue";
+import WhyUS from "./WhyUS.vue";
+import Possibilities from "./Possibilities.vue";
 
 export default defineComponent({
     components: {
