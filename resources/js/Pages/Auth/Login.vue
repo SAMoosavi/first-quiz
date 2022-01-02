@@ -52,7 +52,6 @@
 
             <div class="flex items-center justify-end mt-4">
                 <Link
-                    v-if="canResetPassword"
                     :href="route('register')"
                     class="text-sm font-medium text-gray-400 underline dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
                 >
@@ -68,31 +67,29 @@
                 </Button>
             </div>
             <Link
-                    :href="route('password.request')"
-                    class="text-sm font-medium text-gray-400 underline dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
-                >
-                    فراموشی رمز عبور!
-                </Link>
+                :href="route('password.request')"
+                class="text-sm font-medium text-gray-400 underline dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+            >
+                فراموشی رمز عبور!
+            </Link>
         </form>
     </authentication-card>
 </template>
 
 <script>
-import { defineComponent } from "vue";
+import { defineComponent, ref } from "vue";
 import AuthenticationCard from "@/component/AuthenticationCard.vue";
-import JetAuthenticationCardLogo from "@/Jetstream/AuthenticationCardLogo.vue";
 import Button from "@/component/Button.vue";
 import Input from "@/component/Input.vue";
 import Checkbox from "@/component/Checkbox.vue";
 import Label from "@/component/Label.vue";
 import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
-import { Head, Link } from "@inertiajs/inertia-vue3";
+import { Head, Link, useForm } from "@inertiajs/inertia-vue3";
 
 export default defineComponent({
     components: {
         Head,
         AuthenticationCard,
-        JetAuthenticationCardLogo,
         Button,
         Input,
         Checkbox,
@@ -102,36 +99,36 @@ export default defineComponent({
     },
 
     props: {
-        canResetPassword: Boolean,
         status: String,
     },
 
-    data() {
-        return {
-            form: this.$inertia.form({
-                email: "",
-                password: "",
-                remember: false,
-            }),
-            loding: false,
-        };
-    },
+    setup() {
+        const form = useForm({
+            email: "",
+            password: "",
+            remember: false,
+        });
 
-    methods: {
-        submit() {
-            this.loding = true;
-            this.form
-                .transform((data) => ({
-                    ...data,
-                    remember: this.form.remember ? "on" : "",
-                }))
-                .post(this.route("login"), {
-                    onFinish: () => {
-                        this.form.reset("password");
-                        this.loding = false;
-                    },
-                });
-        },
+        const loding = ref(false);
+
+        function submit() {
+            loding.value = true;
+            form.transform((data) => ({
+                ...data,
+                remember: form.remember ? "on" : "",
+            })).post(this.route("login"), {
+                onFinish: () => {
+                    form.reset("password");
+                    loding.value = false;
+                },
+            });
+        }
+
+        return {
+            form,
+            submit,
+            loding,
+        };
     },
 });
 </script>
