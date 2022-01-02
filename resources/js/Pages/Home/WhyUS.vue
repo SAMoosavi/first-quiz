@@ -2,24 +2,24 @@
     <div class="bg-sky-200 dark:bg-gray-700">
         <div class="block md:flex md:justify-center">
             <h2
-                class="py-4 mb-4 text-3xl text-center text-gray-600 border-b-2 border-gray-600  dark:text-sky-600 dark:border-sky-600"
+                class="py-4 mb-4 text-3xl text-center text-gray-600 border-b-2 border-gray-600 dark:text-sky-600 dark:border-sky-600"
             >
                 چرا باید از این سامانه استفاده کرد؟
             </h2>
         </div>
         <div
-            class="grid grid-cols-1 gap-2 pb-0 mb-0  lg:grid-cols-3 md:grid-cols-2"
+            class="grid grid-cols-1 gap-2 pb-0 mb-0 lg:grid-cols-3 md:grid-cols-2"
         >
             <div class="aspect-w-16 lg:aspect-h-9 aspect-h-8">
                 <img
-                    src="../../../../public/image/lorem.jpg"
+                    :src="'../image/lorem.png'"
                     alt="lorem"
                     class="w-full h-full"
                 />
             </div>
             <div class="lg:col-span-2">
                 <p
-                    class="mx-4 text-justify text-gray-700  lg:text-lg dark:text-gray-300"
+                    class="mx-4 text-justify text-gray-700 lg:text-lg dark:text-gray-300"
                 >
                     لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و
                     با استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه
@@ -76,9 +76,3 @@
         </div>
     </div>
 </template>
-
-<script>
-export default {};
-</script>
-
-<style></style>

@@ -12,7 +12,7 @@
         >
             <div class="block md:hidden aspect-w-16 lg:aspect-h-9 aspect-h-8">
                 <img
-                    src="../../../../public/image/lorem.jpg"
+                    :src="'../image/lorem.png'"
                     alt="lorem"
                     class="w-full h-full"
                 />
@@ -37,7 +37,7 @@
             </div>
             <div class="hidden md:block aspect-w-16 lg:aspect-h-9 aspect-h-8">
                 <img
-                    src="../../../../public/image/lorem.jpg"
+                   :src="'../image/lorem.png'"
                     alt="lorem"
                     class="w-full h-full"
                 />
@@ -46,8 +46,3 @@
     </div>
 </template>
 
-<script>
-export default {};
-</script>
-
-<style></style>
