@@ -83,7 +83,7 @@ import Checkbox from "@/component/Checkbox.vue";
 import Label from "@/component/Label.vue";
 import AuthLink from "@/component/AuthLink.vue";
 import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
-import { Head, Link, useForm } from "@inertiajs/inertia-vue3";
+import { Head, useForm } from "@inertiajs/inertia-vue3";
 
 export default defineComponent({
     components: {
@@ -94,7 +94,6 @@ export default defineComponent({
         Checkbox,
         Label,
         JetValidationErrors,
-        Link,
         AuthLink,
     },
 
