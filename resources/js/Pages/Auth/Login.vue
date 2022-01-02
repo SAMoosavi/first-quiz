@@ -51,12 +51,11 @@
             </div>
 
             <div class="flex items-center justify-end mt-4">
-                <Link
+                <auth-link
                     :href="route('register')"
-                    class="text-sm font-medium text-gray-400 underline dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
                 >
                     ساخت حساب جدید
-                </Link>
+                </auth-link>
 
                 <Button
                     class="mr-4"
@@ -66,12 +65,11 @@
                     ورود
                 </Button>
             </div>
-            <Link
+            <auth-link
                 :href="route('password.request')"
-                class="text-sm font-medium text-gray-400 underline dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
             >
                 فراموشی رمز عبور!
-            </Link>
+            </auth-link>
         </form>
     </authentication-card>
 </template>
@@ -83,6 +81,7 @@ import Button from "@/component/Button.vue";
 import Input from "@/component/Input.vue";
 import Checkbox from "@/component/Checkbox.vue";
 import Label from "@/component/Label.vue";
+import AuthLink from "@/component/AuthLink.vue";
 import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
 import { Head, Link, useForm } from "@inertiajs/inertia-vue3";
 
@@ -96,6 +95,7 @@ export default defineComponent({
         Label,
         JetValidationErrors,
         Link,
+        AuthLink,
     },
 
     props: {
