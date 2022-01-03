@@ -1,67 +1,97 @@
 <template>
-    <Head title="Secure Area" />
+    <Head title="منطقه امن" />
 
-    <jet-authentication-card>
-        <template #logo>
-            <jet-authentication-card-logo />
+    <authentication-card>
+        <template #img>
+            <img
+                :src="'../image/confirm-password.png'"
+                class="w-full max-h-screen"
+                alt="تصویر صفحه منطقه امن"
+            />
         </template>
 
-        <div class="mb-4 text-sm text-gray-600">
-            This is a secure area of the application. Please confirm your password before continuing.
+        <div
+            class="
+                my-4
+                text-sm
+                font-medium
+                text-justify text-gray-700
+                dark:text-gray-200
+            "
+        >
+            این یک منطقه امن برنامه است. لطفاً قبل از ادامه رمز عبور خود را
+            تأیید کنید.
         </div>
 
         <jet-validation-errors class="mb-4" />
 
         <form @submit.prevent="submit">
             <div>
-                <jet-label for="password" value="Password" />
-                <jet-input id="password" type="password" class="mt-1 block w-full" v-model="form.password" required autocomplete="current-password" autofocus />
+                <Label for="password" value="رمز عبور" />
+                <Input
+                    id="password"
+                    type="password"
+                    class="block w-full mt-1"
+                    v-model="form.password"
+                    required
+                    autocomplete="current-password"
+                    autofocus
+                />
             </div>
 
             <div class="flex justify-end mt-4">
-                <jet-button class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
-                    Confirm
-                </jet-button>
+                <Button
+                    class="mr-4"
+                    :loding="loding"
+                    :disabled="form.processing"
+                >
+                    تایید
+                </Button>
             </div>
         </form>
-    </jet-authentication-card>
+    </authentication-card>
 </template>
 
 <script>
-    import { defineComponent } from 'vue';
-    import { Head } from '@inertiajs/inertia-vue3';
-    import JetAuthenticationCard from '@/Jetstream/AuthenticationCard.vue'
-    import JetAuthenticationCardLogo from '@/Jetstream/AuthenticationCardLogo.vue'
-    import JetButton from '@/Jetstream/Button.vue'
-    import JetInput from '@/Jetstream/Input.vue'
-    import JetLabel from '@/Jetstream/Label.vue'
-    import JetValidationErrors from '@/Jetstream/ValidationErrors.vue'
+import { ref } from "vue";
+import { Head, useForm } from "@inertiajs/inertia-vue3";
+import AuthenticationCard from "@/component/AuthenticationCard.vue";
+import Button from "@/component/Button.vue";
+import Input from "@/component/Input.vue";
+import Label from "@/component/Label.vue";
+import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
 
-    export default defineComponent({
-        components: {
-            Head,
-            JetAuthenticationCard,
-            JetAuthenticationCardLogo,
-            JetButton,
-            JetInput,
-            JetLabel,
-            JetValidationErrors
-        },
+export default {
+    components: {
+        Head,
+        AuthenticationCard,
+        Button,
+        Input,
+        Label,
+        JetValidationErrors,
+    },
 
-        data() {
-            return {
-                form: this.$inertia.form({
-                    password: '',
-                })
-            }
-        },
+    setup() {
+        const form = useForm({
+            password: "",
+        });
+        const loding = ref(false);
 
-        methods: {
-            submit() {
-                this.form.post(this.route('password.confirm'), {
-                    onFinish: () => this.form.reset(),
-                })
-            }
+        function submit() {
+            loding.value = true;
+            form.post(this.route("password.confirm"), {
+                onFinish: () => {
+                    form.reset();
+                    loding.value = false;
+                },
+            });
         }
-    })
+
+        return {
+            form,
+            submit,
+            loding,
+        };
+    },
+};
 </script>
