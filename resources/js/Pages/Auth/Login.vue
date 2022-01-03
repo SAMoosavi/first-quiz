@@ -9,7 +9,6 @@
                 alt="تصویر صفحه ورود"
             />
         </template>
-        <jet-validation-errors class="mb-4" />
 
         <div v-if="status" class="mb-4 text-sm font-medium text-green-600">
             {{ status }}
@@ -51,9 +50,7 @@
             </div>
 
             <div class="flex items-center justify-end mt-4">
-                <auth-link
-                    :href="route('register')"
-                >
+                <auth-link :href="route('register')">
                     ساخت حساب جدید
                 </auth-link>
 
@@ -65,9 +62,7 @@
                     ورود
                 </Button>
             </div>
-            <auth-link
-                :href="route('password.request')"
-            >
+            <auth-link :href="route('password.request')">
                 فراموشی رمز عبور!
             </auth-link>
         </form>
@@ -82,8 +77,8 @@ import Input from "@/component/Input.vue";
 import Checkbox from "@/component/Checkbox.vue";
 import Label from "@/component/Label.vue";
 import AuthLink from "@/component/AuthLink.vue";
-import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
 import { Head, useForm } from "@inertiajs/inertia-vue3";
+import { useToast } from "vue-toastification";
 
 export default defineComponent({
     components: {
@@ -93,7 +88,6 @@ export default defineComponent({
         Input,
         Checkbox,
         Label,
-        JetValidationErrors,
         AuthLink,
     },
 
@@ -116,6 +110,24 @@ export default defineComponent({
                 ...data,
                 remember: form.remember ? "on" : "",
             })).post(this.route("login"), {
+                onError: (errors) => {
+                    for (const property in errors) {
+                        useToast().error(errors[property], {
+                            position: "bottom-right",
+                            timeout: 5000,
+                            closeOnClick: true,
+                            pauseOnFocusLoss: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            draggablePercent: 0.6,
+                            showCloseButtonOnHover: false,
+                            hideProgressBar: false,
+                            closeButton: "button",
+                            icon: true,
+                            rtl: false,
+                        });
+                    }
+                },
                 onFinish: () => {
                     form.reset("password");
                     loding.value = false;

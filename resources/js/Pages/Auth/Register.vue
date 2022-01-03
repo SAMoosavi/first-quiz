@@ -14,7 +14,6 @@
                 alt="تصویر صفحه ثبت نام"
             />
         </template>
-        <jet-validation-errors class="mb-4" />
 
         <form @submit.prevent="submit">
             <div>
@@ -95,25 +94,22 @@
 <script>
 import { defineComponent, ref } from "vue";
 import AuthenticationCard from "@/component/AuthenticationCard.vue";
-import JetAuthenticationCardLogo from "@/Jetstream/AuthenticationCardLogo.vue";
 import Button from "@/component/Button.vue";
 import Input from "@/component/Input.vue";
 import Checkbox from "@/component/Checkbox.vue";
 import Label from "@/component/Label.vue";
 import AuthLink from "@/component/AuthLink.vue";
-import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
 import { Head, useForm } from "@inertiajs/inertia-vue3";
+import { useToast } from "vue-toastification";
 
 export default defineComponent({
     components: {
         Head,
         AuthenticationCard,
-        JetAuthenticationCardLogo,
         Button,
         Input,
         Checkbox,
         Label,
-        JetValidationErrors,
         AuthLink,
     },
 
@@ -129,7 +125,24 @@ export default defineComponent({
 
         function submit() {
             loding.value = true;
-            form.post(this.route("register"), {
+            form.post(this.route("register"), { onError: (errors) => {
+                    for (const property in errors) {
+                        useToast().error(errors[property], {
+                            position: "bottom-right",
+                            timeout: 5000,
+                            closeOnClick: true,
+                            pauseOnFocusLoss: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            draggablePercent: 0.6,
+                            showCloseButtonOnHover: false,
+                            hideProgressBar: false,
+                            closeButton: "button",
+                            icon: true,
+                            rtl: false,
+                        });
+                    }
+                },
                 onFinish: () => {
                     loding.value = false;
                     form.reset("password", "password_confirmation");

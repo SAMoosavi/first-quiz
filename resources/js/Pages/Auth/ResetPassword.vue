@@ -10,8 +10,6 @@
             />
         </template>
 
-        <jet-validation-errors class="mb-4" />
-
         <form @submit.prevent="submit">
             <div>
                 <Label for="email" value="ایمیل" />
@@ -69,7 +67,7 @@ import AuthenticationCard from "@/component/AuthenticationCard.vue";
 import Button from "@/component/Button.vue";
 import Input from "@/component/Input.vue";
 import Label from "@/component/Label.vue";
-import JetValidationErrors from "@/Jetstream/ValidationErrors.vue";
+import { useToast } from "vue-toastification";
 
 export default {
     components: {
@@ -78,7 +76,6 @@ export default {
         Button,
         Input,
         Label,
-        JetValidationErrors,
     },
 
     props: {
@@ -96,7 +93,24 @@ export default {
 
         function submit() {
             loding.value = true;
-            form.post(this.route("password.update"), {
+            form.post(this.route("password.update"), { onError: (errors) => {
+                    for (const property in errors) {
+                        useToast().error(errors[property], {
+                            position: "bottom-right",
+                            timeout: 5000,
+                            closeOnClick: true,
+                            pauseOnFocusLoss: true,
+                            pauseOnHover: true,
+                            draggable: true,
+                            draggablePercent: 0.6,
+                            showCloseButtonOnHover: false,
+                            hideProgressBar: false,
+                            closeButton: "button",
+                            icon: true,
+                            rtl: false,
+                        });
+                    }
+                },
                 onFinish: () => {
                     form.reset("password", "password_confirmation"),
                         (loding.value = false);

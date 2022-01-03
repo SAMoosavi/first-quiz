@@ -37,9 +37,9 @@
 
 <script>
     import { defineComponent } from 'vue'
-    import JetButton from './Button.vue'
+    import JetButton from '../component/Button.vue'
     import JetDialogModal from './DialogModal.vue'
-    import JetInput from './Input.vue'
+    import JetInput from '../component/Input.vue'
     import JetInputError from './InputError.vue'
     import JetSecondaryButton from './SecondaryButton.vue'
 
