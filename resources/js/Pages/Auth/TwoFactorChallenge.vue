@@ -1,7 +1,8 @@
+<!--
 <template>
     <Head title="Two-factor Confirmation" />
 
-    <jet-authentication-card>
+    <authentication-card>
         <template #logo>
             <jet-authentication-card-logo />
         </template>
@@ -20,17 +21,17 @@
 
         <form @submit.prevent="submit">
             <div v-if="! recovery">
-                <jet-label for="code" value="Code" />
-                <jet-input ref="code" id="code" type="text" inputmode="numeric" class="mt-1 block w-full" v-model="form.code" autofocus autocomplete="one-time-code" />
+                <Label for="code" value="Code" />
+                <Input ref="code" id="code" type="text" Inputmode="numeric" class="block w-full mt-1" v-model="form.code" autofocus autocomplete="one-time-code" />
             </div>
 
             <div v-else>
-                <jet-label for="recovery_code" value="Recovery Code" />
-                <jet-input ref="recovery_code" id="recovery_code" type="text" class="mt-1 block w-full" v-model="form.recovery_code" autocomplete="one-time-code" />
+                <Label for="recovery_code" value="Recovery Code" />
+                <Input ref="recovery_code" id="recovery_code" type="text" class="block w-full mt-1" v-model="form.recovery_code" autocomplete="one-time-code" />
             </div>
 
             <div class="flex items-center justify-end mt-4">
-                <button type="button" class="text-sm text-gray-600 hover:text-gray-900 underline cursor-pointer" @click.prevent="toggleRecovery">
+                <button type="button" class="text-sm text-gray-600 underline cursor-pointer hover:text-gray-900" @click.prevent="toggleRecovery">
                     <template v-if="! recovery">
                         Use a recovery code
                     </template>
@@ -40,32 +41,32 @@
                     </template>
                 </button>
 
-                <jet-button class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                <Button class="ml-4" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                     Log in
-                </jet-button>
+                </Button>
             </div>
         </form>
-    </jet-authentication-card>
+    </authentication-card>
 </template>
 
 <script>
     import { defineComponent } from 'vue';
     import { Head } from '@inertiajs/inertia-vue3';
-    import JetAuthenticationCard from '@/Jetstream/AuthenticationCard.vue'
+    import AuthenticationCard from '@/component/AuthenticationCard.vue'
     import JetAuthenticationCardLogo from '@/Jetstream/AuthenticationCardLogo.vue'
-    import JetButton from '@/Jetstream/Button.vue'
-    import JetInput from '@/Jetstream/Input.vue'
-    import JetLabel from '@/Jetstream/Label.vue'
+import Button from "@/component/Button.vue";
+    import Input from '@/component/Input.vue'
+    import Label from '@/component/Label.vue'
     import JetValidationErrors from '@/Jetstream/ValidationErrors.vue'
 
     export default defineComponent({
         components: {
             Head,
-            JetAuthenticationCard,
+            AuthenticationCard,
             JetAuthenticationCardLogo,
-            JetButton,
-            JetInput,
-            JetLabel,
+            Button,
+            Input,
+            Label,
             JetValidationErrors,
         },
 
@@ -100,3 +101,4 @@
         }
     })
 </script>
+-->
