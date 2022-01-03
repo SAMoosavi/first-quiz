@@ -1,3 +1,4 @@
+<!--
 <template>
     <app-layout title="API Tokens">
         <template #header>
@@ -34,3 +35,4 @@
         },
     })
 </script>
+-->
