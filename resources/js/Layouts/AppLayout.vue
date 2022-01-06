@@ -10,11 +10,7 @@
                             <on-off-dark-mode />
                             <!-- Navigation Links -->
                             <div
-                                class="
-                                    hidden
-                                    space-x-8
-                                    sm:-my-px sm:ml-10 sm:flex
-                                "
+                                class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex"
                             >
                                 <nav-link
                                     :href="route('dashboard')"
@@ -35,20 +31,10 @@
                                                 $page.props.jetstream
                                                     .managesProfilePhotos
                                             "
-                                            class="
-                                                flex
-                                                text-sm
-                                                focus:outline-none
-                                                transition
-                                            "
+                                            class="flex text-sm focus:outline-none transition"
                                         >
                                             <img
-                                                class="
-                                                    h-8
-                                                    w-8
-                                                    rounded-full
-                                                    object-cover
-                                                "
+                                                class="h-8 w-8 rounded-full object-cover"
                                                 :src="
                                                     $page.props.user
                                                         .profile_photo_url
@@ -63,24 +49,7 @@
                                         >
                                             <button
                                                 type="button"
-                                                class="
-                                                    inline-flex
-                                                    items-center
-                                                    px-3
-                                                    py-2
-                                                    border border-transparent
-                                                    text-sm
-                                                    leading-4
-                                                    font-medium
-                                                    text-gray-300
-                                                    dark:text-gray-600
-                                                    hover:text-white
-                                                    hover:dark:text-black
-                                                    focus:outline-none
-                                                    transition
-                                                    bg-transparent
-                                                    focus:text-white
-                                                "
+                                                class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium text-gray-300 dark:text-gray-600 hover:text-white hover:dark:text-black focus:outline-none transition bg-transparent focus:text-white"
                                             >
                                                 {{ $page.props.user.name }}
 
@@ -103,13 +72,7 @@
                                     <template #content>
                                         <!-- Account Management -->
                                         <div
-                                            class="
-                                                block
-                                                px-4
-                                                py-2
-                                                text-xs text-gray-200
-                                                dark:text-gray-600
-                                            "
+                                            class="block px-4 py-2 text-xs text-gray-200 dark:text-gray-600"
                                         >
                                             مدیریت حساب
                                         </div>
@@ -121,10 +84,7 @@
                                         </Dropdown-link>
 
                                         <div
-                                            class="
-                                                border-t border-gray-100
-                                                dark:border-gray-800
-                                            "
+                                            class="border-t border-gray-100 dark:border-gray-800"
                                         ></div>
 
                                         <!-- Authentication -->
@@ -136,12 +96,7 @@
                                                 خروج
                                                 <svg
                                                     xmlns="http://www.w3.org/2000/svg"
-                                                    class="
-                                                        inline-block
-                                                        h-4
-                                                        w-4
-                                                        mr-2
-                                                    "
+                                                    class="inline-block h-4 w-4 mr-2"
                                                     fill="none"
                                                     viewBox="0 0 24 24"
                                                     stroke="currentColor"
@@ -167,20 +122,7 @@
                                     showingNavigationDropdown =
                                         !showingNavigationDropdown
                                 "
-                                class="
-                                    inline-flex
-                                    items-center
-                                    justify-center
-                                    p-2
-                                    rounded-none
-                                    text-gray-300
-                                    dark:text-gray-700
-                                    hover:text-gray-100 hover:dark:text-gray-900
-                                    focus:text-white
-                                    focus:dark:text-black
-                                    focus:outline-none
-                                    transition
-                                "
+                                class="inline-flex items-center justify-center p-2 rounded-none text-gray-300 dark:text-gray-700 hover:text-gray-100 hover:dark:text-gray-900 focus:text-white focus:dark:text-black focus:outline-none transition"
                             >
                                 <svg
                                     class="h-6 w-6"
@@ -251,20 +193,12 @@
 
                             <div>
                                 <div
-                                    class="
-                                        font-medium
-                                        text-base text-gray-100
-                                        dark:text-gray-800
-                                    "
+                                    class="font-medium text-base text-gray-100 dark:text-gray-800"
                                 >
                                     {{ $page.props.user.name }}
                                 </div>
                                 <div
-                                    class="
-                                        font-medium
-                                        text-sm text-gray-300
-                                        dark:text-gray-700
-                                    "
+                                    class="font-medium text-sm text-gray-300 dark:text-gray-700"
                                 >
                                     {{ $page.props.user.email }}
                                 </div>
@@ -310,7 +244,9 @@
                 v-if="$slots.header"
             >
                 <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    <slot name="header"></slot>
+                    <h2 class="font-semibold text-xl leading-tight">
+                        <slot name="header"></slot>
+                    </h2>
                 </div>
             </header>
 
