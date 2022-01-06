@@ -1,8 +1,5 @@
 <template>
     <Title> آزمون هایی که شرکت کردید </Title>
-    <div v-for="maker in makers" :key="maker.id" class="text-black">
-        <Card :item="maker" />
-    </div>
     <div v-if="makers.length == 0">
         <Link :href="route('create.quiz')">
             <div
@@ -22,6 +19,9 @@
                 <Title class="py-3"> ساخت آزمون جدید </Title>
             </div>
         </Link>
+    </div>
+    <div v-for="maker in makers" :key="maker.id" class="text-black">
+        <Card :item="maker" />
     </div>
 </template>
 
