@@ -1,7 +1,7 @@
 <template>
     <Link
         class="border-2 border-sky-300 dark:border-sky-600 hover:border-solid border-dotted p-1 my-2 grid grid-cols-4"
-        :href="route('show.quiz', { uuid: item.id })"
+        :href="route('show.quiz', { uuid: item.uuid })"
     >
         <!-- name quiz -->
         <div>
