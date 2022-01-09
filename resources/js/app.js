@@ -8,6 +8,8 @@ import { InertiaProgress } from '@inertiajs/progress';
 import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
 
+import Vue3PersianDatetimePicker from 'vue3-persian-datetime-picker'
+
 const appName = window.document.getElementsByTagName('title')[0]?.innerText || 'Laravel';
 
 createInertiaApp({
@@ -17,6 +19,7 @@ createInertiaApp({
         return createApp({ render: () => h(app, props) })
             .use(plugin)
             .use(Toast)
+            .use(Vue3PersianDatetimePicker)
             .mixin({ methods: { route } })
             .mount(el);
     },
