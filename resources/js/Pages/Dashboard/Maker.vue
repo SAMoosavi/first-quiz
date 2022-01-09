@@ -1,22 +1,14 @@
 <template>
-    <Title> آزمون هایی که شرکت کردید </Title>
-    <div v-if="makers.length == 0">
+    <Title> آزمون هایی که ساختید </Title>
+    <div>
         <Link :href="route('create.quiz')">
             <div
-                class="border-2 border-sky-300 dark:border-sky-600 hover:border-solid border-dotted p-1 py-4 my-2"
+                class="p-1 py-4 my-2 border-2 border-dotted border-sky-300 dark:border-sky-600 hover:border-solid"
             >
-                <Title class="py-3">
+                <Title v-if="makers.length == 0" class="py-3">
                     آزمونی وجود ندارد برای ساخت آزمون کلیک کنید
                 </Title>
-            </div>
-        </Link>
-    </div>
-    <div v-else>
-        <Link :href="route('create.quiz')">
-            <div
-                class="border-2 border-sky-300 dark:border-sky-600 hover:border-solid border-dotted p-1 py-4 my-2"
-            >
-                <Title class="py-3"> ساخت آزمون جدید </Title>
+                <Title v-else class="py-3"> ساخت آزمون جدید </Title>
             </div>
         </Link>
     </div>
