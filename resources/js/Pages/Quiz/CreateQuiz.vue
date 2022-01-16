@@ -10,7 +10,7 @@
                         class="grid grid-cols-1 gap-4 md:grid-cols-3"
                         @submit.prevent="submit"
                     >
-                        <!-- <div class="col-span-full md:w-1/2 lg:w-1/3">
+                        <div class="col-span-full md:w-1/2 lg:w-1/3">
                             <Label
                                 for="name"
                                 value="نام آزمون"
@@ -57,15 +57,23 @@
                             <date-picker
                                 id="time"
                                 v-model="form.time"
-                                :initial-value="a"
                                 :max="form.start - form.end"
                                 type="time"
                             />
-                        </div> -->
+                        </div>
+
                         <section class="col-span-full">
-                            <ol class="list-decimal m-4" >
+                            <ul class="m-6 list-decimal">
                                 <question />
-                            </ol>
+                            </ul>
+
+                            <Button
+                                class="mr-4"
+                                :loding="loding"
+                                :disabled="form.processing"
+                            >
+                                ساخت آزمون
+                            </Button>
                         </section>
                     </form>
                 </div>
@@ -82,8 +90,9 @@ import { ref } from "@vue/reactivity";
 import Label from "@/component/Label.vue";
 import Input from "@/component/Input.vue";
 import DatePicker from "vue3-persian-datetime-picker";
-import { watch } from "@vue/runtime-core";
 import Question from "./Question.vue";
+import Button from "@/component/Button.vue";
+import { useStore } from "vuex";
 
 export default {
     components: {
@@ -92,94 +101,107 @@ export default {
         Input,
         DatePicker,
         Question,
+        Button,
     },
     setup() {
-        const a = ref("00:00");
         const form = useForm({
             name: "",
             start: "",
-            end: 0,
-            time: a.value,
-            questions: [],
+            end: "",
+            time: "",
+            questions: {},
         });
+
+        // Submit
         const loding = ref(false);
+        const store = useStore();
+        const toast = useToast();
         function submit() {
-            loding.value = true;
-            form.post(route("store.quiz"), {
-                onError: (errors) => {
-                    for (const property in errors) {
-                        useToast().error(errors[property], {
-                            position: "bottom-right",
-                            timeout: 5000,
-                            closeOnClick: true,
-                            pauseOnFocusLoss: true,
-                            pauseOnHover: true,
-                            draggable: true,
-                            draggablePercent: 0.6,
-                            showCloseButtonOnHover: false,
-                            hideProgressBar: false,
-                            closeButton: "button",
-                            icon: true,
-                            rtl: false,
-                        });
-                    }
-                },
-                onSuccess: () => {
-                    useToast().success("آزمون با موفقیت ساخته شد", {
-                        position: "bottom-right",
-                        timeout: 5000,
-                        closeOnClick: true,
-                        pauseOnFocusLoss: true,
-                        pauseOnHover: true,
-                        draggable: true,
-                        draggablePercent: 0.6,
-                        showCloseButtonOnHover: false,
-                        hideProgressBar: false,
-                        closeButton: "button",
-                        icon: true,
-                        rtl: false,
+            if (!!form.start && !form.end) {
+                toast.error("فیلد زمان پایان الزامی است", {
+                    position: "bottom-right",
+                    timeout: 5000,
+                    closeOnClick: true,
+                    pauseOnFocusLoss: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    draggablePercent: 0.6,
+                    showCloseButtonOnHover: false,
+                    hideProgressBar: false,
+                    closeButton: "button",
+                    icon: true,
+                    rtl: false,
+                });
+            } else if (!form.time) {
+                toast.error("فیلد مدت زمان آزمون الزامی است", {
+                    position: "bottom-right",
+                    timeout: 5000,
+                    closeOnClick: true,
+                    pauseOnFocusLoss: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    draggablePercent: 0.6,
+                    showCloseButtonOnHover: false,
+                    hideProgressBar: false,
+                    closeButton: "button",
+                    icon: true,
+                    rtl: false,
+                });
+            } else {
+                loding.value = true;
+                form
+                    // first get questions
+                    .transform((data) => ({
+                        ...data,
+                        questions: store.getters.getQuestions,
+                    }))
+                    //second send to backend
+                    .post(route("store.quiz"), {
+                        onError: (errors) => {
+                            for (const property of errors) {
+                                toast.error(property, {
+                                    position: "bottom-right",
+                                    timeout: 5000,
+                                    closeOnClick: true,
+                                    pauseOnFocusLoss: true,
+                                    pauseOnHover: true,
+                                    draggable: true,
+                                    draggablePercent: 0.6,
+                                    showCloseButtonOnHover: false,
+                                    hideProgressBar: false,
+                                    closeButton: "button",
+                                    icon: true,
+                                    rtl: false,
+                                });
+                            }
+                        },
+                        onSuccess: () => {
+                            toast.success("آزمون با موفقیت ساخته شد", {
+                                position: "bottom-right",
+                                timeout: 5000,
+                                closeOnClick: true,
+                                pauseOnFocusLoss: true,
+                                pauseOnHover: true,
+                                draggable: true,
+                                draggablePercent: 0.6,
+                                showCloseButtonOnHover: false,
+                                hideProgressBar: false,
+                                closeButton: "button",
+                                icon: true,
+                                rtl: false,
+                            });
+                        },
+                        onFinish: () => {
+                            loding.value = false;
+                        },
                     });
-                },
-                onFinish: () => {
-                    loding.value = false;
-                },
-            });
+            }
         }
 
-        const start = ref("");
-        const end = ref("");
-        watch(
-            () => form.start,
-            (time) => {
-                start.value = Math.abs(new Date(time).getTime());
-            }
-        );
-        watch(
-            () => form.end,
-            (time) => {
-                end.value = Math.abs(new Date(time).getTime());
-            }
-        );
-
-        watch([start, end], ([startTime, endTime]) => {
-            if (endTime > 0) {
-                a.value = startTime - endTime;
-                a.value /= 60000;
-                const min = a.value % 60;
-                const hour = (a.value - min) / 60;
-                if (hour < 24) {
-                    a.value =
-                        `${hour}`.padStart(2, "0") +
-                        `:` +
-                        `${min}`.padStart(2, "0");
-                }
-            }
-        });
         return {
             form,
             submit,
             loding,
-            a,
         };
     },
 };
