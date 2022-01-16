@@ -8,6 +8,7 @@
                 v-model.lazy="question.question"
                 class="w-full border-transparent"
                 rows="1"
+                required
             ></textarea>
         </div>
         <div class="md:w-1/6">
@@ -17,6 +18,7 @@
                 id="type"
                 class="w-full border-transparent"
                 v-model="question.type"
+                required
             >
                 <option value="test-answer">پاسخ تستی</option>
                 <option value="long-answer">پاسخ طولانی</option>

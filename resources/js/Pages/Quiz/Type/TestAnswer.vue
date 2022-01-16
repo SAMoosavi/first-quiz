@@ -3,21 +3,23 @@
         class="grid grid-cols-1 gap-2 my-3 list-decimal md:grid-cols-2 lg:grid-cols-4 sm:gap-3 md:gap-4"
     >
         <li v-for="(option, index) in options" :key="index">
-            <input type="radio" v-model="ans.num" :value="index" />
-            <Input
-                class="w-3/4 mx-2"
-                v-model.lazy="options[index]"
-            />
+            <Label :required="true" class="inline-block ml-2"/>
+            <input type="radio" v-model="ans.num" :value="index" required />
+            <Input class="w-3/4 mx-2" v-model.lazy="options[index]" required />
         </li>
     </ul>
 </template>
 
 <script>
 import Input from "@/component/Input.vue";
+import Label from "@/component/Label.vue";
 import { reactive } from "@vue/reactivity";
 import { watch } from "@vue/runtime-core";
 export default {
-    components: { Input },
+    components: {
+        Input,
+        Label,
+    },
 
     props: ["index"],
 
