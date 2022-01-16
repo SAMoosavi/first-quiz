@@ -9,6 +9,7 @@
                     <form
                         class="grid grid-cols-1 gap-4 md:grid-cols-3"
                         @submit.prevent="submit"
+                        novalidate
                     >
                         <div class="col-span-full md:w-1/2 lg:w-1/3">
                             <Label
@@ -112,54 +113,80 @@ export default {
             questions: {},
         });
 
+        //validation
+        function validForm(question) {
+            //required question
+            if (!!!question.question) return false;
+
+            // if test check required
+            if (question.type === "test-answer") {
+                if (!!!question.answer) return false;
+                for (const ans of question.option) {
+                    if (!!!ans) return false;
+                }
+            }
+
+            //if valid return true
+            return true;
+        }
+
+        //show tost error
+        const toast = useToast();
+        function errorToast(text) {
+            toast.error(text, {
+                position: "bottom-right",
+                timeout: 5000,
+                closeOnClick: true,
+                pauseOnFocusLoss: true,
+                pauseOnHover: true,
+                draggable: true,
+                draggablePercent: 0.6,
+                showCloseButtonOnHover: false,
+                hideProgressBar: false,
+                closeButton: "button",
+                icon: true,
+                rtl: false,
+            });
+        }
+
         // Submit
         const loding = ref(false);
         const store = useStore();
-        const toast = useToast();
         function submit() {
             if (!!form.start && !form.end) {
-                toast.error("فیلد زمان پایان الزامی است", {
-                    position: "bottom-right",
-                    timeout: 5000,
-                    closeOnClick: true,
-                    pauseOnFocusLoss: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    draggablePercent: 0.6,
-                    showCloseButtonOnHover: false,
-                    hideProgressBar: false,
-                    closeButton: "button",
-                    icon: true,
-                    rtl: false,
-                });
+                errorToast("لطفا تمامی فیلد های ستاره دار را پر کنید");
             } else if (!form.time) {
-                toast.error("فیلد مدت زمان آزمون الزامی است", {
-                    position: "bottom-right",
-                    timeout: 5000,
-                    closeOnClick: true,
-                    pauseOnFocusLoss: true,
-                    pauseOnHover: true,
-                    draggable: true,
-                    draggablePercent: 0.6,
-                    showCloseButtonOnHover: false,
-                    hideProgressBar: false,
-                    closeButton: "button",
-                    icon: true,
-                    rtl: false,
-                });
+                errorToast("لطفا تمامی فیلد های ستاره دار را پر کنید");
+            } else if (!form.name) {
+                errorToast("لطفا تمامی فیلد های ستاره دار را پر کنید");
             } else {
-                loding.value = true;
-                form
-                    // first get questions
-                    .transform((data) => ({
-                        ...data,
-                        questions: store.getters.getQuestions,
-                    }))
-                    //second send to backend
-                    .post(route("store.quiz"), {
-                        onError: (errors) => {
-                            for (const property of errors) {
-                                toast.error(property, {
+                form.questions = store.getters.getQuestions;
+                let required = true;
+                console.log(form.questions);
+                for (const key in form.questions) {
+                    required = validForm(form.questions[key]);
+                    if (!required) {
+                        errorToast("لطفا تمامی فیلد های ستاره دار را پر کنید");
+                        break;
+                    }
+                }
+                if (required) {
+                    loding.value = true;
+                    form
+                        // first get questions
+                        .transform((data) => ({
+                            ...data,
+                            questions: store.getters.getQuestions,
+                        }))
+                        //second send to backend
+                        .post(route("store.quiz"), {
+                            onError: (errors) => {
+                                for (const property of errors) {
+                                    errorToast(property);
+                                }
+                            },
+                            onSuccess: () => {
+                                toast.success("آزمون با موفقیت ساخته شد", {
                                     position: "bottom-right",
                                     timeout: 5000,
                                     closeOnClick: true,
@@ -173,28 +200,12 @@ export default {
                                     icon: true,
                                     rtl: false,
                                 });
-                            }
-                        },
-                        onSuccess: () => {
-                            toast.success("آزمون با موفقیت ساخته شد", {
-                                position: "bottom-right",
-                                timeout: 5000,
-                                closeOnClick: true,
-                                pauseOnFocusLoss: true,
-                                pauseOnHover: true,
-                                draggable: true,
-                                draggablePercent: 0.6,
-                                showCloseButtonOnHover: false,
-                                hideProgressBar: false,
-                                closeButton: "button",
-                                icon: true,
-                                rtl: false,
-                            });
-                        },
-                        onFinish: () => {
-                            loding.value = false;
-                        },
-                    });
+                            },
+                            onFinish: () => {
+                                loding.value = false;
+                            },
+                        });
+                }
             }
         }
 
