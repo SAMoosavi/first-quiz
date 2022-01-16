@@ -16,6 +16,7 @@ class Question extends Model
         'option',
         'answer',
         'quiz_id',
+        'uuid',
     ];
 
     public function quiz(){

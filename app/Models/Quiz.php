@@ -18,6 +18,7 @@ class Quiz extends Model
         'end',
         'time',
         'user_id',
+        'uuid',
     ];
 
     public function maker(){
