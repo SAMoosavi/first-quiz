@@ -63,24 +63,24 @@ export default {
             const index = props.index;
         function getOption(val) {
             question.option = val;
-            store.commit("addQuestions", {question, index});
+            store.commit("editQuestions", {question, index});
         }
 
         function getAnswer(val) {
             question.answer = val;
-            store.commit("addQuestions", {question, index});
+            store.commit("editQuestions", {question, index});
         }
 
         watch(
             () => question.question,
             () => {
-                store.commit("addQuestions", {question, index});
+                store.commit("editQuestions", {question, index});
             }
         );
         watch(
             () => question.type,
             () => {
-                store.commit("addQuestions", {question, index});
+                store.commit("editQuestions", {question, index});
             }
         );
 
