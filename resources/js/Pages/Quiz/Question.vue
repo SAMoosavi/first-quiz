@@ -60,6 +60,20 @@ export default {
                  */
                 if (!showTopOf.value) {
                     showTopOf.value = true;
+                    toast.success("سوال با موفقیت افزوده شد", {
+                    position: "bottom-right",
+                    timeout: 5000,
+                    closeOnClick: true,
+                    pauseOnFocusLoss: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    draggablePercent: 0.6,
+                    showCloseButtonOnHover: false,
+                    hideProgressBar: false,
+                    closeButton: "button",
+                    icon: true,
+                    rtl: false,
+                });
                 } else {
                     showChilder.value = newVall;
                 }
@@ -67,7 +81,7 @@ export default {
         );
 
         store.commit("addQuestions", index);
-        
+
         function add() {
             /*
              *خانه ی پایین را می سازد و اگر ساخته شده بود به فرزند می گوید که بسازد
