@@ -136,12 +136,17 @@ export default defineComponent({
 
         function submit() {
             loding.value = true;
+            let valid = true;
 
             if (!form.email || !form.password) {
                 errorToast("لطفا تمام فیلد های ستاره دار را پر کنید");
-            } else if (!validEmail(form.email)) {
+                valid = false;
+            }
+            if (form.email && !validEmail(form.email)) {
                 errorToast("ایمیل وارد شده صحیح نمی باشد");
-            } else {
+                valid = false;
+            }
+            if (valid) {
                 form.transform((data) => ({
                     ...data,
                     remember: form.remember ? "on" : "",
@@ -174,7 +179,7 @@ export default defineComponent({
             }
             setTimeout(() => {
                 loding.value = false;
-            }, 100);
+            }, 200);
         }
 
         return {
