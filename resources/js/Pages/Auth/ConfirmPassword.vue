@@ -17,10 +17,9 @@
             تأیید کنید.
         </div>
 
-
-        <form @submit.prevent="submit">
+        <form @submit.prevent="submit" novalidate>
             <div>
-                <Label for="password" value="رمز عبور" />
+                <Label for="password" value="رمز عبور" :required="true" />
                 <Input
                     id="password"
                     type="password"
@@ -69,12 +68,36 @@ export default {
         });
         const loding = ref(false);
 
+        const toast = useToast();
+        function errorToast(text) {
+            toast.error(text, {
+                position: "bottom-right",
+                timeout: 5000,
+                closeOnClick: true,
+                pauseOnFocusLoss: true,
+                pauseOnHover: true,
+                draggable: true,
+                draggablePercent: 0.6,
+                showCloseButtonOnHover: false,
+                hideProgressBar: false,
+                closeButton: "button",
+                icon: true,
+                rtl: false,
+            });
+        }
         function submit() {
             loding.value = true;
-            form.post(this.route("password.confirm"), {
-                 onError: (errors) => {
-                    for (const property in errors) {
-                        useToast().error(errors[property], {
+            if (!form.password) {
+                errorToast("لطفا تمام فیلد های ستاره دار را پر کنید");
+            } else {
+                form.post(this.route("password.confirm"), {
+                    onError: (errors) => {
+                        for (const property in errors) {
+                            errorToast(errors[property]);
+                        }
+                    },
+                    onSuccess: () => {
+                        toast.success("هویت شما تایید", {
                             position: "bottom-right",
                             timeout: 5000,
                             closeOnClick: true,
@@ -88,13 +111,15 @@ export default {
                             icon: true,
                             rtl: false,
                         });
-                    }
-                },
-                onFinish: () => {
-                    form.reset();
-                    loding.value = false;
-                },
-            });
+                    },
+                    onFinish: () => {
+                        form.reset();
+                    },
+                });
+            }
+            setTimeout(() => {
+                loding.value = false;
+            }, 200);
         }
 
         return {

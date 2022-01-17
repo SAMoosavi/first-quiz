@@ -10,7 +10,7 @@
             />
         </template>
 
-        <form @submit.prevent="submit">
+        <form @submit.prevent="submit" novalidate>
             <div>
                 <Label for="email" value="ایمیل" />
                 <Input
@@ -24,7 +24,7 @@
             </div>
 
             <div class="mt-4">
-                <Label for="password" value="رمز عبور" />
+                <Label for="password" value="رمز عبور" :required="true" />
                 <Input
                     id="password"
                     type="password"
@@ -36,7 +36,11 @@
             </div>
 
             <div class="mt-4">
-                <Label for="password_confirmation" value="تکرار رمز عبور" />
+                <Label
+                    for="password_confirmation"
+                    value="تکرار رمز عبور"
+                    :required="true"
+                />
                 <Input
                     id="password_confirmation"
                     type="password"
@@ -91,11 +95,38 @@ export default {
         });
         const loding = ref(false);
 
+        const toast = useToast();
+        function errorToast(text) {
+            toast.error(text, {
+                position: "bottom-right",
+                timeout: 5000,
+                closeOnClick: true,
+                pauseOnFocusLoss: true,
+                pauseOnHover: true,
+                draggable: true,
+                draggablePercent: 0.6,
+                showCloseButtonOnHover: false,
+                hideProgressBar: false,
+                closeButton: "button",
+                icon: true,
+                rtl: false,
+            });
+        }
         function submit() {
             loding.value = true;
-            form.post(this.route("password.update"), { onError: (errors) => {
-                    for (const property in errors) {
-                        useToast().error(errors[property], {
+            if (!form.password || !form.password_confirmation) {
+                errorToast("لطفا تمام فیلد های ستاره دار را پر کنید");
+            } else if (form.password != form.password_confirmation) {
+                errorToast("رمز عبور و تکرار رمز عبور یکسان نیست");
+            } else {
+                form.post(this.route("password.update"), {
+                    onError: (errors) => {
+                        for (const property in errors) {
+                            errorToast(errors[property]);
+                        }
+                    },
+                    onSuccess: () => {
+                        toast.success("بازیابی رمز عبور با موفقیت انجام شد", {
                             position: "bottom-right",
                             timeout: 5000,
                             closeOnClick: true,
@@ -109,13 +140,15 @@ export default {
                             icon: true,
                             rtl: false,
                         });
-                    }
-                },
-                onFinish: () => {
-                    form.reset("password", "password_confirmation"),
-                        (loding.value = false);
-                },
-            });
+                    },
+                    onFinish: () => {
+                        form.reset("password", "password_confirmation");
+                    },
+                });
+            }
+            setTimeout(() => {
+                loding.value = false;
+            }, 200);
         }
 
         return {
