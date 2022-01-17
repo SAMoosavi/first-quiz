@@ -66,7 +66,7 @@ export default {
         status: String,
     },
 
-    setup() {
+    setup(props) {
         const form = useForm({
             email: "",
         });
@@ -90,12 +90,22 @@ export default {
                 rtl: false,
             });
         }
+        function validEmail(email) {
+            return String(email)
+                .toLowerCase()
+                .match(
+                    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+                );
+        }
+
         function submit() {
             loding.value = true;
             if (!form.email) {
                 errorToast("لطفا تمام فیلد های ستاره دار را پر کنید");
+            } else if (!validEmail(form.email)) {
+                errorToast("ایمیل وارد شده صحیح نمی باشد");
             } else {
-                this.form.post(this.route("password.email"), {
+                form.post("/forgot-password", {
                     onError: (errors) => {
                         for (const property in errors) {
                             errorToast(errors[property]);
