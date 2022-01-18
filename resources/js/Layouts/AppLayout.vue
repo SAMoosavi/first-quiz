@@ -1,8 +1,8 @@
 <template>
     <div>
         <Head :title="title" />
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-            <nav class="bg-sky-700 dark:bg-sky-400">
+        <div class="min-h-screen bg-indigo-100 dark:bg-slate-900">
+            <nav class="bg-indigo-600 dark:bg-indigo-700">
                 <!-- Primary Navigation Menu -->
                 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div class="flex justify-between h-16">
@@ -24,7 +24,7 @@
                         <div class="hidden sm:flex sm:items-center sm:ml-6">
                             <!-- Settings Dropdown -->
                             <div class="ml-3 relative">
-                                <Dropdown align="left" width="48">
+                                <Dropdown :align="'left'" :width="'48'">
                                     <template #trigger>
                                         <button
                                             v-if="
@@ -49,12 +49,12 @@
                                         >
                                             <button
                                                 type="button"
-                                                class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium text-gray-300 dark:text-gray-600 hover:text-white hover:dark:text-black focus:outline-none transition bg-transparent focus:text-white"
+                                                class="inline-flex items-center px-3 py-2 text-sm leading-4 font-medium text-gray-400 dark:text-gray-800/70 hover:text-white dark:hover:text-black dark:focus:text-black focus:outline-none transition focus:text-white"
                                             >
                                                 {{ $page.props.user.name }}
 
                                                 <svg
-                                                    class="mr-1.5 h-4 w-4"
+                                                    class="mr-1.5 h-5 w-5"
                                                     xmlns="http://www.w3.org/2000/svg"
                                                     viewBox="0 0 20 20"
                                                     fill="currentColor"
@@ -72,7 +72,7 @@
                                     <template #content>
                                         <!-- Account Management -->
                                         <div
-                                            class="block px-4 py-2 text-xs text-gray-200 dark:text-gray-600"
+                                            class="block px-4 py-2 text-xs text-gray-400 dark:text-gray-400"
                                         >
                                             مدیریت حساب
                                         </div>
@@ -122,7 +122,7 @@
                                     showingNavigationDropdown =
                                         !showingNavigationDropdown
                                 "
-                                class="inline-flex items-center justify-center p-2 rounded-none text-gray-300 dark:text-gray-700 hover:text-gray-100 hover:dark:text-gray-900 focus:text-white focus:dark:text-black focus:outline-none transition"
+                                class="inline-flex items-center justify-center p-2 rounded-none text-gray-300 dark:text-gray-400 hover:text-gray-100 hover:dark:text-gray-900 focus:text-white focus:dark:text-black focus:outline-none transition"
                             >
                                 <svg
                                     class="h-6 w-6"
@@ -159,88 +159,96 @@
                 </div>
 
                 <!-- Responsive Navigation Menu -->
-                <div
-                    :class="{
-                        block: showingNavigationDropdown,
-                        hidden: !showingNavigationDropdown,
-                    }"
-                    class="sm:hidden"
+                <transition
+                    enter-active-class="transition-all ease-in duration-200"
+                    enter-from-class="transform h-0"
+                    enter-to-class="transform h-full"
+                    leave-active-class="transition-all ease-in duration-100"
+                    leave-from-class="transform w-full"
+                    leave-to-class="transform w-0"
+                    tag="div"
+                    class="overflow-hidden"
                 >
-                    <div class="pt-2 pb-3 space-y-1">
-                        <responsive-nav-link
-                            :href="route('dashboard')"
-                            :active="route().current('dashboard')"
-                        >
-                            داشبورد
-                        </responsive-nav-link>
-                    </div>
-
-                    <!-- Responsive Settings Options -->
-                    <div class="pt-4 pb-1 border-t border-gray-200">
-                        <div class="flex items-center px-4">
-                            <div
-                                v-if="
-                                    $page.props.jetstream.managesProfilePhotos
-                                "
-                                class="shrink-0 mr-3"
-                            >
-                                <img
-                                    class="h-10 w-10 rounded-full object-cover"
-                                    :src="$page.props.user.profile_photo_url"
-                                    :alt="$page.props.user.name"
-                                />
-                            </div>
-
-                            <div>
-                                <div
-                                    class="font-medium text-base text-gray-100 dark:text-gray-800"
-                                >
-                                    {{ $page.props.user.name }}
-                                </div>
-                                <div
-                                    class="font-medium text-sm text-gray-300 dark:text-gray-700"
-                                >
-                                    {{ $page.props.user.email }}
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mt-3 space-y-1">
+                    <div v-if="showingNavigationDropdown" class="sm:hidden">
+                        <div class="pt-2 ">
                             <responsive-nav-link
-                                :href="route('profile.show')"
-                                :active="route().current('profile.show')"
+                                :href="route('dashboard')"
+                                :active="route().current('dashboard')"
                             >
-                                پروفایل
+                                داشبورد
                             </responsive-nav-link>
+                        </div>
 
-                            <!-- Authentication -->
-                            <form method="POST" @submit.prevent="logout">
-                                <responsive-nav-link as="button">
-                                    خروج
-                                    <svg
-                                        xmlns="http://www.w3.org/2000/svg"
-                                        class="inline-block h-4 w-4 mr-2"
-                                        fill="none"
-                                        viewBox="0 0 24 24"
-                                        stroke="currentColor"
+                        <!-- Responsive Settings Options -->
+                        <div class="pt-4  border-t border-gray-200 dark:border-black">
+                            <div class="flex items-center px-4">
+                                <div
+                                    v-if="
+                                        $page.props.jetstream
+                                            .managesProfilePhotos
+                                    "
+                                    class="shrink-0 mr-3"
+                                >
+                                    <img
+                                        class="h-10 w-10 rounded-full object-cover"
+                                        :src="
+                                            $page.props.user.profile_photo_url
+                                        "
+                                        :alt="$page.props.user.name"
+                                    />
+                                </div>
+
+                                <div>
+                                    <div
+                                        class="font-medium text-base text-gray-100 dark:text-gray-800"
                                     >
-                                        <path
-                                            stroke-linecap="square"
-                                            stroke-linejoin="square"
-                                            stroke-width="2"
-                                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                                        />
-                                    </svg>
+                                        {{ $page.props.user.name }}
+                                    </div>
+                                    <div
+                                        class="font-medium text-sm text-gray-300 dark:text-gray-700"
+                                    >
+                                        {{ $page.props.user.email }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-3 space-y-1">
+                                <responsive-nav-link
+                                    :href="route('profile.show')"
+                                    :active="route().current('profile.show')"
+                                >
+                                    پروفایل
                                 </responsive-nav-link>
-                            </form>
+
+                                <!-- Authentication -->
+                                <form method="POST" @submit.prevent="logout">
+                                    <responsive-nav-link as="button">
+                                        خروج
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            class="inline-block h-5 w-5 mr-2"
+                                            fill="none"
+                                            viewBox="0 0 24 24"
+                                            stroke="currentColor"
+                                        >
+                                            <path
+                                                stroke-linecap="square"
+                                                stroke-linejoin="square"
+                                                stroke-width="2"
+                                                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                                            />
+                                        </svg>
+                                    </responsive-nav-link>
+                                </form>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </transition>
             </nav>
 
             <!-- Page Heading -->
             <header
-                class="bg-sky-900 dark:bg-sky-200 text-white dark:text-black"
+                class="bg-indigo-400/75 dark:bg-indigo-500/75 text-white dark:text-black"
                 v-if="$slots.header"
             >
                 <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
