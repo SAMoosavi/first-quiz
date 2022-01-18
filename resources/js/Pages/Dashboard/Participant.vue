@@ -9,7 +9,7 @@
     </div>
     <div v-if="participants.length == 0">
         <div
-            class="border-2 border-sky-300 dark:border-sky-600 hover:border-solid border-dotted p-1 py-4 my-2"
+            class="p-1 py-4 my-2 transition-all transform border-2 border-indigo-500 border-dotted shadow hover:scale-x-[1.02] dark:border-indigo-400 hover:border-solid shadow-transparent hover:shadow-indigo-800 dark:hover:shadow-indigo-400"
         >
             <Title class="py-3"> آزمونی وجود ندارد </Title>
         </div>
