@@ -1,6 +1,6 @@
 <template>
     <Link
-        class="border-2 border-sky-300 dark:border-sky-600 hover:border-solid border-dotted p-1 my-2 grid grid-cols-4"
+        class="p-1 py-4 my-2 transition-all justify-items-center duration-150 transform border-2 border-indigo-500 border-dotted shadow hover:scale-x-[1.02] dark:border-indigo-400 shadow-transparent hover:shadow-indigo-800 dark:hover:shadow-indigo-400 grid grid-cols-4 hover:border-solid"
         :href="route('show.quiz', { uuid: item.uuid })"
     >
         <!-- name quiz -->
@@ -18,6 +18,13 @@
                 <slot name="maker" />
             </card-text>
         </div> -->
+        <!-- time -->
+        <div>
+            <card-title> مدت آزمون : </card-title>
+            <card-text>
+                {{ item.time }}
+            </card-text>
+        </div>
         <!-- start time -->
         <div v-if="item.start">
             <card-title> شروع آزمون : </card-title>
@@ -30,13 +37,6 @@
             <card-title> پایان آزمون : </card-title>
             <card-text>
                 {{ item.end }}
-            </card-text>
-        </div>
-        <!-- time -->
-        <div v-if="item.time">
-            <card-title> مدت آزمون : </card-title>
-            <card-text>
-                {{ item.time }}
             </card-text>
         </div>
     </Link>
