@@ -2,9 +2,9 @@
     <div>
         <Head :title="title" />
         <div class="min-h-screen bg-indigo-100 dark:bg-slate-900">
-            <nav class="bg-indigo-600 dark:bg-indigo-700">
+            <nav class="h-full bg-indigo-600 dark:bg-indigo-700">
                 <!-- Primary Navigation Menu -->
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div class="flex justify-between h-16">
                         <div class="flex items-center gap-4">
                             <on-off-dark-mode />
@@ -23,7 +23,7 @@
 
                         <div class="hidden sm:flex sm:items-center sm:ml-6">
                             <!-- Settings Dropdown -->
-                            <div class="ml-3 relative">
+                            <div class="relative ml-3">
                                 <Dropdown :align="'left'" :width="'48'">
                                     <template #trigger>
                                         <button
@@ -31,10 +31,10 @@
                                                 $page.props.jetstream
                                                     .managesProfilePhotos
                                             "
-                                            class="flex text-sm focus:outline-none transition"
+                                            class="flex text-sm transition focus:outline-none"
                                         >
                                             <img
-                                                class="h-8 w-8 rounded-full object-cover"
+                                                class="object-cover w-8 h-8 rounded-full"
                                                 :src="
                                                     $page.props.user
                                                         .profile_photo_url
@@ -49,7 +49,7 @@
                                         >
                                             <button
                                                 type="button"
-                                                class="inline-flex items-center px-3 py-2 text-sm leading-4 font-medium text-gray-400 dark:text-gray-800/70 hover:text-white dark:hover:text-black dark:focus:text-black focus:outline-none transition focus:text-white"
+                                                class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-gray-400 transition dark:text-gray-800/70 hover:text-white dark:hover:text-black dark:focus:text-black focus:outline-none focus:text-white"
                                             >
                                                 {{ $page.props.user.name }}
 
@@ -96,7 +96,7 @@
                                                 خروج
                                                 <svg
                                                     xmlns="http://www.w3.org/2000/svg"
-                                                    class="inline-block h-4 w-4 mr-2"
+                                                    class="inline-block w-4 h-4 mr-2"
                                                     fill="none"
                                                     viewBox="0 0 24 24"
                                                     stroke="currentColor"
@@ -116,16 +116,16 @@
                         </div>
 
                         <!-- Hamburger -->
-                        <div class="-ml-2 flex items-center sm:hidden">
+                        <div class="flex items-center -ml-2 sm:hidden">
                             <button
                                 @click="
                                     showingNavigationDropdown =
                                         !showingNavigationDropdown
                                 "
-                                class="inline-flex items-center justify-center p-2 rounded-none text-gray-300 dark:text-gray-400 hover:text-gray-100 hover:dark:text-gray-900 focus:text-white focus:dark:text-black focus:outline-none transition"
+                                class="inline-flex items-center justify-center p-2 text-gray-300 transition rounded-none dark:text-gray-400 hover:text-gray-100 hover:dark:text-gray-900 focus:text-white focus:dark:text-black focus:outline-none"
                             >
                                 <svg
-                                    class="h-6 w-6"
+                                    class="w-6 h-6"
                                     stroke="currentColor"
                                     fill="none"
                                     viewBox="0 0 24 24"
@@ -159,17 +159,18 @@
                 </div>
 
                 <!-- Responsive Navigation Menu -->
-                <transition
-                    enter-active-class="transition-all ease-in duration-200"
-                    enter-from-class="transform h-0"
-                    enter-to-class="transform h-full"
-                    leave-active-class="transition-all ease-in duration-100"
-                    leave-from-class="transform w-full"
-                    leave-to-class="transform w-0"
+                <!-- <transition
+                    enter-active-class="transition-all duration-1000 ease-in"
+                    enter-from-class="h-0 origin-top transform opacity-0"
+                    enter-to-class="h-full transform"
+                    leave-active-class="transition-all duration-1000 ease-in"
+                    leave-from-class="w-full transform"
+                    leave-to-class="w-0 transform"
                     tag="div"
                     class="overflow-hidden"
-                >
-                    <div v-if="showingNavigationDropdown" class="sm:hidden">
+                    mode="out-in"
+                > -->
+                    <div v-if="showingNavigationDropdown" class=" sm:hidden">
                         <div class="pt-2 ">
                             <responsive-nav-link
                                 :href="route('dashboard')"
@@ -180,17 +181,17 @@
                         </div>
 
                         <!-- Responsive Settings Options -->
-                        <div class="pt-4  border-t border-gray-200 dark:border-black">
+                        <div class="pt-4 border-t border-gray-200 dark:border-black">
                             <div class="flex items-center px-4">
                                 <div
                                     v-if="
                                         $page.props.jetstream
                                             .managesProfilePhotos
                                     "
-                                    class="shrink-0 mr-3"
+                                    class="mr-3 shrink-0"
                                 >
                                     <img
-                                        class="h-10 w-10 rounded-full object-cover"
+                                        class="object-cover w-10 h-10 rounded-full"
                                         :src="
                                             $page.props.user.profile_photo_url
                                         "
@@ -200,12 +201,12 @@
 
                                 <div>
                                     <div
-                                        class="font-medium text-base text-gray-100 dark:text-gray-800"
+                                        class="text-base font-medium text-gray-100 dark:text-gray-800"
                                     >
                                         {{ $page.props.user.name }}
                                     </div>
                                     <div
-                                        class="font-medium text-sm text-gray-300 dark:text-gray-700"
+                                        class="text-sm font-medium text-gray-300 dark:text-gray-700"
                                     >
                                         {{ $page.props.user.email }}
                                     </div>
@@ -226,7 +227,7 @@
                                         خروج
                                         <svg
                                             xmlns="http://www.w3.org/2000/svg"
-                                            class="inline-block h-5 w-5 mr-2"
+                                            class="inline-block w-5 h-5 mr-2"
                                             fill="none"
                                             viewBox="0 0 24 24"
                                             stroke="currentColor"
@@ -243,16 +244,16 @@
                             </div>
                         </div>
                     </div>
-                </transition>
+                <!-- </transition> -->
             </nav>
 
             <!-- Page Heading -->
             <header
-                class="bg-indigo-400/75 dark:bg-indigo-500/75 text-white dark:text-black"
+                class="text-white bg-indigo-400/75 dark:bg-indigo-500/75 dark:text-black"
                 v-if="$slots.header"
             >
-                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    <h2 class="font-semibold text-xl leading-tight">
+                <div class="px-4 py-6 mx-auto max-w-7xl sm:px-6 lg:px-8">
+                    <h2 class="text-xl font-semibold leading-tight">
                         <slot name="header"></slot>
                     </h2>
                 </div>
