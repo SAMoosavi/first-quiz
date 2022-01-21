@@ -1,5 +1,5 @@
 <template>
-    <Input disabled class="w-1/2 my-3 bg-gray-300 md:w-1/3" />
+    <Input :disabled="true" :required="false" class="w-1/2 my-3 md:w-1/3" />
 </template>
 <script>
 import { onMounted } from "@vue/runtime-core";
