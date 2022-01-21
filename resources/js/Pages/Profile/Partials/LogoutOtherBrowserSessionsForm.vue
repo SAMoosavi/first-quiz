@@ -14,7 +14,7 @@
                 If necessary, you may log out of all of your other browser sessions across all of your devices. Some of your recent sessions are listed below; however, this list may not be exhaustive. If you feel your account has been compromised, you should also update your password.
             </div>
 
-            <!-- Other Browser Sessions
+            Other Browser Sessions
             <div class="mt-5 space-y-6" v-if="sessions.length > 0">
                 <div class="flex items-center" v-for="(session, i) in sessions" :key="i">
                     <div>
@@ -54,7 +54,7 @@
                 </action-message>
             </div>
 
-            <!-- Log Out Other Devices Confirmation Modal 
+             Log Out Other Devices Confirmation Modal
             <jet-dialog-modal :show="confirmingLogout" @close="closeModal">
                 <template #title>
                     Log Out Other Browser Sessions

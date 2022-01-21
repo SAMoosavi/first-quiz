@@ -18,7 +18,7 @@
                 </jet-danger-button>
             </div>
 
-            <!-- Delete Account Confirmation Modal
+             Delete Account Confirmation Modal
             <jet-dialog-modal
                 :show="confirmingUserDeletion"
                 @close="closeModal"
