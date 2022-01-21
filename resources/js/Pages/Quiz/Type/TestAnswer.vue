@@ -1,11 +1,11 @@
 <template>
     <ul
-        class="grid grid-cols-1 gap-2 my-3 list-decimal md:grid-cols-2 lg:grid-cols-4 sm:gap-3 md:gap-4"
+        class="grid grid-cols-1 gap-2 my-3 group-hover:list-decimal md:grid-cols-2 lg:grid-cols-4 sm:gap-3 md:gap-4"
     >
-        <li v-for="(option, index) in options" :key="index">
-            <Label :required="true" class="inline-block ml-2"/>
-            <input type="radio" v-model="ans.num" :value="index" required />
-            <Input class="w-3/4 mx-2" v-model.lazy="options[index]" required />
+        <li v-for="(option, key) in options" :key="key">
+            <Label :required="true" class="inline-block ml-2" />
+            <Radio v-model="ans.num" :value="key" :name="index" />
+            <Input class="w-3/4 mx-2" v-model.lazy="options[key]" required />
         </li>
     </ul>
 </template>
@@ -15,10 +15,12 @@ import Input from "@/component/Input.vue";
 import Label from "@/component/Label.vue";
 import { reactive } from "@vue/reactivity";
 import { watch } from "@vue/runtime-core";
+import Radio from "@/component/Radio.vue";
 export default {
     components: {
         Input,
         Label,
+        Radio,
     },
 
     props: ["index"],
