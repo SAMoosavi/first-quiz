@@ -1,3 +1,4 @@
+<!--
 <template>
     <jet-action-section>
         <template #title>
@@ -17,7 +18,7 @@
                 You have not enabled two factor authentication.
             </h3>
 
-            <div class="mt-3 max-w-xl text-sm text-gray-600">
+            <div class="max-w-xl mt-3 text-sm text-gray-600">
                 <p>
                     When two factor authentication is enabled, you will be prompted for a secure, random token during authentication. You may retrieve this token from your phone's Google Authenticator application.
                 </p>
@@ -25,7 +26,7 @@
 
             <div v-if="twoFactorEnabled">
                 <div v-if="qrCode">
-                    <div class="mt-4 max-w-xl text-sm text-gray-600">
+                    <div class="max-w-xl mt-4 text-sm text-gray-600">
                         <p class="font-semibold">
                             Two factor authentication is now enabled. Scan the following QR code using your phone's authenticator application.
                         </p>
@@ -36,13 +37,13 @@
                 </div>
 
                 <div v-if="recoveryCodes.length > 0">
-                    <div class="mt-4 max-w-xl text-sm text-gray-600">
+                    <div class="max-w-xl mt-4 text-sm text-gray-600">
                         <p class="font-semibold">
                             Store these recovery codes in a secure password manager. They can be used to recover access to your account if your two factor authentication device is lost.
                         </p>
                     </div>
 
-                    <div class="grid gap-1 max-w-xl mt-4 px-4 py-4 font-mono text-sm bg-gray-100 rounded-lg">
+                    <div class="grid max-w-xl gap-1 px-4 py-4 mt-4 font-mono text-sm bg-gray-100 rounded-lg">
                         <div v-for="code in recoveryCodes" :key="code">
                             {{ code }}
                         </div>
@@ -53,24 +54,24 @@
             <div class="mt-5">
                 <div v-if="! twoFactorEnabled">
                     <jet-confirms-password @confirmed="enableTwoFactorAuthentication">
-                        <jet-button type="button" :class="{ 'opacity-25': enabling }" :disabled="enabling">
+                        <Button type="button" :class="{ 'opacity-25': enabling }" :disabled="enabling">
                             Enable
-                        </jet-button>
+                        </Button>
                     </jet-confirms-password>
                 </div>
 
                 <div v-else>
                     <jet-confirms-password @confirmed="regenerateRecoveryCodes">
-                        <jet-secondary-button class="mr-3"
+                        <secondary-button class="mr-3"
                                         v-if="recoveryCodes.length > 0">
                             Regenerate Recovery Codes
-                        </jet-secondary-button>
+                        </secondary-button>
                     </jet-confirms-password>
 
                     <jet-confirms-password @confirmed="showRecoveryCodes">
-                        <jet-secondary-button class="mr-3" v-if="recoveryCodes.length === 0">
+                        <secondary-button class="mr-3" v-if="recoveryCodes.length === 0">
                             Show Recovery Codes
-                        </jet-secondary-button>
+                        </secondary-button>
                     </jet-confirms-password>
 
                     <jet-confirms-password @confirmed="disableTwoFactorAuthentication">
@@ -89,18 +90,18 @@
 <script>
     import { defineComponent } from 'vue'
     import JetActionSection from '@/Jetstream/ActionSection.vue'
-    import JetButton from '@/Jetstream/Button.vue'
+    import Button from "@/component/Button.vue";
     import JetConfirmsPassword from '@/Jetstream/ConfirmsPassword.vue'
     import JetDangerButton from '@/Jetstream/DangerButton.vue'
-    import JetSecondaryButton from '@/Jetstream/SecondaryButton.vue'
+    import SecondaryButton from '@/component/SecondaryButton.vue'
 
     export default defineComponent({
         components: {
             JetActionSection,
-            JetButton,
+            Button,
             JetConfirmsPassword,
             JetDangerButton,
-            JetSecondaryButton,
+            SecondaryButton,
         },
 
         data() {
@@ -165,3 +166,4 @@
         }
     })
 </script>
+-->
