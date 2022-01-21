@@ -17,6 +17,7 @@
                     type="file"
                     class="hidden"
                     ref="photo"
+                    id="photo"
                     @change="updatePhotoPreview"
                 />
 
@@ -87,9 +88,9 @@
         </template>
 
         <template #actions>
-            <jet-action-message :on="form.recentlySuccessful" class="ml-3">
+            <action-message :on="form.recentlySuccessful" class="ml-3">
                 ذخیره.
-            </jet-action-message>
+            </action-message>
 
             <Button class="mr-4" :loding="loding" :disabled="form.processing">
                 ذخیره
@@ -99,24 +100,24 @@
 </template>
 
 <script>
-import { defineComponent, ref } from "vue";
+import {  ref } from "vue";
+import { useForm } from "@inertiajs/inertia-vue3";
+import { Inertia } from "@inertiajs/inertia";
 import Button from "@/component/Button.vue";
 import FormSection from "@/component/FormSection.vue";
 import Input from "@/component/Input.vue";
-import JetInputError from "@/Jetstream/InputError.vue";
+import InputError from "@/component/InputError.vue";
 import Label from "@/component/Label.vue";
-import JetActionMessage from "@/Jetstream/ActionMessage.vue";
+import ActionMessage from "@/component/ActionMessage.vue";
 import SecondaryButton from "@/component/SecondaryButton.vue";
-import { useForm } from "@inertiajs/inertia-vue3";
-import { Inertia } from "@inertiajs/inertia";
 
-export default defineComponent({
+export default {
     components: {
-        JetActionMessage,
+        ActionMessage,
         Button,
         FormSection,
         Input,
-        JetInputError,
+        InputError,
         Label,
         SecondaryButton,
     },
@@ -137,13 +138,13 @@ export default defineComponent({
         function updateProfileInformation() {
             loding.value = true;
             if (photo.value) {
-                form.photo = photo.value.files[0];
+                form.photo = photo.value.files;
             }
 
             form.post(route("user-profile-information.update"), {
                 errorBag: "updateProfileInformation",
                 preserveScroll: true,
-                onSuccess: () => this.clearPhotoFileInput(),
+                onSuccess: () => clearPhotoFileInput(),
                 onFinish: () => {
                     loding.value = false;
                 },
@@ -151,11 +152,11 @@ export default defineComponent({
         }
 
         function selectNewPhoto() {
-            photo.value.click();
+            document.querySelector("#photo").click();
         }
 
         function updatePhotoPreview() {
-            const photo = photo.value.files[0];
+            const photo = photo.value.files;
 
             if (!photo) return;
 
@@ -173,13 +174,13 @@ export default defineComponent({
                 preserveScroll: true,
                 onSuccess: () => {
                     photoPreview.value = null;
-                    this.clearPhotoFileInput();
+                    clearPhotoFileInput();
                 },
             });
         }
 
         function clearPhotoFileInput() {
-            if (photo?.value) {
+            if (photo.value) {
                 photo.value = null;
             }
         }
@@ -195,5 +196,5 @@ export default defineComponent({
             clearPhotoFileInput,
         };
     },
-});
+};
 </script>
