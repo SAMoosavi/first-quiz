@@ -1,3 +1,4 @@
+<!--
 <template>
     <jet-action-section>
         <template #title>
@@ -13,7 +14,7 @@
                 If necessary, you may log out of all of your other browser sessions across all of your devices. Some of your recent sessions are listed below; however, this list may not be exhaustive. If you feel your account has been compromised, you should also update your password.
             </div>
 
-            <!-- Other Browser Sessions -->
+            <!-- Other Browser Sessions
             <div class="mt-5 space-y-6" v-if="sessions.length > 0">
                 <div class="flex items-center" v-for="(session, i) in sessions" :key="i">
                     <div>
@@ -35,7 +36,7 @@
                             <div class="text-xs text-gray-500">
                                 {{ session.ip_address }},
 
-                                <span class="text-green-500 font-semibold" v-if="session.is_current_device">This device</span>
+                                <span class="font-semibold text-green-500" v-if="session.is_current_device">This device</span>
                                 <span v-else>Last active {{ session.last_active }}</span>
                             </div>
                         </div>
@@ -44,16 +45,16 @@
             </div>
 
             <div class="flex items-center mt-5">
-                <jet-button @click="confirmLogout">
+                <Button @click="confirmLogout">
                     Log Out Other Browser Sessions
-                </jet-button>
+                </Button>
 
-                <jet-action-message :on="form.recentlySuccessful" class="ml-3">
+                <action-message :on="form.recentlySuccessful" class="ml-3">
                     Done.
-                </jet-action-message>
+                </action-message>
             </div>
 
-            <!-- Log Out Other Devices Confirmation Modal -->
+            <!-- Log Out Other Devices Confirmation Modal 
             <jet-dialog-modal :show="confirmingLogout" @close="closeModal">
                 <template #title>
                     Log Out Other Browser Sessions
@@ -63,23 +64,23 @@
                     Please enter your password to confirm you would like to log out of your other browser sessions across all of your devices.
 
                     <div class="mt-4">
-                        <jet-input type="password" class="mt-1 block w-3/4" placeholder="Password"
+                        <Input type="password" class="block w-3/4 mt-1" placeholder="Password"
                                     ref="password"
                                     v-model="form.password"
                                     @keyup.enter="logoutOtherBrowserSessions" />
 
-                        <jet-input-error :message="form.errors.password" class="mt-2" />
+                        <Input-error :message="form.errors.password" class="mt-2" />
                     </div>
                 </template>
 
                 <template #footer>
-                    <jet-secondary-button @click="closeModal">
+                    <secondary-button @click="closeModal">
                         Cancel
-                    </jet-secondary-button>
+                    </secondary-button>
 
-                    <jet-button class="ml-2" @click="logoutOtherBrowserSessions" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                    <Button class="ml-2" @click="logoutOtherBrowserSessions" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
                         Log Out Other Browser Sessions
-                    </jet-button>
+                    </Button>
                 </template>
             </jet-dialog-modal>
         </template>
@@ -88,25 +89,25 @@
 
 <script>
     import { defineComponent } from 'vue'
-    import JetActionMessage from '@/Jetstream/ActionMessage.vue'
+    import ActionMessage from '@/component/ActionMessage.vue'
     import JetActionSection from '@/Jetstream/ActionSection.vue'
-    import JetButton from '@/Jetstream/Button.vue'
+import Button from "@/component/Button.vue";
     import JetDialogModal from '@/Jetstream/DialogModal.vue'
-    import JetInput from '@/Jetstream/Input.vue'
-    import JetInputError from '@/Jetstream/InputError.vue'
-    import JetSecondaryButton from '@/Jetstream/SecondaryButton.vue'
+    import Input from '@/component/Input.vue'
+    import InputError from '@/component/InputError.vue'
+    import SecondaryButton from '@/component/SecondaryButton.vue'
 
     export default defineComponent({
         props: ['sessions'],
 
         components: {
-            JetActionMessage,
+            ActionMessage,
             JetActionSection,
-            JetButton,
+            Button,
             JetDialogModal,
-            JetInput,
-            JetInputError,
-            JetSecondaryButton,
+            Input,
+        InputError,
+            SecondaryButton,
         },
 
         data() {
@@ -143,3 +144,4 @@
         },
     })
 </script>
+-->
