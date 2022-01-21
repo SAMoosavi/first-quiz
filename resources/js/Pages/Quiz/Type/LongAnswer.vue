@@ -1,13 +1,15 @@
 <template>
-    <textarea  disabled rows="1" class="w-full my-3 bg-gray-300 border-transparent"></textarea>
+    <Textarea :required="false" :disabled="true" />
 </template>
 <script>
 import { onMounted } from "@vue/runtime-core";
+import Textarea from "@/component/Textarea.vue";
 export default {
-    setup(props,{emit}) {
+    components: { Textarea },
+    setup(props, { emit }) {
         onMounted(() => {
-            emit('option',null);
-            emit('answer',null);
+            emit("option", null);
+            emit("answer", null);
         });
     },
 };
