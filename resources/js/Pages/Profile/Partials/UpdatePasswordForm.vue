@@ -63,12 +63,6 @@
             </Button>
         </template>
     </form-section>
-    <toast
-        v-for="message in messages"
-        :key="message"
-        :message="message"
-        :type="type"
-    />
 </template>
 
 <script>
@@ -80,7 +74,6 @@ import Input from "@/component/Input.vue";
 import InputError from "@/component/InputError.vue";
 import Label from "@/component/Label.vue";
 import { useForm } from "@inertiajs/inertia-vue3";
-import Toast from "@/component/Toast.vue";
 
 export default defineComponent({
     components: {
@@ -90,7 +83,6 @@ export default defineComponent({
         Input,
         InputError,
         Label,
-        Toast,
     },
 
     setup() {
@@ -101,8 +93,40 @@ export default defineComponent({
         });
         const loding = ref(false);
 
-        const type = ref(null);
-        const messages = ref(null);
+        const toast = useToast();
+
+        function toastSuccess(text) {
+            toast.success(text, {
+                position: "bottom-right",
+                timeout: 5000,
+                closeOnClick: true,
+                pauseOnFocusLoss: true,
+                pauseOnHover: true,
+                draggable: true,
+                draggablePercent: 0.6,
+                showCloseButtonOnHover: false,
+                hideProgressBar: false,
+                closeButton: "button",
+                icon: true,
+                rtl: false,
+            });
+        }
+        function errorToast(text) {
+            toast.error(text, {
+                position: "bottom-right",
+                timeout: 5000,
+                closeOnClick: true,
+                pauseOnFocusLoss: true,
+                pauseOnHover: true,
+                draggable: true,
+                draggablePercent: 0.6,
+                showCloseButtonOnHover: false,
+                hideProgressBar: false,
+                closeButton: "button",
+                icon: true,
+                rtl: false,
+            });
+        }
 
         function updatePassword() {
             loding.value = true;
@@ -111,22 +135,20 @@ export default defineComponent({
                 !form.password ||
                 !form.password_confirmation
             ) {
-                type.value = "error";
-                messages.value = ["تمامی فیلد های ستاره دار را پر کنید"];
+                errorToast("تمامی فیلد های ستاره دار را پر کنید");
             } else if (form.password_confirmation != form.password) {
-                type.value = "error";
-                messages.value = ["رمز عبور جدید و تکرار آن یکسان نیست"];
+                errorToast("رمز عبور جدید و تکرار آن یکسان نیست");
             } else {
                 form.put(route("user-password.update"), {
                     errorBag: "updatePassword",
                     preserveScroll: true,
                     onSuccess: () => {
-                        type.value = "success";
-                        messages.value = ["رمز عبور با موفقیت تغییر کرد"];
+                        toastSuccess("رمز عبور با موفقیت تغییر کرد");
                     },
                     onError: (errors) => {
-                        type.value = "error";
-                        messages.value = errors;
+                        for (const property in errors) {
+                            errorToast(errors[property]);
+                        }
                     },
                     onFinish: () => {
                         form.reset();
@@ -140,8 +162,6 @@ export default defineComponent({
             form,
             updatePassword,
             loding,
-            type,
-            messages,
         };
     },
 });
