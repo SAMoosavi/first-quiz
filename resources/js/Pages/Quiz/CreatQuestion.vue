@@ -2,28 +2,19 @@
     <div class="md:flex md:justify-between">
         <div class="w-full md:w-4/6 md:gap-2 lg:gap-4">
             <Label :required="true" :value="'سوال'" />
-            <textarea
-                name="question"
-                id="question"
+            <Textarea
+                :name="'question'"
+                :id="'question'"
                 v-model.lazy="question.question"
-                class="w-full border-transparent"
-                rows="1"
-                required
-            ></textarea>
+            />
         </div>
         <div class="md:w-1/6">
             <Label :required="true" :value="'نوع سوال'" />
-            <select
-                name="type"
-                id="type"
-                class="w-full border-transparent"
-                v-model="question.type"
-                required
-            >
-                <option value="test-answer">پاسخ تستی</option>
-                <option value="long-answer">پاسخ طولانی</option>
-                <option value="short-answer">پاسخ کوتاه</option>
-            </select>
+            <Select :name="'type'" :id="'type'" v-model="question.type">
+                <Option :value="'test-answer'">پاسخ تستی</Option>
+                <Option :value="'long-answer'">پاسخ طولانی</Option>
+                <Option :value="'short-answer'">پاسخ کوتاه</Option>
+            </Select>
         </div>
     </div>
     <component
@@ -41,6 +32,9 @@ import ShortAnswer from "@/Pages/Quiz/Type/ShortAnswer.vue";
 import TestAnswer from "@/Pages/Quiz/Type/TestAnswer.vue";
 import { watch } from "@vue/runtime-core";
 import { useStore } from "vuex";
+import Textarea from "@/component/Textarea.vue";
+import Select from "@/component/Select.vue";
+import Option from "@/component/Option.vue";
 
 export default {
     components: {
@@ -48,6 +42,9 @@ export default {
         LongAnswer,
         ShortAnswer,
         TestAnswer,
+        Textarea,
+        Select,
+        Option,
     },
 
     props: ["index"],
@@ -59,30 +56,30 @@ export default {
             type: "test-answer",
             question: null,
             option: {},
-            answer: {},
+            answer: null,
         });
 
-            const index = props.index;
+        const index = props.index;
         function getOption(val) {
             question.option = val;
-            store.commit("editQuestions", {question, index});
+            store.commit("editQuestions", { question, index });
         }
 
         function getAnswer(val) {
             question.answer = val;
-            store.commit("editQuestions", {question, index});
+            store.commit("editQuestions", { question, index });
         }
 
         watch(
             () => question.question,
             () => {
-                store.commit("editQuestions", {question, index});
+                store.commit("editQuestions", { question, index });
             }
         );
         watch(
             () => question.type,
             () => {
-                store.commit("editQuestions", {question, index});
+                store.commit("editQuestions", { question, index });
             }
         );
 
