@@ -4,7 +4,7 @@
         <div class="pt-12">
             <div class="mx-auto lg:max-w-7xl lg:px-8">
                 <div
-                    class="min-h-full gap-2 p-2 overflow-hidden shadow-none bg-sky-200 dark:bg-sky-700 sm:rounded-none"
+                    class="min-h-full gap-2 p-2 overflow-hidden bg-indigo-200 shadow-md dark:bg-indigo-700 sm:rounded-md"
                 >
                     <form
                         class="grid grid-cols-1 gap-4 md:grid-cols-3"
@@ -28,11 +28,32 @@
                         </div>
                         <div>
                             <Label for="start" value="زمان شروع" />
-                            <date-picker
+                            <Input
                                 id="start"
+                                class="w-full"
+                                v-model="form.start"
+                                :icon="true"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="w-6 h-6"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                    />
+                                </svg>
+                            </Input>
+                            <date-picker
                                 v-model="form.start"
                                 type="datetime"
                                 :min="new Date()"
+                                custom-input="#start"
                             />
                         </div>
                         <div>
@@ -41,12 +62,33 @@
                                 value="زمان پایان"
                                 :required="!!form.start"
                             />
-                            <date-picker
+                            <Input
                                 id="end"
+                                class="w-full"
+                                v-model="form.end"
+                                :icon="true"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="w-6 h-6"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                    />
+                                </svg>
+                            </Input>
+                            <date-picker
                                 v-model="form.end"
                                 :disabled="!!!form.start"
                                 :min="form.start"
                                 type="datetime"
+                                custom-input="#end"
                             />
                         </div>
                         <div>
@@ -55,26 +97,57 @@
                                 value="مدت زمان آزمون"
                                 :required="true"
                             />
-                            <date-picker
+                            <Input
                                 id="time"
+                                class="w-full"
+                                v-model="form.time"
+                                :icon="true"
+                            >
+                                <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    class="h-6 w-6"
+                                    fill="none"
+                                    viewBox="0 0 24 24"
+                                    stroke="currentColor"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                                    />
+                                </svg>
+                            </Input>
+                            <date-picker
                                 v-model="form.time"
                                 :max="form.start - form.end"
                                 type="time"
+                                custom-input="#time"
                             />
                         </div>
 
-                        <section class="col-span-full">
-                            <ul class="m-6 list-decimal">
-                                <question />
-                            </ul>
-
-                            <Button
-                                class="mr-4"
-                                :loding="loding"
-                                :disabled="form.processing"
-                            >
-                                ساخت آزمون
-                            </Button>
+                        <section class="m-6 col-span-full">
+                            <question />
+                            <div class="flex items-center justify-start gap-2">
+                                <Button
+                                    class="mr-4"
+                                    :loding="loding"
+                                    :disabled="form.processing"
+                                >
+                                    ساخت آزمون
+                                </Button>
+                                <div>
+                                    <p class="text-gray-800 dark:text-gray-300">
+                                        آزمون دارای
+                                        <span>
+                                            {{
+                                                $store.getters.getSizeQuestions
+                                            }}
+                                        </span>
+                                        سوال است
+                                    </p>
+                                </div>
+                            </div>
                         </section>
                     </form>
                 </div>
@@ -116,13 +189,12 @@ export default {
         //validation
         function validForm(question) {
             //required question
-            if (!!!question.question) return false;
-
+            if (!question.question) return false;
             // if test check required
-            if (question.type === "test-answer") {
-                if (!!!question.answer) return false;
-                for (const ans of question.option) {
-                    if (!!!ans) return false;
+            if (question.type == "test-answer") {
+                if (!question.answer) return false;
+                for (const key in question.option) {
+                    if (!question.option[key]) return false;
                 }
             }
 
@@ -153,6 +225,7 @@ export default {
         const loding = ref(false);
         const store = useStore();
         function submit() {
+            loding.value = true;
             if (!!form.start && !form.end) {
                 errorToast("لطفا تمامی فیلد های ستاره دار را پر کنید");
             } else if (!form.time) {
@@ -164,6 +237,7 @@ export default {
                 let required = true;
                 console.log(form.questions);
                 for (const key in form.questions) {
+                    console.log(form.questions[key]);
                     required = validForm(form.questions[key]);
                     if (!required) {
                         errorToast("لطفا تمامی فیلد های ستاره دار را پر کنید");
@@ -171,7 +245,6 @@ export default {
                     }
                 }
                 if (required) {
-                    loding.value = true;
                     form
                         // first get questions
                         .transform((data) => ({
@@ -181,8 +254,8 @@ export default {
                         //second send to backend
                         .post(route("store.quiz"), {
                             onError: (errors) => {
-                                for (const property of errors) {
-                                    errorToast(property);
+                                for (const key in errors) {
+                                    errorToast(errors[key]);
                                 }
                             },
                             onSuccess: () => {
@@ -207,6 +280,7 @@ export default {
                         });
                 }
             }
+            setTimeout(() => (loding.value = false), 200);
         }
 
         return {
