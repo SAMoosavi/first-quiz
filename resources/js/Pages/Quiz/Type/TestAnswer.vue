@@ -1,11 +1,13 @@
 <template>
     <ul
-        class="grid grid-cols-1 gap-2 my-3 group-hover:list-decimal md:grid-cols-2 lg:grid-cols-4 sm:gap-3 md:gap-4"
+        class="grid grid-cols-1 gap-2 my-3 group-hover:list-decimal md:grid-cols-2 lg:grid-cols-4 sm:gap-3 md:gap-4 dark:text-gray-200"
     >
-        <li v-for="(option, key) in options" :key="key">
+        <li v-for="(option, key) in options" :key="key" >
+            <div class="flex items-center">
             <Label :required="true" class="inline-block ml-2" />
-            <Radio v-model="ans.num" :value="key" :name="index" />
-            <Input class="w-3/4 mx-2" v-model.lazy="options[key]" required />
+            <Radio v-model="ans.num" class="inline-block" :value="key" :name="index" />
+            <Input class="inline-block w-3/4 mx-2" v-model.lazy="options[key]" required />
+            </div>
         </li>
     </ul>
 </template>
