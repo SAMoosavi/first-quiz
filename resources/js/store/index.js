@@ -4,7 +4,7 @@ export default createStore({
     state() {
         return {
             questions: {},
-            questionsLength: 0,
+            answers: {},
         };
     },
     mutations: {
@@ -14,12 +14,18 @@ export default createStore({
 
         addQuestions(state, index) {
             state.questions = { ...state.questions, [index]: {} };
-            state.questionsLength++;
         },
 
         removeQuestion(state, index) {
             delete state.questions[index];
-            state.questionsLength--;
+        },
+
+        addAnswer(state, { index, ans }) {
+            state.answers = { ...state.answers, [index]: {uuid: ans.uuid} };
+            
+        },
+        editAnswer(state, { index, ans }) {
+            state.answers[index] = ans;
         },
     },
     getters: {
@@ -28,7 +34,11 @@ export default createStore({
         },
 
         getSizeQuestions(state) {
-            return state.questionsLength;
+            return state.questions.length;
+        },
+
+        getAnswer(state) {
+            return state.answers;
         },
     },
 });
