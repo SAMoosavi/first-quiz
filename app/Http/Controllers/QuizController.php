@@ -8,16 +8,12 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Inertia\Inertia;
 
 use function PHPSTORM_META\map;
 
 class QuizController extends Controller
 {
-    public function show($uuid)
-    {
-        $quiz = Quiz::where('uuid', '=', $uuid)->get();
-        dd( $quiz[0]->questions);
-    }
 
     public function store(Request $request)
     {
@@ -44,7 +40,7 @@ class QuizController extends Controller
             Question::create([
                 'questions' => $question['question'],
                 'type' => $question['type'],
-                'option' => $question['option'],
+                'option' =>  json_encode($question['option']),
                 'answer' => $question['answer'],
                 'quiz_id' => $quiz->id,
                 'uuid' => (string)Str::uuid(),
