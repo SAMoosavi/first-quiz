@@ -19,11 +19,11 @@ class QuizController extends Controller
     {
 
         $request->validate([
-                'name' => "required|string",
-                'start' => 'nullable|string',
-                'end' => 'nullable|string',
-                'time' => 'nullable|string',
-            ]);
+            'name' => "required|string",
+            'start' => 'nullable|string',
+            'end' => 'nullable|string',
+            'time' => 'nullable|string',
+        ]);
 
         $user = Auth::user();
 
@@ -41,7 +41,7 @@ class QuizController extends Controller
                 'questions' => $question['question'],
                 'type' => $question['type'],
                 'option' =>  json_encode($question['option']),
-                'answer' => $question['answer'],
+                'answer' => json_encode($question['answer']),
                 'quiz_id' => $quiz->id,
                 'uuid' => (string)Str::uuid(),
             ]);
