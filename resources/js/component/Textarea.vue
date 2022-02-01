@@ -7,19 +7,17 @@
         :rows="rows"
         :required="required"
         :disabled="disabled"
+        v-model="value"
     ></textarea>
 </template>
 
-<script>
-export default {
-    props: {
-        name: String,
-        id: String,
-        disabled: { disabled: Boolean, default: false },
-        required: { required: Boolean, default: true },
-        rows: { rows: Number, default: 1 },
-    },
-};
+<script setup>
+defineProps({
+    name: String,
+    id: String,
+    disabled: { disabled: Boolean, default: false },
+    required: { required: Boolean, default: true },
+    rows: { rows: Number, default: 1 },
+    value: String,
+});
 </script>
-
-<style></style>
