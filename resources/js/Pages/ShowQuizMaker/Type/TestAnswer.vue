@@ -18,7 +18,7 @@
                     :value="key"
                     :name="index"
                     :checked="num == key ? true : false"
-                    :disabled="!showEdit"
+                    :disabled="!showEdit && num != key"
                 />
                 <my-input
                     class="inline-block w-3/4 mx-2"
