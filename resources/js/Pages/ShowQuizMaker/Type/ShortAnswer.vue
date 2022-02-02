@@ -1,5 +1,5 @@
 <template>
-    <h3 v-if="!showEdit">{{ question.questions }}</h3>
+    <h3 v-if="!showEdit">{{ thisQuestion.questions }}</h3>
     <my-textarea
         v-if="showEdit"
         v-model="editQuestion.questions"
@@ -45,15 +45,16 @@ import MyButton from "@/component/Button.vue";
 import MyButtonDanger from "@/component/ButtonDanger.vue";
 
 import { useForm } from "@inertiajs/inertia-vue3";
-import { ref } from "@vue/reactivity";
+import { reactive, ref } from "@vue/reactivity";
 import { useToast } from "vue-toastification";
 
 const props = defineProps(["question", "index"]);
-// const emit = defineEmits([])
-
+const thisQuestion = reactive(props.question);
 const editQuestion = useForm({
-    questions: props.question.questions,
-    uuid: props.question.uuid,
+    questions: thisQuestion.questions,
+    uuid: thisQuestion.uuid,
+    Option: null,
+    answer: null,
 });
 
 const showEdit = ref(false);
@@ -62,14 +63,18 @@ const lodingCansel = ref(false);
 
 function edit() {
     loding.value = true;
-    showEdit.value = true;
-    loding.value = false;
+    setTimeout(() => {
+        showEdit.value = true;
+        loding.value = false;
+    }, 200);
 }
 function editCansel() {
     lodingCansel.value = true;
-    editQuestion.questions = props.question.questions;
-    showEdit.value = !showEdit.value;
-    lodingCansel.value = false;
+    setTimeout(() => {
+        editQuestion.questions = thisQuestion.questions;
+        showEdit.value = !showEdit.value;
+        lodingCansel.value = false;
+    }, 200);
 }
 
 const toast = useToast();
@@ -115,9 +120,9 @@ function editing() {
     //         });
     //     },
     //     onFinish: () => {
-    //         editQuestion.questions = props.question.questions;
-    //         showEdit.value = !showEdit.value;
-    //         loding.value = false;
+    thisQuestion.questions = editQuestion.questions;
+    showEdit.value = !showEdit.value;
+    loding.value = false;
     //     },
     // });
 }
