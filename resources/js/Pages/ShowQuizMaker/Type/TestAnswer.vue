@@ -1,5 +1,5 @@
 <template>
-    <h3 v-if="!showEdit">{{ question.questions }}</h3>
+    <h3 v-if="!showEdit">{{ editQuestion.questions }}</h3>
     <my-textarea
         v-if="showEdit"
         v-model="editQuestion.questions"
@@ -9,20 +9,20 @@
     <ul
         class="grid grid-cols-1 gap-2 my-3 mr-4 group-hover:list-decimal md:grid-cols-2 lg:grid-cols-4 sm:gap-3 md:gap-4 dark:text-gray-200"
     >
-        <li v-for="(option, key) in options" :key="key">
+        <li v-for="(option, key) in editQuestion.option" :key="key">
             <div class="flex items-center">
                 <my-label :required="true" class="inline-block ml-2" />
                 <my-radio
-                    v-model="ans.num"
+                    v-model="num"
                     class="inline-block"
                     :value="key"
                     :name="index"
-                    :checked="ans.answer == option ? true : false"
+                    :checked="num == key ? true : false"
                     :disabled="!showEdit"
                 />
                 <my-input
                     class="inline-block w-3/4 mx-2"
-                    v-model.lazy="options[key]"
+                    v-model.lazy="editQuestion.option[key]"
                     :disabled="!showEdit"
                 />
             </div>
@@ -74,20 +74,29 @@ import { useToast } from "vue-toastification";
 import { watch } from "vue";
 
 const props = defineProps(["question", "index"]);
-// const emit = defineEmits([])
+const thisQuestion = reactive({
+    uuid: props.question.uuid,
+    questions: props.question.questions,
+    option: JSON.parse(props.question.option),
+    answer: JSON.parse(props.question.answer),
+});
 
-//decode Json and creat ans object
-const options = reactive(JSON.parse(props.question.option));
-const ans = reactive({ num: null, answer: JSON.parse(props.question.answer) });
-for (const key in options) {
-    ans.answer == options[key] ? (ans.num = key) : "";
+const pNum = ref(null);
+for (const key in thisQuestion.option) {
+    thisQuestion.answer == thisQuestion.option[key] ? (pNum.value = key) : "";
 }
+const num = ref(pNum.value);
 
 const editQuestion = useForm({
-    questions: props.question.questions,
-    option: options,
-    answer: ans.answer,
-    uuid: props.question.uuid,
+    uuid: thisQuestion.uuid,
+    questions: thisQuestion.questions,
+    option: {
+        ans1: thisQuestion.option.ans1,
+        ans2: thisQuestion.option.ans2,
+        ans3: thisQuestion.option.ans3,
+        ans4: thisQuestion.option.ans4,
+    },
+    answer: thisQuestion.answer,
 });
 
 const showEdit = ref(false);
@@ -96,14 +105,40 @@ const lodingCansel = ref(false);
 
 function edit() {
     loding.value = true;
-    showEdit.value = true;
-    loding.value = false;
+    setTimeout(() => {
+        showEdit.value = true;
+        loding.value = false;
+    }, 200);
 }
+
+//check edite
+for (const key in editQuestion.option) {
+    watch(
+        () => editQuestion.option[key],
+        (newVal) => {
+            if (key == num.value) {
+                editQuestion.answer = newVal;
+            }
+        }
+    );
+}
+
+watch(num, (newVal) => {
+    editQuestion.answer = editQuestion.option[newVal];
+});
+
 function editCansel() {
     lodingCansel.value = true;
-    editQuestion.questions = props.question.questions;
-    showEdit.value = !showEdit.value;
-    lodingCansel.value = false;
+    setTimeout(() => {
+        editQuestion.questions = thisQuestion.questions;
+        editQuestion.answer = thisQuestion.answer;
+        for (const key in thisQuestion.option) {
+            editQuestion.option[key] = thisQuestion.option[key];
+        }
+        num.value = pNum.value;
+        showEdit.value = !showEdit.value;
+        lodingCansel.value = false;
+    }, 200);
 }
 
 const toast = useToast();
@@ -123,24 +158,6 @@ function errorToast(text) {
         rtl: false,
     });
 }
-
-//check edite
-for (const key in options) {
-    watch(
-        () => options[key],
-        (newVal) => {
-            if (key == ans.num) {
-                ans.answer = newVal;
-            }
-        }
-    );
-}
-watch(
-    () => ans.num,
-    (val) => {
-        ans.answer = options[val];
-    }
-);
 
 function editing() {
     loding.value = true;
@@ -168,9 +185,14 @@ function editing() {
     //         });
     //     },
     //     onFinish: () => {
-    //         editQuestion.questions = props.question.questions;
-    //         showEdit.value = !showEdit.value;
-    //         loding.value = false;
+    thisQuestion.questions = editQuestion.questions;
+    for (const key in thisQuestion.option) {
+        thisQuestion.option[key] = editQuestion.option[key];
+    }
+    thisQuestion.answer = editQuestion.answer;
+    pNum.value = num.value;
+    showEdit.value = !showEdit.value;
+    loding.value = false;
     //     },
     // });
 }
