@@ -75,6 +75,7 @@ import { watch } from "vue";
 
 const props = defineProps(["question", "index"]);
 const thisQuestion = reactive({
+    id: props.question.id,
     uuid: props.question.uuid,
     questions: props.question.questions,
     option: JSON.parse(props.question.option),
@@ -88,6 +89,7 @@ for (const key in thisQuestion.option) {
 const num = ref(pNum.value);
 
 const editQuestion = useForm({
+    id: thisQuestion.id,
     uuid: thisQuestion.uuid,
     questions: thisQuestion.questions,
     option: {
@@ -162,39 +164,39 @@ function errorToast(text) {
 function editing() {
     loding.value = true;
 
-    // editQuestion.put(this.route("edit.question"), {
-    //     onError: (errors) => {
-    //         for (const property in errors) {
-    //             errorToast(errors[property]);
-    //         }
-    //     },
-    //     onSuccess: () => {
-    //         toast.success("سوال با موفقیت ویرایش شد", {
-    //             position: "bottom-right",
-    //             timeout: 5000,
-    //             closeOnClick: true,
-    //             pauseOnFocusLoss: true,
-    //             pauseOnHover: true,
-    //             draggable: true,
-    //             draggablePercent: 0.6,
-    //             showCloseButtonOnHover: false,
-    //             hideProgressBar: false,
-    //             closeButton: "button",
-    //             icon: true,
-    //             rtl: false,
-    //         });
-    //     },
-    //     onFinish: () => {
-    thisQuestion.questions = editQuestion.questions;
-    for (const key in thisQuestion.option) {
-        thisQuestion.option[key] = editQuestion.option[key];
-    }
-    thisQuestion.answer = editQuestion.answer;
-    pNum.value = num.value;
-    showEdit.value = !showEdit.value;
-    loding.value = false;
-    //     },
-    // });
+    editQuestion.put(route("edit.question", { id: editQuestion.id }), {
+        onError: (errors) => {
+            for (const property in errors) {
+                errorToast(errors[property]);
+            }
+        },
+        onSuccess: () => {
+            toast.success("سوال با موفقیت ویرایش شد", {
+                position: "bottom-right",
+                timeout: 5000,
+                closeOnClick: true,
+                pauseOnFocusLoss: true,
+                pauseOnHover: true,
+                draggable: true,
+                draggablePercent: 0.6,
+                showCloseButtonOnHover: false,
+                hideProgressBar: false,
+                closeButton: "button",
+                icon: true,
+                rtl: false,
+            });
+        },
+        onFinish: () => {
+            thisQuestion.questions = editQuestion.questions;
+            for (const key in thisQuestion.option) {
+                thisQuestion.option[key] = editQuestion.option[key];
+            }
+            thisQuestion.answer = editQuestion.answer;
+            pNum.value = num.value;
+            showEdit.value = !showEdit.value;
+            loding.value = false;
+        },
+    });
 }
 </script>
 

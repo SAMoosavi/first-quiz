@@ -50,6 +50,7 @@ import { useToast } from "vue-toastification";
 const props = defineProps(["question", "index"]);
 const thisQuestion = reactive(props.question);
 const editQuestion = useForm({
+    id: thisQuestion.id,
     questions: thisQuestion.questions,
     uuid: thisQuestion.uuid,
     Option: null,
@@ -96,34 +97,34 @@ function errorToast(text) {
 function editing() {
     loding.value = true;
 
-    // editQuestion.put(this.route("edit.question"), {
-    //     onError: (errors) => {
-    //         for (const property in errors) {
-    //             errorToast(errors[property]);
-    //         }
-    //     },
-    //     onSuccess: () => {
-    //         toast.success("سوال با موفقیت ویرایش شد", {
-    //             position: "bottom-right",
-    //             timeout: 5000,
-    //             closeOnClick: true,
-    //             pauseOnFocusLoss: true,
-    //             pauseOnHover: true,
-    //             draggable: true,
-    //             draggablePercent: 0.6,
-    //             showCloseButtonOnHover: false,
-    //             hideProgressBar: false,
-    //             closeButton: "button",
-    //             icon: true,
-    //             rtl: false,
-    //         });
-    //     },
-    //     onFinish: () => {
-    thisQuestion.questions = editQuestion.questions;
-    showEdit.value = !showEdit.value;
-    loding.value = false;
-    //     },
-    // });
+    editQuestion.put(route("edit.question", { id: editQuestion.id }), {
+        onError: (errors) => {
+            for (const property in errors) {
+                errorToast(errors[property]);
+            }
+        },
+        onSuccess: () => {
+            toast.success("سوال با موفقیت ویرایش شد", {
+                position: "bottom-right",
+                timeout: 5000,
+                closeOnClick: true,
+                pauseOnFocusLoss: true,
+                pauseOnHover: true,
+                draggable: true,
+                draggablePercent: 0.6,
+                showCloseButtonOnHover: false,
+                hideProgressBar: false,
+                closeButton: "button",
+                icon: true,
+                rtl: false,
+            });
+        },
+        onFinish: () => {
+            thisQuestion.questions = editQuestion.questions;
+            showEdit.value = !showEdit.value;
+            loding.value = false;
+        },
+    });
 }
 </script>
 
