@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\IndexController;
+use App\Http\Controllers\QuestionController;
 use App\Http\Controllers\QuizController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -43,6 +44,7 @@ Route::get('/create/quiz', [QuizController::class, function () {
 
 // Create Quiz Backend
 Route::post('/create/quiz', [QuizController::class, 'store'])->name('store.quiz')->middleware(['auth:sanctum', 'verified']);
+Route::put('/edit/question/{id}', [QuestionController::class, 'update'])->name('edit.question')->middleware(['auth:sanctum', 'verified']);
 
 // Show Quiz Page
 Route::get('/quiz/{uuid}', function ($uuid) {
