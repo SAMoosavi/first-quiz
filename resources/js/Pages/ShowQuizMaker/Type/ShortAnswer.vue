@@ -133,10 +133,10 @@ function editing() {
             },
             onFinish: () => {
                 thisQuestion.questions = editQuestion.questions;
+                showEdit.value = !showEdit.value;
             },
         });
         setTimeout(() => {
-            showEdit.value = !showEdit.value;
             loding.value = false;
         }, 200);
     }
