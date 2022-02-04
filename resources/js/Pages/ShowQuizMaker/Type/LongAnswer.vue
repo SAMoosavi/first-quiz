@@ -1,11 +1,20 @@
 <template>
     <h3 v-if="!showEdit">{{ thisQuestion.questions }}</h3>
-    <my-textarea
-        v-if="showEdit"
-        v-model="editQuestion.questions"
-        :value="editQuestion.questions"
-        :required="true"
-    />
+    <div v-if="showEdit">
+        <my-label
+            :required="true"
+            name="questions"
+            value="سوال"
+            class="inline-block ml-2"
+        />
+        <my-textarea
+            id="questions"
+            v-model="editQuestion.questions"
+            :value="editQuestion.questions"
+            :required="true"
+            class="inline-block"
+        />
+    </div>
     <my-textarea :required="false" :disabled="true" />
     <my-button
         v-if="!showEdit"
@@ -42,6 +51,7 @@
 import MyTextarea from "@/component/Textarea.vue";
 import MyButton from "@/component/Button.vue";
 import MyButtonDanger from "@/component/ButtonDanger.vue";
+import MyLabel from "@/component/Label.vue";
 
 import { useForm } from "@inertiajs/inertia-vue3";
 import { reactive, ref } from "@vue/reactivity";
@@ -96,35 +106,40 @@ function errorToast(text) {
 }
 function editing() {
     loding.value = true;
-
-    editQuestion.put(route("edit.question", { id: editQuestion.id }), {
-        onError: (errors) => {
-            for (const property in errors) {
-                errorToast(errors[property]);
-            }
-        },
-        onSuccess: () => {
-            toast.success("سوال با موفقیت ویرایش شد", {
-                position: "bottom-right",
-                timeout: 5000,
-                closeOnClick: true,
-                pauseOnFocusLoss: true,
-                pauseOnHover: true,
-                draggable: true,
-                draggablePercent: 0.6,
-                showCloseButtonOnHover: false,
-                hideProgressBar: false,
-                closeButton: "button",
-                icon: true,
-                rtl: false,
-            });
-        },
-        onFinish: () => {
-            thisQuestion.questions = editQuestion.questions;
-            showEdit.value = !showEdit.value;
-            loding.value = false;
-        },
-    });
+    if (!editQuestion.questions) {
+        errorToast("تمام فیلد های ستاره دار را پر کنید");
+    } else {
+        editQuestion.put(route("edit.question", { id: editQuestion.id }), {
+            onError: (errors) => {
+                for (const property in errors) {
+                    errorToast(errors[property]);
+                }
+            },
+            onSuccess: () => {
+                toast.success("سوال با موفقیت ویرایش شد", {
+                    position: "bottom-right",
+                    timeout: 5000,
+                    closeOnClick: true,
+                    pauseOnFocusLoss: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    draggablePercent: 0.6,
+                    showCloseButtonOnHover: false,
+                    hideProgressBar: false,
+                    closeButton: "button",
+                    icon: true,
+                    rtl: false,
+                });
+            },
+            onFinish: () => {
+                thisQuestion.questions = editQuestion.questions;
+            },
+        });
+    }
+    setTimeout(() => {
+        showEdit.value = !showEdit.value;
+        loding.value = false;
+    }, 200);
 }
 </script>
 
