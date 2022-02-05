@@ -4,6 +4,7 @@ export default createStore({
     state() {
         return {
             questions: {},
+            lengthQuestions: 0,
             answers: {},
         };
     },
@@ -14,15 +15,16 @@ export default createStore({
 
         addQuestions(state, index) {
             state.questions = { ...state.questions, [index]: {} };
+            state.lengthQuestions++;
         },
 
         removeQuestion(state, index) {
             delete state.questions[index];
+            state.lengthQuestions--;
         },
 
         addAnswer(state, { index, ans }) {
-            state.answers = { ...state.answers, [index]: {uuid: ans.uuid} };
-            
+            state.answers = { ...state.answers, [index]: { uuid: ans.uuid } };
         },
         editAnswer(state, { index, ans }) {
             state.answers[index] = ans;
@@ -34,7 +36,7 @@ export default createStore({
         },
 
         getSizeQuestions(state) {
-            return state.questions.length;
+            return state.lengthQuestions;
         },
 
         getAnswer(state) {
