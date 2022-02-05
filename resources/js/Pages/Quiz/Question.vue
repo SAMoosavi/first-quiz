@@ -120,7 +120,7 @@ export default {
                     showTopOf.value = true;
                     toastSuccess("سوال با موفقیت افزوده شد");
                 } else {
-                    showChilderT.value = newVall;
+                    showChilderTop.value = newVall;
                 }
             }
         );
@@ -137,7 +137,7 @@ export default {
 
                 toastSuccess("سوال با موفقیت افزوده شد");
             } else {
-                showChilderB.value = showChilderB.value + 1;
+                showChilderBottom.value = showChilderBottom.value + 1;
             }
             setTimeout(() => (lodAdd.value = false), 200);
         }
