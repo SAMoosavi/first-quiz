@@ -49,4 +49,23 @@ class QuizController extends Controller
 
         return Redirect::route('show.quiz', ['uuid' => $quiz->uuid]);
     }
+
+    public function update(Quiz $id, Request $request)
+    {
+        $request->validate([
+            'name' => "required|string",
+            'start' => 'nullable|string',
+            'end' => 'nullable|string',
+            'time' => 'required|string',
+        ]);
+
+        $id->update([
+            'name' => $request->name,
+            'start' => $request->start,
+            'end' => $request->end,
+            'time' => $request->time,
+        ]);
+
+        return  back()->withInput();
+    }
 }
