@@ -44,6 +44,9 @@ Route::get('/create/quiz', [QuizController::class, function () {
 
 // Create Quiz Backend
 Route::post('/create/quiz', [QuizController::class, 'store'])->name('store.quiz')->middleware(['auth:sanctum', 'verified']);
+
+// Edit Quize and Question
+Route::put('/edit/quiz/{id}', [QuizController::class, 'update'])->name('edit.quize')->middleware(['auth:sanctum', 'verified']);
 Route::put('/edit/question/{id}', [QuestionController::class, 'update'])->name('edit.question')->middleware(['auth:sanctum', 'verified']);
 
 // Show Quiz Page
