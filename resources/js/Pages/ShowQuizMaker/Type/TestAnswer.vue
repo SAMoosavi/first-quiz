@@ -202,14 +202,14 @@ function editing() {
                     icon: true,
                     rtl: false,
                 });
-            },
-            onFinish: () => {
                 thisQuestion.questions = editQuestion.questions;
                 for (const key in thisQuestion.option) {
                     thisQuestion.option[key] = editQuestion.option[key];
                 }
                 thisQuestion.answer = editQuestion.answer;
                 pNum.value = num.value;
+            },
+            onFinish: () => {
                 showEdit.value = !showEdit.value;
             },
         });

@@ -315,13 +315,12 @@ function editEditeQuize() {
                     icon: true,
                     rtl: false,
                 });
-            },
-            onFinish: () => {
                 thisQuiz.name = form.name;
                 thisQuiz.start = form.start;
                 thisQuiz.end = form.end;
                 thisQuiz.time = form.time;
-
+            },
+            onFinish: () => {
                 showEdite.value = !showEdite.value;
             },
         });

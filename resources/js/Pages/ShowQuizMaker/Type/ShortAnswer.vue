@@ -130,9 +130,9 @@ function editing() {
                     icon: true,
                     rtl: false,
                 });
+                thisQuestion.questions = editQuestion.questions;
             },
             onFinish: () => {
-                thisQuestion.questions = editQuestion.questions;
                 showEdit.value = !showEdit.value;
             },
         });
