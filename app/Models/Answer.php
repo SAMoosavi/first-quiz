@@ -16,7 +16,7 @@ class Answer extends Model
         'type',
         'option',
         'user_id',
-        'quiz_id',
+        'question_id',
     ];
 
     public function user()
