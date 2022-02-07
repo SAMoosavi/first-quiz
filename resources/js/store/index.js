@@ -24,10 +24,10 @@ export default createStore({
         },
 
         addAnswer(state, { index, ans }) {
-            state.answers = { ...state.answers, [index]: { uuid: ans.uuid } };
+            state.answers = {...state.answers, [index]: { id: ans.id, ans: ans.ans, ype: ans.type, }, };
         },
         editAnswer(state, { index, ans }) {
-            state.answers[index] = ans;
+            state.answers[index].ans = ans.ans;
         },
     },
     getters: {
