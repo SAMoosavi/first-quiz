@@ -36,6 +36,7 @@ const props = defineProps(["question", "in"]);
 const index = props.in;
 const ans = reactive({
     id: props.question.id,
+    type:props.question.type,
     ans: null,
 });
 
