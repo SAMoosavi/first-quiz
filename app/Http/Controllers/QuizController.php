@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Answer;
 use App\Models\Quiz;
 use App\Models\Question;
 use Illuminate\Support\Str;
@@ -67,5 +68,19 @@ class QuizController extends Controller
         ]);
 
         return  back()->withInput();
+    }
+
+    function send(Request $request)
+    {
+        $userId = Auth::user()->id;
+        foreach ($request->answer as $ans) {
+            Answer::create([
+                'type' => $ans['type'],
+                'answer' => $ans['ans'],
+                'user_id' => $userId,
+                'question_id' => $ans['id'],
+            ]);
+        }
+        return Redirect::route('dashboard');
     }
 }
