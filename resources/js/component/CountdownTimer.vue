@@ -1,61 +1,50 @@
 <template>
-    {{ timeEnd }}
+    {{ timeEnd ? timeEnd : "مدت آزمون" }}
 </template>
 
-<script>
+<script setup>
 import { ref } from "@vue/reactivity";
-import axios from "axios";
-export default {
-    props: ["time"],
-    setup(props, { emit }) {
-        let time = props.time;
-        time = time.split(":");
-        time = time[0] * 60 * 60 + time[1] * 60 + time[2] * 1;
 
-        let dispute = ref(null);
-        axios
-            .get("/get-time")
-            .then((response) => {
-                dispute.value = response.data.now * 1000 - new Date().getTime();
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+const props = defineProps(["time", "start", "now"]);
+const emit = defineEmits(["finish"]);
 
-        const start = new Date().getTime();
+let time = props.time;
+time = time.split(":");
+time = time[0] * 60 * 60 + time[1] * 60 + time[2] * 1;
+let dispute = ref(props.now * 1000 - new Date().getTime());
 
-        const timeEnd = ref(null);
+const start = props.start * 1000;
 
-        let timer = setInterval(() => {
-            let now = new Date().getTime() + dispute.value;
-            let lastTime = (now - start - dispute.value) / 1000;
+const timeEnd = ref(null);
 
-            timeEnd.value = time - lastTime;
+function toTwoNumber(num) {
+    return Math.abs(num) > 9 ? num : `0${num}`;
+}
 
-            let seconds = Math.floor(timeEnd.value % 60);
-            timeEnd.value /= 60;
-            let minutes = Math.floor(timeEnd.value % 60);
-            timeEnd.value /= 60;
-            let hour = Math.floor(timeEnd.value % 60);
+let timer = setInterval(() => {
+    let now = new Date().getTime() + dispute.value;
+    let lastTime = (now - start) / 1000;
 
-            timeEnd.value =
-                Math.floor(hour) +
-                ":" +
-                Math.floor(minutes) +
-                ":" +
-                Math.floor(seconds);
+    timeEnd.value = time - lastTime;
+    if (timeEnd.value > 0) {
+        let seconds = Math.floor(timeEnd.value % 60);
+        timeEnd.value /= 60;
+        let minutes = Math.floor(timeEnd.value % 60);
+        timeEnd.value /= 60;
+        let hour = Math.floor(timeEnd.value % 60);
+        timeEnd.value =
+            toTwoNumber(hour) +
+            ":" +
+            toTwoNumber(minutes) +
+            ":" +
+            toTwoNumber(seconds);
+    } else {
+        timeEnd.value = "00:00:00";
+    }
 
-            if (timeEnd.value == "0:0:0") {
-                emit("finish", true);
-                clearInterval(timer);
-            }
-        }, 1000);
-
-        return {
-            timeEnd,
-        };
-    },
-};
+    if (time - lastTime < 0) {
+        emit("finish", true);
+        clearInterval(timer);
+    }
+}, 1000);
 </script>
-
-<style></style>
