@@ -40,8 +40,8 @@
     import JetButton from '../component/Button.vue'
     import JetDialogModal from './DialogModal.vue'
     import JetInput from '../component/Input.vue'
-    import JetInputError from './InputError.vue'
-    import JetSecondaryButton from './SecondaryButton.vue'
+    import JetInputError from '../component/InputError.vue'
+    import JetSecondaryButton from '../component/SecondaryButton.vue'
 
     export default defineComponent({
         emits: ['confirmed'],
