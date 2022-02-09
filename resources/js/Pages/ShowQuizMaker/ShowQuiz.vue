@@ -123,7 +123,7 @@
                                 >
                                     <svg
                                         xmlns="http://www.w3.org/2000/svg"
-                                        class="h-6 w-6"
+                                        class="w-6 h-6"
                                         fill="none"
                                         viewBox="0 0 24 24"
                                         stroke="currentColor"
@@ -169,6 +169,17 @@
                             <span v-else>مخفی کردن</span>
                             سوالات
                         </my-button>
+                    </div>
+                    <div>
+                        <a :href="route('ans.quiz', { uuid: quiz.uuid })">
+                            <p>
+                                لینک آزمون:
+                                <br />
+                                <span>{{
+                                    route("ans.quiz", { uuid: quiz.uuid })
+                                }}</span>
+                            </p>
+                        </a>
                     </div>
                     <transition
                         enter-active-class="transition duration-200 ease-out origin-top "
