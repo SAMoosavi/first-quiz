@@ -17,9 +17,9 @@ class CreateQuizzesTable extends Migration
             $table->id();
             $table->uuid('uuid');
             $table->string('name');
-            $table->time('start')->nullable();
-            $table->time('end')->nullable();
-            $table->time('time')->nullable();
+            $table->timestamp('start')->nullable();
+            $table->timestamp('end')->nullable();
+            $table->time('time');
             $table->foreignId('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
