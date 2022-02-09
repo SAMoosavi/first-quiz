@@ -2,15 +2,16 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Laravel\Fortify\TwoFactorAuthenticatable;
+use Illuminate\Notifications\Notifiable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
-use App\Models\Quiz;
+use App\Models\StudentQuiz;
 use App\Models\Answer;
+use App\Models\Quiz;
 
 class User extends Authenticatable
 {
@@ -66,12 +67,17 @@ class User extends Authenticatable
         return $this->hasMany(Quiz::class);
     }
 
+    // public function quizzesParticipants()
+    // {
+    //     return $this->belongsToMany(Quiz::class);
+    // }
     public function quizzesParticipants()
     {
-        return $this->belongsToMany(Quiz::class);
+        return $this->belongsToMany(StudentQuiz::class);
     }
 
-    public function answers(){
+    public function answers()
+    {
         return $this->belongsToMany(Answer::class);
     }
 }
