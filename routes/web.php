@@ -61,11 +61,7 @@ Route::get('/quiz/{uuid}', function ($uuid) {
 // ---------Student Quiz
 
 // Show Quiz Page
-Route::get('/show/{uuid}', function ($uuid) {
-    $quiz = Quiz::where('uuid', '=', $uuid)->get()[0];
-    $quiz->questions;
-    return Inertia::render('Student/ShowQuiz', ['quiz' => $quiz]);
-})->name('ans.quiz')->middleware(['auth:sanctum', 'verified']);
+Route::get('/show/{uuid}', [QuizController::class, 'show'])->name('ans.quiz')->middleware(['auth:sanctum', 'verified']);
 
 // send answer
 Route::post('/send-answer', [QuizController::class, 'send'])->name('send.answer');
