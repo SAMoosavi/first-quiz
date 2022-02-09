@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Answer;
+use Inertia\Inertia;
+use App\Models\User;
 use App\Models\Quiz;
+use App\Models\Answer;
 use App\Models\Question;
+use App\Models\StudentQuiz;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
-use Inertia\Inertia;
 
 use function PHPSTORM_META\map;
 
@@ -70,7 +72,7 @@ class QuizController extends Controller
         return  back()->withInput();
     }
 
-    function send(Request $request)
+    public  function send(Request $request)
     {
         $userId = Auth::user()->id;
         foreach ($request->answer as $ans) {
@@ -81,6 +83,42 @@ class QuizController extends Controller
                 'question_id' => $ans['id'],
             ]);
         }
+        $quiz =  Question::find($request->answer[0]['id'])->quiz;
+
+        StudentQuiz::where('user_id', '=', $userId)->where('quiz_id', '=', $quiz->id)->get()[0]->update([
+            'end' => date("Y-m-d H:i:s"),
+        ]);
         return Redirect::route('dashboard');
+    }
+
+    public function show($uuid)
+    {
+        $quiz = Quiz::where('uuid', '=', $uuid)->get()[0];
+        $quiz->questions;
+        $user = User::find(auth()->id());
+
+        if (!StudentQuiz::where('user_id', '=', $user->id)->where('quiz_id', '=', $quiz->id)->get()->isEmpty()) {
+            $a = StudentQuiz::where('user_id', '=', $user->id)->where('quiz_id', '=', $quiz->id)->get()[0];
+            if (!$a->end) {
+                if (strtotime(date("Y-m-d H:i:s")) < strtotime($a->start) + strtotime($quiz->time)) {
+                    return Inertia::render('Student/ShowQuiz', ['quiz' => $quiz, 'start' => strtotime($a->start), 'now' => strtotime(date("Y-m-d H:i:s"))]);
+                } else {
+                    StudentQuiz::where('user_id', '=', $user->id)->where('quiz_id', '=', $quiz->id)->get()[0]->update([
+                        'end' => date("Y-m-d H:i:s", strtotime($a->start) + strtotime($quiz->time)),
+                    ]);
+                }
+            } else {
+                dd($a);
+                // return Inertia::render('Student/ShowQuiz', ['quiz' => $quiz]);
+            }
+        } else {
+            StudentQuiz::create([
+                'start' => date("Y-m-d H:i:s"),
+                'end' => null,
+                'quiz_id' => $quiz->id,
+                'user_id' => $user->id,
+            ]);
+            return Inertia::render('Student/ShowQuiz', ['quiz' => $quiz, 'start' => strtotime(date("Y-m-d H:i:s")), 'now' => strtotime(date("Y-m-d H:i:s"))]);
+        }
     }
 }
