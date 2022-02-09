@@ -9,7 +9,12 @@
                     <div class="flex items-center justify-between">
                         <h2>نام آرمون: {{ quiz.name }}</h2>
 
-                        <countdown-timer :time="quiz.time" @finish="finish" />
+                        <countdown-timer
+                            :time="quiz.time"
+                            @finish="finish"
+                            :now="now"
+                            :start="start"
+                        />
                     </div>
                     <div
                         class="flex flex-col items-center justify-between w-full p-1 py-4 my-2 transition-all duration-200 transform border-2 border-indigo-500 border-dotted divide-indigo-500 shadow lg:flex-row group hover:scale-x-[1.03] dark:border-indigo-400 hover:border-solid shadow-transparent hover:shadow-indigo-800 dark:hover:shadow-indigo-400"
@@ -85,7 +90,7 @@ const components = {
     "test-answer": TestAnswer,
 };
 
-const props = defineProps(["quiz"]);
+const props = defineProps(["quiz", "start", "now"]);
 const questions = _.shuffle(props.quiz.questions);
 
 const loding = ref(false);
@@ -145,9 +150,7 @@ function send() {
         },
     });
 }
-function finish(params) {
-    if (params) {
-        console.log("finish");
-    }
+function finish() {
+    send();
 }
 </script>
