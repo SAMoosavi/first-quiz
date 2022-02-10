@@ -100,13 +100,7 @@ class QuizController extends Controller
         if (!StudentQuiz::where('user_id', '=', $user->id)->where('quiz_id', '=', $quiz->id)->get()->isEmpty()) {
             $a = StudentQuiz::where('user_id', '=', $user->id)->where('quiz_id', '=', $quiz->id)->get()[0];
             if (!$a->end) {
-                if (strtotime(date("Y-m-d H:i:s")) < strtotime($a->start) + strtotime($quiz->time)) {
-                    return Inertia::render('Student/ShowQuiz', ['quiz' => $quiz, 'start' => strtotime($a->start), 'now' => strtotime(date("Y-m-d H:i:s"))]);
-                } else {
-                    StudentQuiz::where('user_id', '=', $user->id)->where('quiz_id', '=', $quiz->id)->get()[0]->update([
-                        'end' => date("Y-m-d H:i:s", strtotime($a->start) + strtotime($quiz->time)),
-                    ]);
-                }
+                return Inertia::render('Student/ShowQuiz', ['quiz' => $quiz, 'start' => strtotime($a->start), 'now' => strtotime(date("Y-m-d H:i:s"))]);
             } else {
                 dd($a);
                 // return Inertia::render('Student/ShowQuiz', ['quiz' => $quiz]);
