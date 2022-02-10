@@ -12,6 +12,7 @@
                     :id="answer"
                     :value="answer"
                     :name="index"
+                    :checked="answer == ans.ans ? true : false"
                 />
                 <my-label
                     :name="answer"
@@ -34,10 +35,14 @@ import { useStore } from "vuex";
 
 const props = defineProps(["question", "in"]);
 const index = props.in;
+const ansLocalstoreeg = !!localStorage.getItem(props.question.id)
+    ? localStorage.getItem(props.question.id)
+    : null;
+
 const ans = reactive({
     id: props.question.id,
-    type:props.question.type,
-    ans: null,
+    type: props.question.type,
+    ans: ansLocalstoreeg,
 });
 
 const option = _.shuffle(JSON.parse(props.question.option));
@@ -51,6 +56,7 @@ onMounted(() => {
 watch(
     () => ans.ans,
     (value) => {
+        localStorage.setItem(ans.id, value);
         store.commit("editAnswer", { index, ans });
     }
 );
