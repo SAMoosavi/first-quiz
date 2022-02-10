@@ -16,12 +16,15 @@ import { useStore } from "vuex";
 import MyInput from "@/component/Input.vue";
 
 const props = defineProps(["question", "in"]);
-const index= props.in;
+const index = props.in;
+const ansLocalstoreeg = !!localStorage.getItem(props.question.id)
+    ? localStorage.getItem(props.question.id)
+    : null;
 
 const ans = reactive({
-    type:props.question.type,
+    type: props.question.type,
     id: props.question.id,
-    ans: null,
+    ans: ansLocalstoreeg,
 });
 const store = useStore();
 onMounted(() => {
@@ -30,9 +33,9 @@ onMounted(() => {
 
 watch(
     () => ans.ans,
-    () => {
+    (value) => {
+        localStorage.setItem(ans.id, value);
         store.commit("editAnswer", { index, ans });
     }
 );
 </script>
-
