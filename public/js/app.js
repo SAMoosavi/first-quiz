@@ -22044,12 +22044,16 @@ __webpack_require__.r(__webpack_exports__);
     var form = (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_7__.useForm)({
       answer: null
     });
-    console.log(form);
 
     function send() {
       loding.value = true;
       form.answer = store.getters.getAnswer;
-      console.log(form);
+
+      for (var index in form.answer) {
+        var answer = form.answer[index];
+        localStorage.removeItem(answer.id);
+      }
+
       form.post(route("send.answer"), {
         onError: function onError(errors) {
           for (var key in errors) {
@@ -22143,10 +22147,12 @@ __webpack_require__.r(__webpack_exports__);
     expose();
     var props = __props;
     var index = props["in"];
+    var ansLocalstoreeg = !!localStorage.getItem(props.question.id) ? localStorage.getItem(props.question.id) : null;
+    console.log(ansLocalstoreeg);
     var ans = (0,_vue_reactivity__WEBPACK_IMPORTED_MODULE_1__.reactive)({
       type: props.question.type,
       id: props.question.id,
-      ans: null
+      ans: ansLocalstoreeg
     });
     var store = (0,vuex__WEBPACK_IMPORTED_MODULE_2__.useStore)();
     (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_3__.onMounted)(function () {
@@ -22158,6 +22164,7 @@ __webpack_require__.r(__webpack_exports__);
     (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_3__.watch)(function () {
       return ans.ans;
     }, function (value) {
+      localStorage.setItem(ans.id, value);
       store.commit("editAnswer", {
         index: index,
         ans: ans
@@ -22166,6 +22173,7 @@ __webpack_require__.r(__webpack_exports__);
     var __returned__ = {
       props: props,
       index: index,
+      ansLocalstoreeg: ansLocalstoreeg,
       ans: ans,
       store: store,
       MyTextarea: _component_Textarea_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
@@ -22210,10 +22218,11 @@ __webpack_require__.r(__webpack_exports__);
     expose();
     var props = __props;
     var index = props["in"];
+    var ansLocalstoreeg = !!localStorage.getItem(props.question.id) ? localStorage.getItem(props.question.id) : null;
     var ans = (0,_vue_reactivity__WEBPACK_IMPORTED_MODULE_1__.reactive)({
       type: props.question.type,
       id: props.question.id,
-      ans: null
+      ans: ansLocalstoreeg
     });
     var store = (0,vuex__WEBPACK_IMPORTED_MODULE_2__.useStore)();
     (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_3__.onMounted)(function () {
@@ -22224,7 +22233,8 @@ __webpack_require__.r(__webpack_exports__);
     });
     (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_3__.watch)(function () {
       return ans.ans;
-    }, function () {
+    }, function (value) {
+      localStorage.setItem(ans.id, value);
       store.commit("editAnswer", {
         index: index,
         ans: ans
@@ -22233,6 +22243,7 @@ __webpack_require__.r(__webpack_exports__);
     var __returned__ = {
       props: props,
       index: index,
+      ansLocalstoreeg: ansLocalstoreeg,
       ans: ans,
       store: store,
       reactive: _vue_reactivity__WEBPACK_IMPORTED_MODULE_1__.reactive,
@@ -22281,10 +22292,11 @@ __webpack_require__.r(__webpack_exports__);
     expose();
     var props = __props;
     var index = props["in"];
+    var ansLocalstoreeg = !!localStorage.getItem(props.question.id) ? localStorage.getItem(props.question.id) : null;
     var ans = (0,_vue_reactivity__WEBPACK_IMPORTED_MODULE_3__.reactive)({
       id: props.question.id,
       type: props.question.type,
-      ans: null
+      ans: ansLocalstoreeg
     });
 
     var option = _.shuffle(JSON.parse(props.question.option));
@@ -22299,6 +22311,7 @@ __webpack_require__.r(__webpack_exports__);
     (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.watch)(function () {
       return ans.ans;
     }, function (value) {
+      localStorage.setItem(ans.id, value);
       store.commit("editAnswer", {
         index: index,
         ans: ans
@@ -22307,6 +22320,7 @@ __webpack_require__.r(__webpack_exports__);
     var __returned__ = {
       props: props,
       index: index,
+      ansLocalstoreeg: ansLocalstoreeg,
       ans: ans,
       option: option,
       store: store,
@@ -26579,10 +26593,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }),
     modelModifiers: {
       lazy: true
-    }
+    },
+    value: $setup.ans.ans
   }, null, 8
   /* PROPS */
-  , ["modelValue"])])]);
+  , ["modelValue", "value"])])]);
 }
 
 /***/ }),
@@ -26661,10 +26676,11 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       "class": "inline-block",
       id: answer,
       value: answer,
-      name: $setup.index
+      name: $setup.index,
+      checked: answer == $setup.ans.ans ? true : false
     }, null, 8
     /* PROPS */
-    , ["modelValue", "id", "value", "name"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["MyLabel"], {
+    , ["modelValue", "id", "value", "name", "checked"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["MyLabel"], {
       name: answer,
       value: answer,
       "class": "inline-block mr-2"

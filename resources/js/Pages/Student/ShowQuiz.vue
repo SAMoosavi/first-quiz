@@ -117,12 +117,16 @@ const sendOk = ref(false);
 
 const store = useStore();
 const form = useForm({ answer: null });
-console.log(form);
 
 function send() {
     loding.value = true;
     form.answer = store.getters.getAnswer;
-    console.log(form);
+
+    for (const index in form.answer) {
+        const answer = form.answer[index];
+        localStorage.removeItem(answer.id);
+    }
+    
     form.post(route("send.answer"), {
         onError: (errors) => {
             for (const key in errors) {
