@@ -7,6 +7,7 @@ use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Models\Quiz;
+use Date\Date;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,6 +54,8 @@ Route::put('/edit/question/{id}', [QuestionController::class, 'update'])->name('
 Route::get('/quiz/{uuid}', function ($uuid) {
     $quiz = Quiz::where('uuid', '=', $uuid)->get()[0];
     $quiz->questions;
+    $quiz->start = !!$quiz->start ? (new Date($quiz->start))->toJalali()->format('Y/m/d H:i:s') : null;
+    $quiz->end = !!$quiz->end ? (new Date($quiz->end))->toJalali()->format('Y/m/d H:i:s') : null;
     return Inertia::render('ShowQuizMaker/ShowQuiz', ['quiz' => $quiz]);
 })->name('show.quiz')->middleware(['auth:sanctum', 'verified']);
 
