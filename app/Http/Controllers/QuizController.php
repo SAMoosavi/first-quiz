@@ -12,6 +12,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
+use Date\Jalali;
 
 use function PHPSTORM_META\map;
 
@@ -20,7 +21,6 @@ class QuizController extends Controller
 
     public function store(Request $request)
     {
-
         $request->validate([
             'name' => "required|string",
             'start' => 'nullable|string',
@@ -33,8 +33,8 @@ class QuizController extends Controller
         $quiz = Quiz::create([
             'name' => $request->name,
             'user_id' => $user->id,
-            'start' => $request->start,
-            'end' => $request->end,
+            'start' => !!$request->start ? (new Jalali($request->start))->toGregorian()->format('Y-m-d H:i:s') : null,
+            'end' => !!$request->end ? (new Jalali($request->end))->toGregorian()->format('Y-m-d H:i:s') : null,
             'time' => $request->time,
             'uuid' => (string)Str::uuid(),
         ]);
@@ -64,8 +64,8 @@ class QuizController extends Controller
 
         $id->update([
             'name' => $request->name,
-            'start' => $request->start,
-            'end' => $request->end,
+            'start' => !!$request->start ? (new Jalali($request->start))->toGregorian()->format('Y-m-d H:i:s') : null,
+            'end' => !!$request->end ? (new Jalali($request->end))->toGregorian()->format('Y-m-d H:i:s') : null,
             'time' => $request->time,
         ]);
 
