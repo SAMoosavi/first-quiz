@@ -16,6 +16,7 @@
                             زمان مانده تا شروع آزمون
                             <countdown-timer
                                 @finish="finish"
+                                :time="time"
                                 :now="now"
                                 :start="start"
                             />
@@ -32,10 +33,25 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import CountdownTimer from "@/component/CountdownTimer.vue";
 import { ref } from "@vue/reactivity";
+import { useToast } from "vue-toastification";
 
-const props = defineProps(["start", "now", "uuid"]);
+const props = defineProps(["start", "now", "uuid", "time"]);
 let tagA = ref();
 function finish() {
     tagA.value.click();
+    useToast().success("آزمون با شروع شد", {
+        position: "bottom-right",
+        timeout: 5000,
+        closeOnClick: true,
+        pauseOnFocusLoss: true,
+        pauseOnHover: true,
+        draggable: true,
+        draggablePercent: 0.6,
+        showCloseButtonOnHover: false,
+        hideProgressBar: false,
+        closeButton: "button",
+        icon: true,
+        rtl: false,
+    });
 }
 </script>
