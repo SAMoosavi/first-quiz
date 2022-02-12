@@ -94,25 +94,44 @@ class QuizController extends Controller
     public function show($uuid)
     {
         $quiz = Quiz::where('uuid', '=', $uuid)->get()[0];
-        $quiz->questions;
-        $user = User::find(auth()->id());
+        $now = strtotime(date("Y-m-d H:i:s"));
 
-        if (!StudentQuiz::where('user_id', '=', $user->id)->where('quiz_id', '=', $quiz->id)->get()->isEmpty()) {
-            $a = StudentQuiz::where('user_id', '=', $user->id)->where('quiz_id', '=', $quiz->id)->get()[0];
-            if (!$a->end) {
-                return Inertia::render('Student/ShowQuiz', ['quiz' => $quiz, 'start' => strtotime($a->start), 'now' => strtotime(date("Y-m-d H:i:s"))]);
-            } else {
-                dd($a);
-                // return Inertia::render('Student/ShowQuiz', ['quiz' => $quiz]);
-            }
+        if (!!$quiz->start && $now < strtotime($quiz->start)) {
+            $time = strtotime($quiz->start) - $now;
+            $seconds = $time % 60;
+            $time = floor($time / 60);
+            $minutes = $time % 60;
+            $time = floor($time / 60);
+            $hours = $time;
+            $time = $hours . ":" . $minutes . ":" . $seconds;
+
+            return Inertia::render('Student/NotStart', ['uuid' => $uuid, 'now' => $now, 'start' => $now, 'time' => $time]);
+        } elseif (!!$quiz->end && $now > strtotime($quiz->end)) {
+            dd('finished time');
         } else {
-            StudentQuiz::create([
-                'start' => date("Y-m-d H:i:s"),
-                'end' => null,
-                'quiz_id' => $quiz->id,
-                'user_id' => $user->id,
-            ]);
-            return Inertia::render('Student/ShowQuiz', ['quiz' => $quiz, 'start' => strtotime(date("Y-m-d H:i:s")), 'now' => strtotime(date("Y-m-d H:i:s"))]);
+            $user = User::find(auth()->id());
+
+            if (!StudentQuiz::where('user_id', '=', $user->id)->where('quiz_id', '=', $quiz->id)->get()->isEmpty()) {
+                $studentQuiz = StudentQuiz::where('user_id', '=', $user->id)->where('quiz_id', '=', $quiz->id)->get()[0];
+                if (!$studentQuiz->end) {
+                    $quiz->questions;
+
+                    return Inertia::render('Student/ShowQuiz', ['quiz' => $quiz, 'start' => strtotime($studentQuiz->start), 'now' => $now]);
+                } else {
+                    dd($studentQuiz);
+                    // return Inertia::render('Student/ShowQuiz', ['quiz' => $quiz]);
+                }
+            } else {
+                $quiz->questions;
+
+                StudentQuiz::create([
+                    'start' => date("Y-m-d H:i:s"),
+                    'end' => null,
+                    'quiz_id' => $quiz->id,
+                    'user_id' => $user->id,
+                ]);
+                return Inertia::render('Student/ShowQuiz', ['quiz' => $quiz, 'start' => $now, 'now' => $now]);
+            }
         }
     }
 }
