@@ -8,12 +8,14 @@ import { ref } from "@vue/reactivity";
 const props = defineProps(["time", "start", "now"]);
 const emit = defineEmits(["finish"]);
 
-let time = props.time;
-time = time.split(":");
-time = time[0] * 60 * 60 + time[1] * 60 + time[2] * 1;
+let time = props.time ? props.time : props.start;
+if (props.time) {
+    time = time.split(":");
+    time = time[0] * 60 * 60 + time[1] * 60 + time[2] * 1;
+}
 let dispute = ref(props.now * 1000 - new Date().getTime());
 
-const start = props.start * 1000;
+const start = props.time ? props.start * 1000 : props.now * 1000;
 
 const timeEnd = ref(null);
 
