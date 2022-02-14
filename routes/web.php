@@ -6,8 +6,6 @@ use App\Http\Controllers\QuizController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use App\Models\Quiz;
-use Date\Date;
 
 /*
 |--------------------------------------------------------------------------
@@ -51,20 +49,14 @@ Route::put('/edit/quiz/{id}', [QuizController::class, 'update'])->name('edit.qui
 Route::put('/edit/question/{id}', [QuestionController::class, 'update'])->name('edit.question')->middleware(['auth:sanctum', 'verified']);
 
 // Show Quiz Page
-Route::get('/quiz/{uuid:uuid}', function (Quiz $uuid) {
-    $quiz = $uuid;
-    $quiz->questions;
-    $quiz->start = !!$quiz->start ? (new Date($quiz->start))->toJalali()->format('Y/m/d H:i:s') : null;
-    $quiz->end = !!$quiz->end ? (new Date($quiz->end))->toJalali()->format('Y/m/d H:i:s') : null;
-    return Inertia::render('ShowQuizMaker/ShowQuiz', ['quiz' => $quiz]);
-})->name('show.quiz')->middleware(['auth:sanctum', 'verified']);
+Route::get('/quiz/{uuid:uuid}', [QuizController::class, 'showTeacher'])->name('show.quiz')->middleware(['auth:sanctum', 'verified']);
 
 
 
 // ---------Student Quiz
 
 // Show Quiz Page
-Route::get('/show/{uuid:uuid}', [QuizController::class, 'show'])->name('ans.quiz')->middleware(['auth:sanctum', 'verified']);
+Route::get('/show/{uuid:uuid}', [QuizController::class, 'showStudent'])->name('ans.quiz')->middleware(['auth:sanctum', 'verified']);
 
 // send answer
 Route::post('/send-answer', [QuizController::class, 'send'])->name('send.answer');
