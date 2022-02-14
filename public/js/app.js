@@ -20438,6 +20438,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _component_InputError_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @/component/InputError.vue */ "./resources/js/component/InputError.vue");
 /* harmony import */ var _component_Label_vue__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @/component/Label.vue */ "./resources/js/component/Label.vue");
 /* harmony import */ var _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @inertiajs/inertia-vue3 */ "./node_modules/@inertiajs/inertia-vue3/dist/index.js");
+/* harmony import */ var vue_toastification__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! vue-toastification */ "./node_modules/vue-toastification/dist/index.mjs");
+
 
 
 
@@ -20462,7 +20464,7 @@ __webpack_require__.r(__webpack_exports__);
       password_confirmation: ""
     });
     var loding = (0,vue__WEBPACK_IMPORTED_MODULE_0__.ref)(false);
-    var toast = useToast();
+    var toast = (0,vue_toastification__WEBPACK_IMPORTED_MODULE_8__.useToast)();
 
     function toastSuccess(text) {
       toast.success(text, {

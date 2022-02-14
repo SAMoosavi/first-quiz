@@ -74,6 +74,7 @@ import Input from "@/component/Input.vue";
 import InputError from "@/component/InputError.vue";
 import Label from "@/component/Label.vue";
 import { useForm } from "@inertiajs/inertia-vue3";
+import { useToast } from "vue-toastification";
 
 export default defineComponent({
     components: {
