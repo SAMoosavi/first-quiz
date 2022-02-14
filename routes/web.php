@@ -51,8 +51,8 @@ Route::put('/edit/quiz/{id}', [QuizController::class, 'update'])->name('edit.qui
 Route::put('/edit/question/{id}', [QuestionController::class, 'update'])->name('edit.question')->middleware(['auth:sanctum', 'verified']);
 
 // Show Quiz Page
-Route::get('/quiz/{uuid}', function ($uuid) {
-    $quiz = Quiz::where('uuid', '=', $uuid)->get()[0];
+Route::get('/quiz/{uuid:uuid}', function (Quiz $uuid) {
+    $quiz = $uuid;
     $quiz->questions;
     $quiz->start = !!$quiz->start ? (new Date($quiz->start))->toJalali()->format('Y/m/d H:i:s') : null;
     $quiz->end = !!$quiz->end ? (new Date($quiz->end))->toJalali()->format('Y/m/d H:i:s') : null;
@@ -64,7 +64,7 @@ Route::get('/quiz/{uuid}', function ($uuid) {
 // ---------Student Quiz
 
 // Show Quiz Page
-Route::get('/show/{uuid}', [QuizController::class, 'show'])->name('ans.quiz')->middleware(['auth:sanctum', 'verified']);
+Route::get('/show/{uuid:uuid}', [QuizController::class, 'show'])->name('ans.quiz')->middleware(['auth:sanctum', 'verified']);
 
 // send answer
 Route::post('/send-answer', [QuizController::class, 'send'])->name('send.answer');
