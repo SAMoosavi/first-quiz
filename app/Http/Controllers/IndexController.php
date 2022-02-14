@@ -20,9 +20,9 @@ class IndexController extends Controller
             $quiz->end = !!$quiz->end ? (new  Date($quiz->end))->toJalali()->format('Y/m/d H:i')  : null;
             return $quiz;
         });
-        $participants =  StudentQuiz::where('user_id', '=', $user->id)->get()->map(function ($ids) {
+        $participants =  StudentQuiz::where('user_id', '=', $user->id)->get()->map(function ($id) {
 
-            $quiz = Quiz::find($ids->quiz_id);
+            $quiz = Quiz::find($id->quiz_id);
             $quiz->start = !!$quiz->start ? (new Date($quiz->start))->toJalali()->format('Y/m/d H:i')  : null;
             $quiz->end = !!$quiz->end ? (new  Date($quiz->end))->toJalali()->format('Y/m/d H:i')  : null;
             return $quiz;
