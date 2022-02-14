@@ -22574,7 +22574,7 @@ __webpack_require__.r(__webpack_exports__);
     CardTitle: _component_CardTitle_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
     CardText: _component_CardText_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
   },
-  props: ["item"]
+  props: ["item", "thisRoute"]
 });
 
 /***/ }),
@@ -24433,7 +24433,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       key: maker.id,
       "class": "text-black"
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Card, {
-      item: maker
+      item: maker,
+      thisRoute: "show"
     }, null, 8
     /* PROPS */
     , ["item"])]);
@@ -24488,7 +24489,8 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       key: participant.id,
       "class": "text-black"
     }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(_component_Card, {
-      item: participant
+      item: participant,
+      thisRoute: "ans"
     }, null, 8
     /* PROPS */
     , ["item"])]);
@@ -27127,7 +27129,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)(_component_Link, {
     "class": "p-1 py-4 my-2 transition-all justify-items-center duration-150 transform border-2 border-indigo-500 border-dotted shadow hover:scale-x-[1.02] dark:border-indigo-400 shadow-transparent hover:shadow-indigo-800 dark:hover:shadow-indigo-400 grid grid-cols-4 hover:border-solid",
-    href: _ctx.route('show.quiz', {
+    href: _ctx.route("".concat($props.thisRoute, ".quiz"), {
       uuid: $props.item.uuid
     })
   }, {

@@ -5,7 +5,7 @@
         :key="participant.id"
         class="text-black"
     >
-        <Card :item="participant" />
+        <Card :item="participant" thisRoute="ans" />
     </div>
     <div v-if="participants.length == 0">
         <div

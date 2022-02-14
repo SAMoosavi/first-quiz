@@ -13,7 +13,7 @@
         </Link>
     </div>
     <div v-for="maker in makers" :key="maker.id" class="text-black">
-        <Card :item="maker" />
+        <Card :item="maker" thisRoute="show" />
     </div>
 </template>
 

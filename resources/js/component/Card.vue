@@ -1,7 +1,7 @@
 <template>
     <Link
         class="p-1 py-4 my-2 transition-all justify-items-center duration-150 transform border-2 border-indigo-500 border-dotted shadow hover:scale-x-[1.02] dark:border-indigo-400 shadow-transparent hover:shadow-indigo-800 dark:hover:shadow-indigo-400 grid grid-cols-4 hover:border-solid"
-        :href="route('show.quiz', { uuid: item.uuid })"
+        :href="route(`${thisRoute}.quiz`, { uuid: item.uuid })"
     >
         <!-- name quiz -->
         <div>
@@ -51,6 +51,6 @@ export default {
         CardTitle,
         CardText,
     },
-    props: ["item"],
+    props: ["item", "thisRoute"],
 };
 </script>
