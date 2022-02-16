@@ -21,6 +21,7 @@ class CreateStudentQuizzesTable extends Migration
             $table->foreign('quiz_id')->references('id')->on('quizzes')->onDelete('cascade');
             $table->timestamp('start');
             $table->timestamp('end')->nullable();
+            $table->float('point', 8, 2)->nullable();
             $table->timestamps();
         });
     }

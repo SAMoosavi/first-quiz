@@ -13,6 +13,7 @@ class StudentQuiz extends Model
 
     protected $fillable = [
         'start',
+        'point',
         'end',
         'user_id',
         'quiz_id',
