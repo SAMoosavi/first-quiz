@@ -6,6 +6,7 @@ export default createStore({
             questions: {},
             lengthQuestions: 0,
             answers: {},
+            noAnswer: 0,
         };
     },
     mutations: {
@@ -24,9 +25,23 @@ export default createStore({
         },
 
         addAnswer(state, { index, ans }) {
-            state.answers = {...state.answers, [index]: { id: ans.id, ans: ans.ans, type: ans.type, }, };
+            let answer;
+            if (ans.ans) {
+                answer = ans.ans;
+            } else {
+                answer = "";
+                state.noAnswer++;
+            }
+            state.answers = {
+                ...state.answers,
+                [index]: { id: ans.id, ans: answer, type: ans.type },
+            };
         },
         editAnswer(state, { index, ans }) {
+            if (ans.ans == "" && state.answers[index].ans != "")
+                state.noAnswer++;
+            if (ans.ans != "" && state.answers[index].ans == "")
+                state.noAnswer--;
             state.answers[index].ans = ans.ans;
         },
     },
@@ -41,6 +56,9 @@ export default createStore({
 
         getAnswer(state) {
             return state.answers;
+        },
+        getNoAnswer(state) {
+            return state.noAnswer;
         },
     },
 });

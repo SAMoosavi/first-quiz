@@ -22110,6 +22110,9 @@ __webpack_require__.r(__webpack_exports__);
     var form = (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_7__.useForm)({
       answer: null
     });
+    var noanswer = (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_11__.computed)(function () {
+      return store.getters.getNoAnswer;
+    });
 
     function send() {
       loding.value = true;
@@ -22162,6 +22165,7 @@ __webpack_require__.r(__webpack_exports__);
       sendOk: sendOk,
       store: store,
       form: form,
+      noanswer: noanswer,
       send: send,
       finish: finish,
       AppLayout: _Layouts_AppLayout_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
@@ -26625,16 +26629,19 @@ var _hoisted_7 = {
 var _hoisted_8 = {
   "class": "p-8 bg-indigo-500 border border-indigo-600 rounded-md dark:bg-indigo-800"
 };
-
-var _hoisted_9 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", {
+var _hoisted_9 = {
   "class": "mb-4"
-}, " آیا از ارسال جواب خود مطمعن هستید؟ ", -1
+};
+
+var _hoisted_10 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" آیا از ارسال جواب خود مطمعن هستید؟ ");
+
+var _hoisted_11 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("br", null, null, -1
 /* HOISTED */
 );
 
-var _hoisted_10 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" ارسال ");
+var _hoisted_12 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" ارسال ");
 
-var _hoisted_11 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" کنسل ");
+var _hoisted_13 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" کنسل ");
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)($setup["AppLayout"], {
@@ -26680,14 +26687,16 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
       }, 8
       /* PROPS */
-      , ["disabled"])]), $setup.sendOk ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [_hoisted_9, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["MyButton"], {
+      , ["disabled"])]), $setup.sendOk ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_7, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_8, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("p", _hoisted_9, [_hoisted_10, _hoisted_11, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.noanswer == 0 ? "شما به تمامی سوالات پاسخ داده اید." : "\u0634\u0645\u0627 \u0628\u0647 ".concat($setup.noanswer, " \u0633\u0648\u0627\u0644 \u067E\u0627\u0633\u062E \u0646\u062F\u0627\u062F\u0647 \u0627\u06CC\u062F")), 1
+      /* TEXT */
+      )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["MyButton"], {
         "class": "mr-4",
         loding: $setup.loding,
         disabled: $setup.form.processing,
         onClick: $setup.send
       }, {
         "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-          return [_hoisted_10];
+          return [_hoisted_12];
         }),
         _: 1
         /* STABLE */
@@ -26701,7 +26710,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
         })
       }, {
         "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
-          return [_hoisted_11];
+          return [_hoisted_13];
         }),
         _: 1
         /* STABLE */
@@ -28108,7 +28117,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     return {
       questions: {},
       lengthQuestions: 0,
-      answers: {}
+      answers: {},
+      noAnswer: 0
     };
   },
   mutations: {
@@ -28128,15 +28138,26 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     addAnswer: function addAnswer(state, _ref2) {
       var index = _ref2.index,
           ans = _ref2.ans;
+      var answer;
+
+      if (ans.ans) {
+        answer = ans.ans;
+      } else {
+        answer = "";
+        state.noAnswer++;
+      }
+
       state.answers = _objectSpread(_objectSpread({}, state.answers), {}, _defineProperty({}, index, {
         id: ans.id,
-        ans: ans.ans,
+        ans: answer,
         type: ans.type
       }));
     },
     editAnswer: function editAnswer(state, _ref3) {
       var index = _ref3.index,
           ans = _ref3.ans;
+      if (ans.ans == "" && state.answers[index].ans != "") state.noAnswer++;
+      if (ans.ans != "" && state.answers[index].ans == "") state.noAnswer--;
       state.answers[index].ans = ans.ans;
     }
   },
@@ -28149,6 +28170,9 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     },
     getAnswer: function getAnswer(state) {
       return state.answers;
+    },
+    getNoAnswer: function getNoAnswer(state) {
+      return state.noAnswer;
     }
   }
 }));
