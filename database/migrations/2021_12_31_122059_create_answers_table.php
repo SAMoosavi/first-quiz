@@ -17,6 +17,7 @@ class CreateAnswersTable extends Migration
             $table->id();
             $table->string('type');
             $table->text('answer')->nullable();
+            $table->float('point', 8, 2)->nullable();
             $table->foreignId('user_id');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreignId('question_id');

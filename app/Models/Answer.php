@@ -13,6 +13,7 @@ class Answer extends Model
 
     protected $fillable = [
         'answer',
+        'point',
         'type',
         'option',
         'user_id',
