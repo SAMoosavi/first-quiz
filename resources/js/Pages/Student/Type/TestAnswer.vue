@@ -21,6 +21,9 @@
                 />
             </li>
         </ul>
+        <my-button class="mr-4" :loding="loding" @click="clear">
+            پاک کردن
+        </my-button>
     </div>
 </template>
 
@@ -28,8 +31,9 @@
 import MyInput from "@/component/Input.vue";
 import MyLabel from "@/component/Label.vue";
 import MyRadio from "@/component/Radio.vue";
+import MyButton from "@/component/Button.vue";
 
-import { reactive } from "@vue/reactivity";
+import { reactive, ref } from "@vue/reactivity";
 import { onMounted, watch } from "@vue/runtime-core";
 import { useStore } from "vuex";
 
@@ -39,11 +43,18 @@ const ansLocalstoreeg = !!localStorage.getItem(props.question.id)
     ? localStorage.getItem(props.question.id)
     : null;
 
+const loding = ref(false);
 const ans = reactive({
     id: props.question.id,
     type: props.question.type,
     ans: ansLocalstoreeg,
 });
+
+function clear() {
+    loding.value = true;
+    ans.ans = "";
+    loding.value = false;
+}
 
 const option = _.shuffle(JSON.parse(props.question.option));
 

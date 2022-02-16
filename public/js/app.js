@@ -22342,9 +22342,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _component_Input_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/component/Input.vue */ "./resources/js/component/Input.vue");
 /* harmony import */ var _component_Label_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/component/Label.vue */ "./resources/js/component/Label.vue");
 /* harmony import */ var _component_Radio_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/component/Radio.vue */ "./resources/js/component/Radio.vue");
-/* harmony import */ var _vue_reactivity__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @vue/reactivity */ "./node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js");
-/* harmony import */ var _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @vue/runtime-core */ "./node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js");
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm-bundler.js");
+/* harmony import */ var _component_Button_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/component/Button.vue */ "./resources/js/component/Button.vue");
+/* harmony import */ var _vue_reactivity__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @vue/reactivity */ "./node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js");
+/* harmony import */ var _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @vue/runtime-core */ "./node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm-bundler.js");
+
 
 
 
@@ -22359,22 +22361,29 @@ __webpack_require__.r(__webpack_exports__);
     var props = __props;
     var index = props["in"];
     var ansLocalstoreeg = !!localStorage.getItem(props.question.id) ? localStorage.getItem(props.question.id) : null;
-    var ans = (0,_vue_reactivity__WEBPACK_IMPORTED_MODULE_3__.reactive)({
+    var loding = (0,_vue_reactivity__WEBPACK_IMPORTED_MODULE_4__.ref)(false);
+    var ans = (0,_vue_reactivity__WEBPACK_IMPORTED_MODULE_4__.reactive)({
       id: props.question.id,
       type: props.question.type,
       ans: ansLocalstoreeg
     });
 
+    function clear() {
+      loding.value = true;
+      ans.ans = "";
+      loding.value = false;
+    }
+
     var option = _.shuffle(JSON.parse(props.question.option));
 
-    var store = (0,vuex__WEBPACK_IMPORTED_MODULE_4__.useStore)();
-    (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.onMounted)(function () {
+    var store = (0,vuex__WEBPACK_IMPORTED_MODULE_5__.useStore)();
+    (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.onMounted)(function () {
       store.commit("addAnswer", {
         index: index,
         ans: ans
       });
     });
-    (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.watch)(function () {
+    (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.watch)(function () {
       return ans.ans;
     }, function (value) {
       localStorage.setItem(ans.id, value);
@@ -22387,16 +22396,20 @@ __webpack_require__.r(__webpack_exports__);
       props: props,
       index: index,
       ansLocalstoreeg: ansLocalstoreeg,
+      loding: loding,
       ans: ans,
+      clear: clear,
       option: option,
       store: store,
       MyInput: _component_Input_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
       MyLabel: _component_Label_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
       MyRadio: _component_Radio_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
-      reactive: _vue_reactivity__WEBPACK_IMPORTED_MODULE_3__.reactive,
-      onMounted: _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.onMounted,
-      watch: _vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.watch,
-      useStore: vuex__WEBPACK_IMPORTED_MODULE_4__.useStore
+      MyButton: _component_Button_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
+      reactive: _vue_reactivity__WEBPACK_IMPORTED_MODULE_4__.reactive,
+      ref: _vue_reactivity__WEBPACK_IMPORTED_MODULE_4__.ref,
+      onMounted: _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.onMounted,
+      watch: _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.watch,
+      useStore: vuex__WEBPACK_IMPORTED_MODULE_5__.useStore
     };
     Object.defineProperty(__returned__, '__isScriptSetup', {
       enumerable: false,
@@ -26802,6 +26815,9 @@ var _hoisted_2 = {
 var _hoisted_3 = {
   "class": "flex flex-col md:flex-row md:justify-between"
 };
+
+var _hoisted_4 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" پاک کردن ");
+
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_1, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_2, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h3", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($props.question.questions), 1
   /* TEXT */
@@ -26829,7 +26845,20 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     , ["name", "value"])]);
   }), 128
   /* KEYED_FRAGMENT */
-  ))])]);
+  ))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["MyButton"], {
+    "class": "mr-4",
+    loding: $setup.loding,
+    onClick: $setup.clear
+  }, {
+    "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+      return [_hoisted_4];
+    }),
+    _: 1
+    /* STABLE */
+
+  }, 8
+  /* PROPS */
+  , ["loding"])]);
 }
 
 /***/ }),
