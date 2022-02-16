@@ -45,6 +45,12 @@
                         >
                             <p class="mb-4">
                                 آیا از ارسال جواب خود مطمعن هستید؟
+                                <br />
+                                {{
+                                    noanswer == 0
+                                        ? "شما به تمامی سوالات پاسخ داده اید."
+                                        : `شما به ${noanswer} سوال پاسخ نداده اید`
+                                }}
                             </p>
                             <my-button
                                 class="mr-4"
@@ -117,7 +123,7 @@ const sendOk = ref(false);
 
 const store = useStore();
 const form = useForm({ answer: null });
-
+const noanswer = computed(() => store.getters.getNoAnswer);
 function send() {
     loding.value = true;
     form.answer = store.getters.getAnswer;
@@ -126,7 +132,7 @@ function send() {
         const answer = form.answer[index];
         localStorage.removeItem(answer.id);
     }
-    
+
     form.post(route("send.answer"), {
         onError: (errors) => {
             for (const key in errors) {
