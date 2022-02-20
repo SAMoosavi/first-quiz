@@ -8,18 +8,63 @@
                 >
                     <!-- Show Quiz And Edition -->
                     <quiz :quiz="quiz" />
-                    
+
                     <!-- Show Link Of Quiz -->
-                    <div>
-                        <a :href="route('ans.quiz', { uuid: quiz.uuid })">
-                            <p>
-                                لینک آزمون:
-                                <br />
-                                <span>{{
-                                    route("ans.quiz", { uuid: quiz.uuid })
-                                }}</span>
-                            </p>
-                        </a>
+                    <div class="mt-3">
+                        لینک آزمون:
+                        <button
+                            @click="copy"
+                            class="flex p-2 bg-gray-300 border border-gray-700 rounded-md"
+                        >
+                            <!-- Copy Icon -->
+                            <span class="ml-2">
+                                <transition
+                                    mode="out-in"
+                                    enter-active-class="transition duration-200 ease-out"
+                                    enter-from-class="transform scale-x-0 "
+                                    enter-to-class="transform scale-x-100 "
+                                    leave-active-class="transition duration-200 ease-in "
+                                    leave-from-class="transform scale-x-100 opacity-100"
+                                    leave-to-class="transform scale-x-0 opacity-0"
+                                    move-class="transition transform"
+                                >
+                                    <svg
+                                        key="1"
+                                        v-if="!copied"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        class="w-6 h-6"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"
+                                        />
+                                    </svg>
+                                    <svg
+                                        key="2"
+                                        v-else
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        class="w-6 h-6"
+                                        fill="none"
+                                        viewBox="0 0 24 24"
+                                        stroke="currentColor"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"
+                                        />
+                                    </svg>
+                                </transition>
+                            </span>
+                            <!-- URL -->
+                            {{ url }}
+                        </button>
                     </div>
                 </div>
             </div>
@@ -31,9 +76,14 @@
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Quiz from "@/Pages/ShowQuizMaker/Quiz.vue";
 
-import { reactive, ref } from "@vue/reactivity";
-import { useForm } from "@inertiajs/inertia-vue3";
-import { useToast } from "vue-toastification";
+import { ref } from "@vue/reactivity";
 
 const props = defineProps(["quiz"]);
+// Create URL For Quiz Student
+const copied = ref(false);
+const url = route("ans.quiz", [props.quiz.uuid]);
+function copy() {
+    navigator.clipboard.writeText(url);
+    copied.value = true;
+}
 </script>
