@@ -145,6 +145,24 @@ class QuizController extends Controller
         $quiz->questions;
         $quiz->start = !!$quiz->start ? (new Date($quiz->start))->toJalali()->format('Y/m/d H:i:s') : null;
         $quiz->end = !!$quiz->end ? (new Date($quiz->end))->toJalali()->format('Y/m/d H:i:s') : null;
-        return Inertia::render('ShowQuizMaker/ShowQuiz', ['quiz' => $quiz]);
+
+        $students = StudentQuiz::where('quiz_id', "=", $quiz->id)->get();
+        $student = collect([]);
+        foreach ($students as $item) {
+            $ans = collect([]);
+            foreach ($quiz->questions as $value) {
+                $ans->push([
+                    'answerStudent' => Answer::where('question_id', "=", $value->id)->where('user_id', "=", $item->user_id)->first()->answer,
+                    'type' => $value->type,
+                    'questions' => $value->questions,
+                    'option' => json_decode($value->option),
+                    'answer' => json_decode($value->answer),
+                    'id' => $value->id,
+                ]);
+            }
+            $student->push($ans);
+        }
+
+        return Inertia::render('ShowQuizMaker/ShowQuiz', ['quiz' => $quiz, 'student' => $student]);
     }
 }
