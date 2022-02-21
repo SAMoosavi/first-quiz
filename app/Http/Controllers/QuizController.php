@@ -158,6 +158,7 @@ class QuizController extends Controller
                     'option' => json_decode($value->option),
                     'answer' => json_decode($value->answer),
                     'id' => $value->id,
+                    'point' => $value->point,
                 ]);
             }
             $student->push($ans);
