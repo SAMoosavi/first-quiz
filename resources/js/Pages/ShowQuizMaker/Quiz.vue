@@ -184,9 +184,9 @@ import myLabel from "@/component/Label.vue";
 // Package
 import DatePicker from "vue3-persian-datetime-picker";
 // Type
-import LongAnswer from "@/Pages/ShowQuizMaker/Type/LongAnswer.vue";
-import ShortAnswer from "@/Pages/ShowQuizMaker/Type/ShortAnswer.vue";
-import TestAnswer from "@/Pages/ShowQuizMaker/Type/TestAnswer.vue";
+import LongAnswer from "@/Pages/ShowQuizMaker/TypeQuiz/LongAnswer.vue";
+import ShortAnswer from "@/Pages/ShowQuizMaker/TypeQuiz/ShortAnswer.vue";
+import TestAnswer from "@/Pages/ShowQuizMaker/TypeQuiz/TestAnswer.vue";
 // Vue Functions
 import { reactive, ref } from "@vue/reactivity";
 // Package Functions
