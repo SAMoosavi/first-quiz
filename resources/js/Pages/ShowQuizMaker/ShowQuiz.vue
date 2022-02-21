@@ -66,6 +66,11 @@
                             {{ url }}
                         </button>
                     </div>
+
+                    <div>
+                        <student v-for="(students,index) in student" :key="index" :student="student[0]"/>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -75,10 +80,11 @@
 <script setup>
 import AppLayout from "@/Layouts/AppLayout.vue";
 import Quiz from "@/Pages/ShowQuizMaker/Quiz.vue";
+import Student from "@/Pages/ShowQuizMaker/Student.vue";
 
 import { ref } from "@vue/reactivity";
 
-const props = defineProps(["quiz"]);
+const props = defineProps(["quiz", "student"]);
 // Create URL For Quiz Student
 const copied = ref(false);
 const url = route("ans.quiz", [props.quiz.uuid]);
@@ -86,4 +92,6 @@ function copy() {
     navigator.clipboard.writeText(url);
     copied.value = true;
 }
+//Student
+const students = ref(props.student);
 </script>
