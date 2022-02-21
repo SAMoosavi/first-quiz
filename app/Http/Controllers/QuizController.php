@@ -147,12 +147,11 @@ class QuizController extends Controller
         $quiz->end = !!$quiz->end ? (new Date($quiz->end))->toJalali()->format('Y/m/d H:i:s') : null;
 
         $students = StudentQuiz::where('quiz_id', "=", $quiz->id)->get();
-        $student = collect([]);
+        $student = collect();
         foreach ($students as $item) {
-            $ans = collect(['student' => User::find($item->user_id)]);
+            $ans = collect([]);
             foreach ($quiz->questions as $value) {
                 $ans->push([
-
                     'answerStudent' => Answer::where('question_id', "=", $value->id)->where('user_id', "=", $item->user_id)->first()->answer,
                     'type' => $value->type,
                     'questions' => $value->questions,
@@ -162,7 +161,7 @@ class QuizController extends Controller
                     'point' => $value->point,
                 ]);
             }
-            $student->push($ans);
+            $student->push(['ans' => $ans, 'student' => User::find($item->user_id)]);
         }
 
         return Inertia::render('ShowQuizMaker/ShowQuiz', ['quiz' => $quiz, 'student' => $student]);
