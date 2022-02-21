@@ -149,9 +149,10 @@ class QuizController extends Controller
         $students = StudentQuiz::where('quiz_id', "=", $quiz->id)->get();
         $student = collect([]);
         foreach ($students as $item) {
-            $ans = collect([]);
+            $ans = collect(['student' => User::find($item->user_id)]);
             foreach ($quiz->questions as $value) {
                 $ans->push([
+
                     'answerStudent' => Answer::where('question_id', "=", $value->id)->where('user_id', "=", $item->user_id)->first()->answer,
                     'type' => $value->type,
                     'questions' => $value->questions,
