@@ -1,6 +1,6 @@
 <template>
-    <div class="md:flex md:justify-between">
-        <div class="w-full md:w-4/6 md:gap-2 lg:gap-4">
+    <div class="md:flex md:justify-between md:items-center gap-2">
+        <div class="w-full md:basis-4/6 md:gap-2 lg:gap-4">
             <Label :required="true" :value="'سوال'" />
             <Textarea
                 :name="'question'"
@@ -8,7 +8,11 @@
                 v-model.lazy="question.question"
             />
         </div>
-        <div class="md:w-1/6">
+        <div class="md:basis-1/7">
+            <Label :required="true" :value="'نمره سوال'" />
+            <my-input v-model.lazy="question.point" />
+        </div>
+        <div class="md:basis-1/6">
             <Label :required="true" :value="'نوع سوال'" />
             <Select :name="'type'" :id="'type'" v-model="question.type">
                 <Option :value="'test-answer'">پاسخ تستی</Option>
@@ -33,6 +37,7 @@ import TestAnswer from "@/Pages/Quiz/Type/TestAnswer.vue";
 import { watch } from "@vue/runtime-core";
 import { useStore } from "vuex";
 import Textarea from "@/component/Textarea.vue";
+import MyInput from "@/component/Input.vue";
 import Select from "@/component/Select.vue";
 import Option from "@/component/Option.vue";
 
@@ -45,6 +50,7 @@ export default {
         Textarea,
         Select,
         Option,
+        MyInput,
     },
 
     props: ["index"],
@@ -57,6 +63,7 @@ export default {
             question: null,
             option: {},
             answer: null,
+            point: null,
         });
 
         const index = props.index;
@@ -82,7 +89,12 @@ export default {
                 store.commit("editQuestions", { question, index });
             }
         );
-
+        watch(
+            () => question.point,
+            () => {
+                store.commit("editQuestions", { question, index });
+            }
+        );
         return {
             getOption,
             getAnswer,

@@ -190,6 +190,8 @@ export default {
         function validForm(question) {
             //required question
             if (!question.question) return false;
+            //required point
+            if (!question.point) return false;
             // if test check required
             if (question.type == "test-answer") {
                 if (!question.answer) return false;
@@ -235,9 +237,7 @@ export default {
             } else {
                 form.questions = store.getters.getQuestions;
                 let required = true;
-                console.log(form.questions);
                 for (const key in form.questions) {
-                    console.log(form.questions[key]);
                     required = validForm(form.questions[key]);
                     if (!required) {
                         errorToast("لطفا تمامی فیلد های ستاره دار را پر کنید");
@@ -259,6 +259,7 @@ export default {
                                 }
                             },
                             onSuccess: () => {
+                                store.commit("clearQuestions");
                                 toast.success("آزمون با موفقیت ساخته شد", {
                                     position: "bottom-right",
                                     timeout: 5000,

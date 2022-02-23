@@ -45,7 +45,8 @@ class QuizController extends Controller
                 'questions' => $question['question'],
                 'type' => $question['type'],
                 'option' =>  json_encode($question['option']),
-                'answer' => json_encode($question['answer']),
+                'answer' => $question['answer'],
+                'point' => (float)$question['point'],
                 'quiz_id' => $quiz->id,
                 'uuid' => (string)Str::uuid(),
             ]);
@@ -151,12 +152,14 @@ class QuizController extends Controller
         foreach ($students as $item) {
             $ans = collect([]);
             foreach ($quiz->questions as $value) {
+                $answer = Answer::where('question_id', "=", $value->id)->where('user_id', "=", $item->user_id)->first();
                 $ans->push([
-                    'answerStudent' => Answer::where('question_id', "=", $value->id)->where('user_id', "=", $item->user_id)->first()->answer,
+                    'answerStudent' => $answer->answer,
+                    'pointStudent'=>$answer->point,
                     'type' => $value->type,
                     'questions' => $value->questions,
                     'option' => json_decode($value->option),
-                    'answer' => json_decode($value->answer),
+                    'answer' => $value->answer,
                     'id' => $value->id,
                     'point' => $value->point,
                 ]);

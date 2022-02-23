@@ -19,7 +19,8 @@ class CreateQuestionsTable extends Migration
             $table->string('questions');
             $table->string('type');
             $table->json('option')->nullable();
-            $table->json('answer')->nullable();
+            $table->string('answer')->nullable();
+            $table->float('point', 8, 2);
             $table->foreignId('quiz_id');
             $table->foreign('quiz_id')->references('id')->on('quizzes')->onDelete('cascade');
             $table->timestamps();
