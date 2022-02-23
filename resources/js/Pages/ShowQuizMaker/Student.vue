@@ -5,14 +5,23 @@
         <button class="flex items-center gap-4" @click="showAns = !showAns">
             <div class="w-12 overflow-hidden rounded-full">
                 <img
-                    :src="student.student.profile_photo_url"
+                    :src="props.student.student.profile_photo_url"
                     alt="image user"
                 />
             </div>
             <div class="flex flex-col items-start">
-                <h3>{{ student.student.name }}</h3>
-                <h3>{{ student.student.email }}</h3>
+                <h3>{{ props.student.student.name }}</h3>
+                <h3>{{ props.student.student.email }}</h3>
             </div>
+            {{ studentPoint }}
+            <!-- <my-button
+                :loding="loding"
+                type="button"
+                @click="send"
+                class="w-full md:w-24 mr-auto z-10"
+            >
+                ثبت نمره
+            </my-button> -->
         </button>
 
         <transition
@@ -25,12 +34,24 @@
         >
             <div v-if="showAns" class="flex flex-col gap-3">
                 <div
-                    v-for="(ans, index) in student.ans"
+                    v-for="(ans, index) in props.student.ans"
                     :key="index"
                     class="p-4 border border-indigo-300"
                 >
-                    <component :is="components[ans.type]" :ans="ans" />
+                    <component
+                        :is="components[ans.type]"
+                        :ans="ans"
+                        :studentId="studentId"
+                    />
                 </div>
+                <my-button
+                    :loding="loding"
+                    type="button"
+                    @click="send"
+                    class="w-full md:w-24"
+                >
+                    ثبت نمره
+                </my-button>
             </div>
         </transition>
     </div>
@@ -42,9 +63,15 @@ import LongAnswer from "@/Pages/ShowQuizMaker/TypeAns/LongAnswer.vue";
 import ShortAnswer from "@/Pages/ShowQuizMaker/TypeAns/ShortAnswer.vue";
 import TestAnswer from "@/Pages/ShowQuizMaker/TypeAns/TestAnswer.vue";
 
-import { ref } from "@vue/reactivity";
+import MyButton from "@/component/Button.vue";
 
-defineProps(["student"]);
+import { ref } from "@vue/reactivity";
+import { computed, onMounted } from "@vue/runtime-core";
+import { useStore } from "vuex";
+import { useToast } from "vue-toastification";
+import { useForm } from "@inertiajs/inertia-vue3";
+
+const props = defineProps(["student", "quizId"]);
 
 // Type
 const components = {
@@ -52,6 +79,94 @@ const components = {
     "short-answer": ShortAnswer,
     "test-answer": TestAnswer,
 };
+const studentId = props.student.student.id;
+
+const form = useForm({
+    [studentId]: { points: null, point: { point: null, id: props.quizId } },
+});
 
 const showAns = ref(false);
+const store = useStore();
+onMounted(() => {
+    store.commit("addStudent", studentId);
+    if (!localStorage.getItem(`${studentId},*`))
+        localStorage.setItem(`${studentId},*`, 0);
+});
+
+let studentPoint = computed(() =>
+    store.getters.getSumPointOfStudents[studentId]
+        ? store.getters.getSumPointOfStudents[studentId]
+        : localStorage.getItem(`${studentId},*`)
+        ? localStorage.getItem(`${studentId},*`)
+        : "هنوز نمره ای ثبت نشده است"
+);
+
+const loding = ref(false);
+
+function validation(v) {
+    for (const key in v) {
+        const ans = v[key];
+        if (ans === "") return false;
+    }
+    return true;
+}
+
+const toast = useToast();
+function errorToast(text) {
+    toast.error(text, {
+        position: "bottom-right",
+        timeout: 5000,
+        closeOnClick: true,
+        pauseOnFocusLoss: true,
+        pauseOnHover: true,
+        draggable: true,
+        draggablePercent: 0.6,
+        showCloseButtonOnHover: false,
+        hideProgressBar: false,
+        closeButton: "button",
+        icon: true,
+        rtl: false,
+    });
+}
+
+function send() {
+    loding.value = true;
+
+    if (!validation(store.getters.getPointOfStudents[studentId])) {
+        errorToast("نمره تمامی سوالات را وارد نمایید");
+    } else {
+        form[studentId].point.point =
+            store.getters.getSumPointOfStudents[studentId];
+        form[studentId].points = store.getters.getPointOfStudents[studentId];
+        form.post(route("send.point"), {
+            onError: (errors) => {
+                for (const property in errors) {
+                    errorToast(errors[property]);
+                }
+            },
+            onSuccess: () => {
+                toast.success("نمره با موفقیت ثبت شد", {
+                    position: "bottom-right",
+                    timeout: 5000,
+                    closeOnClick: true,
+                    pauseOnFocusLoss: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    draggablePercent: 0.6,
+                    showCloseButtonOnHover: false,
+                    hideProgressBar: false,
+                    closeButton: "button",
+                    icon: true,
+                    rtl: false,
+                });
+            },
+            onFinish: () => {
+                showAns.value = !showAns.value;
+            },
+        });
+    }
+    setTimeout(() => {
+        loding.value = false;
+    }, 300);
+}
 </script>

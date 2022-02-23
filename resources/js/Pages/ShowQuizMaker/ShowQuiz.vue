@@ -68,9 +68,13 @@
                     </div>
 
                     <div>
-                        <student v-for="(students,index) in student" :key="index" :student="student[0]"/>
+                        <student
+                            v-for="(students, index) in student"
+                            :key="index"
+                            :student="props.student[0]"
+                            :quizId="props.quiz.id"
+                        />
                     </div>
-
                 </div>
             </div>
         </div>
