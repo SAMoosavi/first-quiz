@@ -9,6 +9,9 @@ export default createStore({
             // Answer Quiz
             answers: {},
             noAnswer: 0,
+            // Point Student Quiz
+            pointsOfStudents: {},
+            pointOfStudents: {},
         };
     },
     mutations: {
@@ -49,6 +52,25 @@ export default createStore({
                 state.noAnswer--;
             state.answers[index].ans = ans.ans;
         },
+        // Point Student Quiz
+        addStudent(state, studentId) {
+            state.pointsOfStudents = {
+                ...state.pointsOfStudents,
+                [studentId]: {},
+            };
+        },
+        addQuestionId(state, { studentId, questionId, point }) {
+            state.pointsOfStudents[studentId] = {
+                ...state.pointsOfStudents[studentId],
+                [questionId]: point,
+            };
+        },
+        pointQuestion(state, { studentId, questionId, point }) {
+            state.pointsOfStudents[studentId][questionId] = point;
+        },
+        pointStudents(state, { studentId, point }) {
+            state.pointOfStudents[studentId] = point;
+        },
     },
     getters: {
         // Creat Quiz
@@ -64,6 +86,13 @@ export default createStore({
         },
         getNoAnswer(state) {
             return state.noAnswer;
+        },
+        // Point Student Quiz
+        getPointOfStudents(state) {
+            return state.pointsOfStudents;
+        },
+        getSumPointOfStudents(state) {
+            return state.pointOfStudents;
         },
     },
 });
