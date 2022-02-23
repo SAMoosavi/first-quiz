@@ -1,18 +1,28 @@
 <template>
-    <h3 v-if="!showEdit">{{ thisQuestion.questions }}</h3>
-    <div v-if="showEdit">
-        <my-label
-            :required="true"
-            name="questions"
-            value="سوال"
-            class="inline-block ml-2"
-        />
-        <my-textarea
-            id="questions"
-            v-model="editQuestion.questions"
-            :value="editQuestion.questions"
-            :required="true"
-        />
+    <div v-if="!showEdit" class="flex justify-between">
+        <h3>{{ thisQuestion.questions }}</h3>
+        <h4>{{ thisQuestion.point }}</h4>
+    </div>
+    <div v-if="showEdit" class="md:flex items-center justify-between">
+        <div class="md:basis-4/6">
+            <my-label
+                :required="true"
+                name="questions"
+                value="سوال"
+                class="inline-block ml-2"
+            />
+            <my-textarea
+                id="questions"
+                v-model="editQuestion.questions"
+                :value="editQuestion.questions"
+                :required="true"
+                class="inline-block"
+            />
+        </div>
+        <div class="md:basis-1/6">
+            <Label :required="true" value="نمره سوال" />
+            <my-input v-model.lazy="editQuestion.point" />
+        </div>
     </div>
     <my-input :disabled="true" :required="false" class="w-1/2 my-3 md:w-1/3" />
     <my-button
@@ -65,6 +75,7 @@ const editQuestion = useForm({
     uuid: thisQuestion.uuid,
     Option: null,
     answer: null,
+    point: thisQuestion.point,
 });
 
 const showEdit = ref(false);
@@ -82,6 +93,7 @@ function editCansel() {
     lodingCansel.value = true;
     setTimeout(() => {
         editQuestion.questions = thisQuestion.questions;
+        editQuestion.point = thisQuestion.point;
         showEdit.value = !showEdit.value;
         lodingCansel.value = false;
     }, 200);
@@ -106,7 +118,7 @@ function errorToast(text) {
 }
 function editing() {
     loding.value = true;
-    if (!editQuestion.questions) {
+    if (!editQuestion.questions || !editQuestion.point) {
         errorToast("تمام فیلد های ستاره دار را پر کنید");
     } else {
         editQuestion.put(route("edit.question", { id: editQuestion.id }), {
@@ -131,6 +143,7 @@ function editing() {
                     rtl: false,
                 });
                 thisQuestion.questions = editQuestion.questions;
+                thisQuestion.point = editQuestion.point;
             },
             onFinish: () => {
                 showEdit.value = !showEdit.value;

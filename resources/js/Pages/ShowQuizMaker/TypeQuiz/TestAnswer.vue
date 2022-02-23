@@ -1,19 +1,28 @@
 <template>
-    <h3 v-if="!showEdit">{{ editQuestion.questions }}</h3>
-    <div v-if="showEdit">
-        <my-label
-            :required="true"
-            name="questions"
-            value="سوال"
-            class="inline-block ml-2"
-        />
-        <my-textarea
-            id="questions"
-            v-model="editQuestion.questions"
-            :value="editQuestion.questions"
-            :required="true"
-            class="inline-block"
-        />
+     <div v-if="!showEdit" class="flex justify-between">
+        <h3>{{ thisQuestion.questions }}</h3>
+        <h4>{{ thisQuestion.point }}</h4>
+    </div>
+    <div v-if="showEdit" class="md:flex items-center justify-between">
+        <div class="md:basis-4/6">
+            <my-label
+                :required="true"
+                name="questions"
+                value="سوال"
+                class="inline-block ml-2"
+            />
+            <my-textarea
+                id="questions"
+                v-model="editQuestion.questions"
+                :value="editQuestion.questions"
+                :required="true"
+                class="inline-block"
+            />
+        </div>
+        <div class="md:basis-1/6">
+            <Label :required="true" value="نمره سوال" />
+            <my-input v-model.lazy="editQuestion.point" />
+        </div>
     </div>
     <ul
         class="grid grid-cols-1 gap-2 my-3 mr-4 group-hover:list-decimal md:grid-cols-2 lg:grid-cols-4 sm:gap-3 md:gap-4 dark:text-gray-200"
@@ -88,7 +97,8 @@ const thisQuestion = reactive({
     uuid: props.question.uuid,
     questions: props.question.questions,
     option: JSON.parse(props.question.option),
-    answer: JSON.parse(props.question.answer),
+    answer: props.question.answer,
+    point: props.question.point,
 });
 
 const pNum = ref(null);
@@ -108,6 +118,7 @@ const editQuestion = useForm({
         ans4: thisQuestion.option.ans4,
     },
     answer: thisQuestion.answer,
+    point: thisQuestion.point,
 });
 
 const showEdit = ref(false);
@@ -143,6 +154,7 @@ function editCansel() {
     setTimeout(() => {
         editQuestion.questions = thisQuestion.questions;
         editQuestion.answer = thisQuestion.answer;
+        editQuestion.point = thisQuestion.point;
         for (const key in thisQuestion.option) {
             editQuestion.option[key] = thisQuestion.option[key];
         }
@@ -178,7 +190,12 @@ function validation() {
 
 function editing() {
     loding.value = true;
-    if (!editQuestion.questions || !editQuestion.answer || !validation()) {
+    if (
+        !editQuestion.questions ||
+        !editQuestion.answer ||
+        !validation() ||
+        !editQuestion.point
+    ) {
         errorToast("تمام فیلد های ستاره دار را پر کنید");
     } else {
         editQuestion.put(route("edit.question", { id: editQuestion.id }), {
@@ -203,6 +220,7 @@ function editing() {
                     rtl: false,
                 });
                 thisQuestion.questions = editQuestion.questions;
+                thisQuestion.point = editQuestion.point;
                 for (const key in thisQuestion.option) {
                     thisQuestion.option[key] = editQuestion.option[key];
                 }
