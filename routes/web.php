@@ -60,3 +60,9 @@ Route::get('/show/{uuid:uuid}', [QuizController::class, 'showStudent'])->name('a
 
 // send answer
 Route::post('/send-answer', [QuizController::class, 'send'])->name('send.answer');
+
+
+// ---------Point
+
+// Set Point
+Route::post('/set-point', [QuestionController::class, 'point'])->name('send.point');
