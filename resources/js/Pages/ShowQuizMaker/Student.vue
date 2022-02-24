@@ -66,12 +66,12 @@ import TestAnswer from "@/Pages/ShowQuizMaker/TypeAns/TestAnswer.vue";
 import MyButton from "@/component/Button.vue";
 
 import { ref } from "@vue/reactivity";
-import { computed, onMounted } from "@vue/runtime-core";
+import { computed, onMounted, watch } from "@vue/runtime-core";
 import { useStore } from "vuex";
 import { useToast } from "vue-toastification";
 import { useForm } from "@inertiajs/inertia-vue3";
 
-const props = defineProps(["student", "quizId"]);
+const props = defineProps(["student", "quizId", "status"]);
 
 // Type
 const components = {
@@ -82,14 +82,19 @@ const components = {
 const studentId = props.student.student.id;
 
 const form = useForm({
-    [studentId]: {
-        points: null,
-        point: {
-            point: null,
-            id: props.quizId,
-        },
+    id: props.quizId,
+    points: {
+        [studentId]: {},
     },
 });
+
+watch(
+    () => props.status,
+    (val) => {
+        showAns.value = val;
+        console.log(val);
+    }
+);
 
 const showAns = ref(false);
 const store = useStore();
@@ -143,9 +148,7 @@ function send() {
     if (!validation(store.getters.getPointOfStudents[studentId])) {
         errorToast("نمره تمامی سوالات را وارد نمایید");
     } else {
-        form[studentId].point.point =
-            store.getters.getSumPointOfStudents[studentId];
-        form[studentId].points = store.getters.getPointOfStudents[studentId];
+        form.points[studentId] = store.getters.getPointOfStudents[studentId];
         form.post(route("send.point"), {
             onError: (errors) => {
                 for (const property in errors) {
