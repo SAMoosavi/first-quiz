@@ -67,13 +67,22 @@
                         </button>
                     </div>
 
-                    <div>
+                    <div class="flex flex-col gap-2 mt-3">
                         <student
-                            v-for="(students, index) in student"
+                            v-for="(student, index) in props.student"
                             :key="index"
-                            :student="props.student[0]"
+                            :student="student"
                             :quizId="props.quiz.id"
+                            :status="status"
                         />
+                        <my-button
+                            :loding="loding"
+                            type="button"
+                            @click="send"
+                            class="w-full"
+                        >
+                            ثبت نمره همگی
+                        </my-button>
                     </div>
                 </div>
             </div>
@@ -86,7 +95,13 @@ import AppLayout from "@/Layouts/AppLayout.vue";
 import Quiz from "@/Pages/ShowQuizMaker/Quiz.vue";
 import Student from "@/Pages/ShowQuizMaker/Student.vue";
 
+import MyButton from "@/component/Button.vue";
+
 import { ref } from "@vue/reactivity";
+
+import { useForm } from "@inertiajs/inertia-vue3";
+import { useToast } from "vue-toastification";
+import { useStore } from "vuex";
 
 const props = defineProps(["quiz", "student"]);
 // Create URL For Quiz Student
@@ -96,6 +111,88 @@ function copy() {
     navigator.clipboard.writeText(url);
     copied.value = true;
 }
-//Student
-const students = ref(props.student);
+
+const loding = ref(false);
+
+const form = useForm({
+    id: props.quiz.id,
+    points: {},
+});
+
+function validation(v) {
+    for (const key1 in v) {
+        for (const key2 in v[key1]) {
+            if (v[key1][key2] === "") return false;
+        }
+    }
+    return true;
+}
+
+const toast = useToast();
+function errorToast(text) {
+    toast.error(text, {
+        position: "bottom-right",
+        timeout: 5000,
+        closeOnClick: true,
+        pauseOnFocusLoss: true,
+        pauseOnHover: true,
+        draggable: true,
+        draggablePercent: 0.6,
+        showCloseButtonOnHover: false,
+        hideProgressBar: false,
+        closeButton: "button",
+        icon: true,
+        rtl: false,
+    });
+}
+const store = useStore();
+const status = ref(false);
+function send() {
+    loding.value = true;
+
+    if (!validation(store.getters.getPointOfStudents)) {
+        errorToast("نمره تمامی سوالات را وارد نمایید");
+    } else {
+        form.points = store.getters.getPointOfStudents;
+        form.post(route("send.point"), {
+            onError: (errors) => {
+                for (const property in errors) {
+                    errorToast(errors[property]);
+                }
+            },
+            onSuccess: () => {
+                toast.success("نمره با موفقیت ثبت شد", {
+                    position: "bottom-right",
+                    timeout: 5000,
+                    closeOnClick: true,
+                    pauseOnFocusLoss: true,
+                    pauseOnHover: true,
+                    draggable: true,
+                    draggablePercent: 0.6,
+                    showCloseButtonOnHover: false,
+                    hideProgressBar: false,
+                    closeButton: "button",
+                    icon: true,
+                    rtl: false,
+                });
+
+                for (const studentId in form.points) {
+                    for (const key in form.points[studentId]) {
+                        localStorage.removeItem(studentId + "," + key);
+                    }
+                    localStorage.removeItem(studentId + ",*");
+                    store.commit("removePoint", studentId);
+                }
+                status.value = true;
+                setTimeout(() => {
+                    status.value = false;
+                }, 100);
+            },
+            onFinish: () => {},
+        });
+    }
+    setTimeout(() => {
+        loding.value = false;
+    }, 300);
+}
 </script>

@@ -21493,7 +21493,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Layouts_AppLayout_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @/Layouts/AppLayout.vue */ "./resources/js/Layouts/AppLayout.vue");
 /* harmony import */ var _Pages_ShowQuizMaker_Quiz_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/Pages/ShowQuizMaker/Quiz.vue */ "./resources/js/Pages/ShowQuizMaker/Quiz.vue");
 /* harmony import */ var _Pages_ShowQuizMaker_Student_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/Pages/ShowQuizMaker/Student.vue */ "./resources/js/Pages/ShowQuizMaker/Student.vue");
-/* harmony import */ var _vue_reactivity__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @vue/reactivity */ "./node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js");
+/* harmony import */ var _component_Button_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/component/Button.vue */ "./resources/js/component/Button.vue");
+/* harmony import */ var _vue_reactivity__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @vue/reactivity */ "./node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js");
+/* harmony import */ var _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @inertiajs/inertia-vue3 */ "./node_modules/@inertiajs/inertia-vue3/dist/index.js");
+/* harmony import */ var vue_toastification__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! vue-toastification */ "./node_modules/vue-toastification/dist/index.mjs");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm-bundler.js");
+
+
+
+
 
 
 
@@ -21505,26 +21513,125 @@ __webpack_require__.r(__webpack_exports__);
     expose();
     var props = __props; // Create URL For Quiz Student
 
-    var copied = (0,_vue_reactivity__WEBPACK_IMPORTED_MODULE_3__.ref)(false);
+    var copied = (0,_vue_reactivity__WEBPACK_IMPORTED_MODULE_6__.ref)(false);
     var url = route("ans.quiz", [props.quiz.uuid]);
 
     function copy() {
       navigator.clipboard.writeText(url);
       copied.value = true;
-    } //Student
+    }
 
+    var loding = (0,_vue_reactivity__WEBPACK_IMPORTED_MODULE_6__.ref)(false);
+    var form = (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_4__.useForm)({
+      id: props.quiz.id,
+      points: {}
+    });
 
-    var students = (0,_vue_reactivity__WEBPACK_IMPORTED_MODULE_3__.ref)(props.student);
+    function validation(v) {
+      for (var key1 in v) {
+        for (var key2 in v[key1]) {
+          if (v[key1][key2] === "") return false;
+        }
+      }
+
+      return true;
+    }
+
+    var toast = (0,vue_toastification__WEBPACK_IMPORTED_MODULE_5__.useToast)();
+
+    function errorToast(text) {
+      toast.error(text, {
+        position: "bottom-right",
+        timeout: 5000,
+        closeOnClick: true,
+        pauseOnFocusLoss: true,
+        pauseOnHover: true,
+        draggable: true,
+        draggablePercent: 0.6,
+        showCloseButtonOnHover: false,
+        hideProgressBar: false,
+        closeButton: "button",
+        icon: true,
+        rtl: false
+      });
+    }
+
+    var store = (0,vuex__WEBPACK_IMPORTED_MODULE_7__.useStore)();
+    var status = (0,_vue_reactivity__WEBPACK_IMPORTED_MODULE_6__.ref)(false);
+
+    function send() {
+      loding.value = true;
+
+      if (!validation(store.getters.getPointOfStudents)) {
+        errorToast("نمره تمامی سوالات را وارد نمایید");
+      } else {
+        form.points = store.getters.getPointOfStudents;
+        form.post(route("send.point"), {
+          onError: function onError(errors) {
+            for (var property in errors) {
+              errorToast(errors[property]);
+            }
+          },
+          onSuccess: function onSuccess() {
+            toast.success("نمره با موفقیت ثبت شد", {
+              position: "bottom-right",
+              timeout: 5000,
+              closeOnClick: true,
+              pauseOnFocusLoss: true,
+              pauseOnHover: true,
+              draggable: true,
+              draggablePercent: 0.6,
+              showCloseButtonOnHover: false,
+              hideProgressBar: false,
+              closeButton: "button",
+              icon: true,
+              rtl: false
+            });
+
+            for (var studentId in form.points) {
+              for (var key in form.points[studentId]) {
+                localStorage.removeItem(studentId + "," + key);
+              }
+
+              localStorage.removeItem(studentId + ",*");
+              store.commit("removePoint", studentId);
+            }
+
+            status.value = true;
+            setTimeout(function () {
+              status.value = false;
+            }, 100);
+          },
+          onFinish: function onFinish() {}
+        });
+      }
+
+      setTimeout(function () {
+        loding.value = false;
+      }, 300);
+    }
+
     var __returned__ = {
       props: props,
       copied: copied,
       url: url,
       copy: copy,
-      students: students,
+      loding: loding,
+      form: form,
+      validation: validation,
+      toast: toast,
+      errorToast: errorToast,
+      store: store,
+      status: status,
+      send: send,
       AppLayout: _Layouts_AppLayout_vue__WEBPACK_IMPORTED_MODULE_0__["default"],
       Quiz: _Pages_ShowQuizMaker_Quiz_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
       Student: _Pages_ShowQuizMaker_Student_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
-      ref: _vue_reactivity__WEBPACK_IMPORTED_MODULE_3__.ref
+      MyButton: _component_Button_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
+      ref: _vue_reactivity__WEBPACK_IMPORTED_MODULE_6__.ref,
+      useForm: _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_4__.useForm,
+      useToast: vue_toastification__WEBPACK_IMPORTED_MODULE_5__.useToast,
+      useStore: vuex__WEBPACK_IMPORTED_MODULE_7__.useStore
     };
     Object.defineProperty(__returned__, '__isScriptSetup', {
       enumerable: false,
@@ -21551,9 +21658,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _Pages_ShowQuizMaker_TypeAns_ShortAnswer_vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @/Pages/ShowQuizMaker/TypeAns/ShortAnswer.vue */ "./resources/js/Pages/ShowQuizMaker/TypeAns/ShortAnswer.vue");
 /* harmony import */ var _Pages_ShowQuizMaker_TypeAns_TestAnswer_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @/Pages/ShowQuizMaker/TypeAns/TestAnswer.vue */ "./resources/js/Pages/ShowQuizMaker/TypeAns/TestAnswer.vue");
 /* harmony import */ var _component_Button_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @/component/Button.vue */ "./resources/js/component/Button.vue");
-/* harmony import */ var _vue_reactivity__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @vue/reactivity */ "./node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js");
-/* harmony import */ var _vue_runtime_core__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @vue/runtime-core */ "./node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js");
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm-bundler.js");
+/* harmony import */ var _vue_reactivity__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @vue/reactivity */ "./node_modules/@vue/reactivity/dist/reactivity.esm-bundler.js");
+/* harmony import */ var _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @vue/runtime-core */ "./node_modules/@vue/runtime-core/dist/runtime-core.esm-bundler.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm-bundler.js");
 /* harmony import */ var vue_toastification__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! vue-toastification */ "./node_modules/vue-toastification/dist/index.mjs");
 /* harmony import */ var _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @inertiajs/inertia-vue3 */ "./node_modules/@inertiajs/inertia-vue3/dist/index.js");
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -21568,7 +21675,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  props: ["student", "quizId"],
+  props: ["student", "quizId", "status"],
   setup: function setup(__props, _ref) {
     var expose = _ref.expose;
     expose();
@@ -21581,23 +21688,26 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       "test-answer": _Pages_ShowQuizMaker_TypeAns_TestAnswer_vue__WEBPACK_IMPORTED_MODULE_2__["default"]
     };
     var studentId = props.student.student.id;
-    var form = (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_5__.useForm)(_defineProperty({}, studentId, {
-      points: null,
-      point: {
-        point: null,
-        id: props.quizId
-      }
-    }));
-    var showAns = (0,_vue_reactivity__WEBPACK_IMPORTED_MODULE_6__.ref)(false);
-    var store = (0,vuex__WEBPACK_IMPORTED_MODULE_7__.useStore)();
-    (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_8__.onMounted)(function () {
+    var form = (0,_inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_5__.useForm)({
+      id: props.quizId,
+      points: _defineProperty({}, studentId, {})
+    });
+    (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.watch)(function () {
+      return props.status;
+    }, function (val) {
+      showAns.value = val;
+      console.log(val);
+    });
+    var showAns = (0,_vue_reactivity__WEBPACK_IMPORTED_MODULE_7__.ref)(false);
+    var store = (0,vuex__WEBPACK_IMPORTED_MODULE_8__.useStore)();
+    (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.onMounted)(function () {
       store.commit("addStudent", studentId);
       if (!localStorage.getItem("".concat(studentId, ",*"))) localStorage.setItem("".concat(studentId, ",*"), studentPoint.value);
     });
-    var studentPoint = (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_8__.computed)(function () {
+    var studentPoint = (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.computed)(function () {
       return store.getters.getSumPointOfStudents[studentId] ? store.getters.getSumPointOfStudents[studentId] : localStorage.getItem("".concat(studentId, ",*")) ? localStorage.getItem("".concat(studentId, ",*")) : props.student.point ? props.student.point : "هنوز نمره ای ثبت نشده است";
     });
-    var loding = (0,_vue_reactivity__WEBPACK_IMPORTED_MODULE_6__.ref)(false);
+    var loding = (0,_vue_reactivity__WEBPACK_IMPORTED_MODULE_7__.ref)(false);
 
     function validation(v) {
       for (var key in v) {
@@ -21633,8 +21743,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       if (!validation(store.getters.getPointOfStudents[studentId])) {
         errorToast("نمره تمامی سوالات را وارد نمایید");
       } else {
-        form[studentId].point.point = store.getters.getSumPointOfStudents[studentId];
-        form[studentId].points = store.getters.getPointOfStudents[studentId];
+        form.points[studentId] = store.getters.getPointOfStudents[studentId];
         form.post(route("send.point"), {
           onError: function onError(errors) {
             for (var property in errors) {
@@ -21692,10 +21801,11 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       ShortAnswer: _Pages_ShowQuizMaker_TypeAns_ShortAnswer_vue__WEBPACK_IMPORTED_MODULE_1__["default"],
       TestAnswer: _Pages_ShowQuizMaker_TypeAns_TestAnswer_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
       MyButton: _component_Button_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
-      ref: _vue_reactivity__WEBPACK_IMPORTED_MODULE_6__.ref,
-      computed: _vue_runtime_core__WEBPACK_IMPORTED_MODULE_8__.computed,
-      onMounted: _vue_runtime_core__WEBPACK_IMPORTED_MODULE_8__.onMounted,
-      useStore: vuex__WEBPACK_IMPORTED_MODULE_7__.useStore,
+      ref: _vue_reactivity__WEBPACK_IMPORTED_MODULE_7__.ref,
+      computed: _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.computed,
+      onMounted: _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.onMounted,
+      watch: _vue_runtime_core__WEBPACK_IMPORTED_MODULE_6__.watch,
+      useStore: vuex__WEBPACK_IMPORTED_MODULE_8__.useStore,
       useToast: vue_toastification__WEBPACK_IMPORTED_MODULE_4__.useToast,
       useForm: _inertiajs_inertia_vue3__WEBPACK_IMPORTED_MODULE_5__.useForm
     };
@@ -26801,6 +26911,12 @@ var _hoisted_12 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
 );
 
 var _hoisted_13 = [_hoisted_12];
+var _hoisted_14 = {
+  "class": "flex flex-col gap-2 mt-3"
+};
+
+var _hoisted_15 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" ثبت نمره همگی ");
+
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)($setup["AppLayout"], {
     title: "ساخت آزمون"
@@ -26834,17 +26950,32 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 
       })]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" URL "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.url), 1
       /* TEXT */
-      )])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($props.student, function (students, index) {
+      )])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_14, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)($setup.props.student, function (student, index) {
         return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createBlock)($setup["Student"], {
           key: index,
-          student: $setup.props.student[0],
-          quizId: $setup.props.quiz.id
+          student: student,
+          quizId: $setup.props.quiz.id,
+          status: $setup.status
         }, null, 8
         /* PROPS */
-        , ["student", "quizId"]);
+        , ["student", "quizId", "status"]);
       }), 128
       /* KEYED_FRAGMENT */
-      ))])])])])];
+      )), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["MyButton"], {
+        loding: $setup.loding,
+        type: "button",
+        onClick: $setup.send,
+        "class": "w-full"
+      }, {
+        "default": (0,vue__WEBPACK_IMPORTED_MODULE_0__.withCtx)(function () {
+          return [_hoisted_15];
+        }),
+        _: 1
+        /* STABLE */
+
+      }, 8
+      /* PROPS */
+      , ["loding"])])])])])];
     }),
     _: 1
     /* STABLE */
