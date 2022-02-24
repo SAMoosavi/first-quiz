@@ -155,7 +155,7 @@ class QuizController extends Controller
                 $answer = Answer::where('question_id', "=", $value->id)->where('user_id', "=", $item->user_id)->first();
                 $ans->push([
                     'answerStudent' => $answer->answer,
-                    'pointStudent'=>$answer->point,
+                    'pointStudent' => $answer->point,
                     'type' => $value->type,
                     'questions' => $value->questions,
                     'option' => json_decode($value->option),
@@ -164,7 +164,7 @@ class QuizController extends Controller
                     'point' => $value->point,
                 ]);
             }
-            $student->push(['ans' => $ans, 'student' => User::find($item->user_id)]);
+            $student->push(['ans' => $ans, 'student' => User::find($item->user_id), 'point' => $item->point]);
         }
 
         return Inertia::render('ShowQuizMaker/ShowQuiz', ['quiz' => $quiz, 'student' => $student]);
