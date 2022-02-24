@@ -71,6 +71,10 @@ export default createStore({
         pointStudents(state, { studentId, point }) {
             state.pointOfStudents[studentId] = point;
         },
+        removePoint(state, studentId) {
+            delete state.pointsOfStudents[studentId];
+            delete state.pointOfStudents[studentId];
+        },
     },
     getters: {
         // Creat Quiz
