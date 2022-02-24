@@ -34,13 +34,14 @@ const point = reactive({
     point: "",
 });
 
-point.point = props.ans.pointStudent
-    ? props.ans.pointStudent
-    : localStorage.getItem(`${point.studentId},${point.questionId}`)
-    ? localStorage.getItem(`${point.studentId},${point.questionId}`)
-    : !props.ans.answerStudent
-    ? 0
-    : "";
+point.point =
+    props.ans.pointStudent !== ""
+        ? props.ans.pointStudent
+        : localStorage.getItem(`${point.studentId},${point.questionId}`)
+        ? localStorage.getItem(`${point.studentId},${point.questionId}`)
+        : !props.ans.answerStudent
+        ? 0
+        : "";
 
 const store = useStore();
 onMounted(() => {

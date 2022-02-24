@@ -48,14 +48,15 @@ const point = reactive({
     questionId: props.ans.id,
     point: "",
 });
-point.point = props.ans.pointStudent
-    ? props.ans.pointStudent
-    : localStorage.getItem(`${point.studentId},${point.questionId}`)
-    ? localStorage.getItem(`${point.studentId},${point.questionId}`)
-    : "";
+point.point =
+    props.ans.pointStudent !== ""
+        ? props.ans.pointStudent
+        : localStorage.getItem(`${point.studentId},${point.questionId}`)
+        ? localStorage.getItem(`${point.studentId},${point.questionId}`)
+        : "";
 
 function getingPoint() {
-    return props.ans.pointStudent
+    return props.ans.pointStudent !== ""
         ? props.ans.pointStudent
         : localStorage.getItem(`${point.studentId},${point.questionId}`)
         ? localStorage.getItem(`${point.studentId},${point.questionId}`)
