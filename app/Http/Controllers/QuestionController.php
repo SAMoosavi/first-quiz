@@ -14,13 +14,15 @@ class QuestionController extends Controller
             'questions' => "required|string",
             'option' => 'nullable|array',
             'answer' => 'nullable|string',
+            'point'=>'required|numeric',
             'uuid' => 'required|string',
         ]);
 
         $id->update([
             'questions' => $request->questions,
             'option' => json_encode($request->option),
-            'answer' => json_encode($request->answer),
+            'answer' => $request->answer,
+            'point' => $request->point,
         ]);
 
         return  back()->withInput();
