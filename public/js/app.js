@@ -21592,10 +21592,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
     var store = (0,vuex__WEBPACK_IMPORTED_MODULE_7__.useStore)();
     (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_8__.onMounted)(function () {
       store.commit("addStudent", studentId);
-      if (!localStorage.getItem("".concat(studentId, ",*"))) localStorage.setItem("".concat(studentId, ",*"), 0);
+      if (!localStorage.getItem("".concat(studentId, ",*"))) localStorage.setItem("".concat(studentId, ",*"), studentPoint.value);
     });
     var studentPoint = (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_8__.computed)(function () {
-      return store.getters.getSumPointOfStudents[studentId] ? store.getters.getSumPointOfStudents[studentId] : localStorage.getItem("".concat(studentId, ",*")) ? localStorage.getItem("".concat(studentId, ",*")) : "هنوز نمره ای ثبت نشده است";
+      return store.getters.getSumPointOfStudents[studentId] ? store.getters.getSumPointOfStudents[studentId] : localStorage.getItem("".concat(studentId, ",*")) ? localStorage.getItem("".concat(studentId, ",*")) : props.student.point ? props.student.point : "هنوز نمره ای ثبت نشده است";
     });
     var loding = (0,_vue_reactivity__WEBPACK_IMPORTED_MODULE_6__.ref)(false);
 
@@ -21656,6 +21656,13 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
               icon: true,
               rtl: false
             });
+
+            for (var key in form[studentId].points) {
+              localStorage.removeItem(studentId + "," + key);
+            }
+
+            localStorage.removeItem(studentId + ",*");
+            store.commit("removePoint", studentId);
           },
           onFinish: function onFinish() {
             showAns.value = !showAns.value;
@@ -21736,7 +21743,7 @@ __webpack_require__.r(__webpack_exports__);
       questionId: props.ans.id,
       point: ""
     });
-    point.point = props.ans.pointStudent ? props.ans.pointStudent : localStorage.getItem("".concat(point.studentId, ",").concat(point.questionId)) ? localStorage.getItem("".concat(point.studentId, ",").concat(point.questionId)) : !props.ans.answerStudent ? 0 : "";
+    point.point = props.ans.pointStudent !== "" ? props.ans.pointStudent : localStorage.getItem("".concat(point.studentId, ",").concat(point.questionId)) ? localStorage.getItem("".concat(point.studentId, ",").concat(point.questionId)) : !props.ans.answerStudent ? 0 : "";
     var store = (0,vuex__WEBPACK_IMPORTED_MODULE_4__.useStore)();
     (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_5__.onMounted)(function () {
       localStorage.setItem("".concat(point.studentId, ",").concat(point.questionId), point.point);
@@ -21819,7 +21826,7 @@ __webpack_require__.r(__webpack_exports__);
       questionId: props.ans.id,
       point: ""
     });
-    point.point = props.ans.pointStudent ? props.ans.pointStudent : localStorage.getItem("".concat(point.studentId, ",").concat(point.questionId)) ? localStorage.getItem("".concat(point.studentId, ",").concat(point.questionId)) : !props.ans.answerStudent ? 0 : "";
+    point.point = props.ans.pointStudent !== "" ? props.ans.pointStudent : localStorage.getItem("".concat(point.studentId, ",").concat(point.questionId)) ? localStorage.getItem("".concat(point.studentId, ",").concat(point.questionId)) : !props.ans.answerStudent ? 0 : "";
     var store = (0,vuex__WEBPACK_IMPORTED_MODULE_3__.useStore)();
     (0,_vue_runtime_core__WEBPACK_IMPORTED_MODULE_4__.onMounted)(function () {
       localStorage.setItem("".concat(point.studentId, ",").concat(point.questionId), point.point);
@@ -21911,10 +21918,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       questionId: props.ans.id,
       point: ""
     });
-    point.point = props.ans.pointStudent ? props.ans.pointStudent : localStorage.getItem("".concat(point.studentId, ",").concat(point.questionId)) ? localStorage.getItem("".concat(point.studentId, ",").concat(point.questionId)) : "";
+    point.point = props.ans.pointStudent !== "" ? props.ans.pointStudent : localStorage.getItem("".concat(point.studentId, ",").concat(point.questionId)) ? localStorage.getItem("".concat(point.studentId, ",").concat(point.questionId)) : "";
 
     function getingPoint() {
-      return props.ans.pointStudent ? props.ans.pointStudent : localStorage.getItem("".concat(point.studentId, ",").concat(point.questionId)) ? localStorage.getItem("".concat(point.studentId, ",").concat(point.questionId)) : props.ans.answerStudent != JSON.parse(props.ans.answer) ? 0 : props.ans.point;
+      return props.ans.pointStudent !== "" ? props.ans.pointStudent : localStorage.getItem("".concat(point.studentId, ",").concat(point.questionId)) ? localStorage.getItem("".concat(point.studentId, ",").concat(point.questionId)) : props.ans.answerStudent != JSON.parse(props.ans.answer) ? 0 : props.ans.point;
     }
 
     function getPoint() {
@@ -29201,6 +29208,10 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       var studentId = _ref6.studentId,
           point = _ref6.point;
       state.pointOfStudents[studentId] = point;
+    },
+    removePoint: function removePoint(state, studentId) {
+      delete state.pointsOfStudents[studentId];
+      delete state.pointOfStudents[studentId];
     }
   },
   getters: {

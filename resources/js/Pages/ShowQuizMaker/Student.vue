@@ -82,7 +82,13 @@ const components = {
 const studentId = props.student.student.id;
 
 const form = useForm({
-    [studentId]: { points: null, point: { point: null, id: props.quizId } },
+    [studentId]: {
+        points: null,
+        point: {
+            point: null,
+            id: props.quizId,
+        },
+    },
 });
 
 const showAns = ref(false);
@@ -90,7 +96,7 @@ const store = useStore();
 onMounted(() => {
     store.commit("addStudent", studentId);
     if (!localStorage.getItem(`${studentId},*`))
-        localStorage.setItem(`${studentId},*`, 0);
+        localStorage.setItem(`${studentId},*`, studentPoint.value);
 });
 
 let studentPoint = computed(() =>
@@ -98,6 +104,8 @@ let studentPoint = computed(() =>
         ? store.getters.getSumPointOfStudents[studentId]
         : localStorage.getItem(`${studentId},*`)
         ? localStorage.getItem(`${studentId},*`)
+        : props.student.point
+        ? props.student.point
         : "هنوز نمره ای ثبت نشده است"
 );
 
@@ -159,6 +167,12 @@ function send() {
                     icon: true,
                     rtl: false,
                 });
+
+                for (const key in form[studentId].points) {
+                    localStorage.removeItem(studentId + "," + key);
+                }
+                localStorage.removeItem(studentId + ",*");
+                store.commit("removePoint", studentId);
             },
             onFinish: () => {
                 showAns.value = !showAns.value;
