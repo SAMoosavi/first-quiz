@@ -32,15 +32,15 @@ class QuestionController extends Controller
 
     public function point(Request $request)
     {
-        foreach ($request->all() as $userId => $answers) {
+        foreach ($request->points as $userId => $answers) {
             $pointQuiz = 0;
-            foreach ($answers['points'] as $questionId => $point) {
+            foreach ($answers as $questionId => $point) {
                 Answer::where('user_id', '=', $userId)->where('question_id', '=', $questionId)->update([
                     'point' =>  number_format((float)$point, 2, '.', ''),
                 ]);
                 $pointQuiz += $point;
             }
-            StudentQuiz::where('user_id', '=', $userId)->where('quiz_id', '=', $answers['point']['id'])->update([
+            StudentQuiz::where('user_id', '=', $userId)->where('quiz_id', '=', $request->id)->update([
                 'point' => $pointQuiz,
             ]);
         }
