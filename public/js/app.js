@@ -22790,7 +22790,6 @@ __webpack_require__.r(__webpack_exports__);
     var props = __props;
     var index = props["in"];
     var ansLocalstoreeg = !!localStorage.getItem(props.question.id) ? localStorage.getItem(props.question.id) : null;
-    console.log(ansLocalstoreeg);
     var ans = (0,_vue_reactivity__WEBPACK_IMPORTED_MODULE_1__.reactive)({
       type: props.question.type,
       id: props.question.id,
@@ -27795,7 +27794,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     value: $setup.ans.ans
   }, null, 8
   /* PROPS */
-  , ["modelValue", "value"])])]);
+  , ["modelValue", "value"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)((0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.props.question.point), 1
+  /* TEXT */
+  )])]);
 }
 
 /***/ }),
@@ -27833,7 +27834,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     }
   }, null, 8
   /* PROPS */
-  , ["modelValue"])])]);
+  , ["modelValue"]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.props.question.point), 1
+  /* TEXT */
+  )])]);
 }
 
 /***/ }),
@@ -27890,7 +27893,9 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     , ["name", "value"])]);
   }), 128
   /* KEYED_FRAGMENT */
-  ))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["MyButton"], {
+  ))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.props.question.point) + " ", 1
+  /* TEXT */
+  ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)($setup["MyButton"], {
     "class": "mr-4",
     loding: $setup.loding,
     onClick: $setup.clear

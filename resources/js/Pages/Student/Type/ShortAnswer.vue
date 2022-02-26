@@ -4,7 +4,7 @@
             <h3>{{ question.questions }}</h3>
         </div>
         <div>
-            <my-input class="w-full md:w-1/2 lg:w-1/3" v-model.lazy="ans.ans" />
+            <my-input class="w-full md:w-1/2 lg:w-1/3" v-model.lazy="ans.ans" /> {{props.question.point}}
         </div>
     </div>
 </template>

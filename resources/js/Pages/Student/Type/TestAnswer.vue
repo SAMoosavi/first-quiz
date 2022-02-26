@@ -21,6 +21,7 @@
                 />
             </li>
         </ul>
+        {{ props.question.point }}
         <my-button class="mr-4" :loding="loding" @click="clear">
             پاک کردن
         </my-button>

@@ -3,7 +3,7 @@
         <div class="my-2 font-medium">
             <h3>{{ question.questions }}</h3>
         </div>
-        <div><my-textarea class="w-full" v-model.lazy="ans.ans" :value="ans.ans" /></div>
+        <div><my-textarea class="w-full" v-model.lazy="ans.ans" :value="ans.ans" />{{props.question.point}}</div>
     </div>
 </template>
 
@@ -19,7 +19,6 @@ const ansLocalstoreeg = !!localStorage.getItem(props.question.id)
     ? localStorage.getItem(props.question.id)
     : null;
 
-console.log(ansLocalstoreeg);
 const ans = reactive({
     type: props.question.type,
     id: props.question.id,
