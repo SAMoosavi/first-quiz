@@ -18,7 +18,7 @@
                 :loding="loding"
                 type="button"
                 @click="send"
-                class="w-full md:w-24 mr-auto z-10"
+                class="z-10 w-full mr-auto md:w-24"
             >
                 ثبت نمره
             </my-button> -->
@@ -92,7 +92,6 @@ watch(
     () => props.status,
     (val) => {
         showAns.value = val;
-        console.log(val);
     }
 );
 

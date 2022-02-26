@@ -21685,7 +21685,6 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return props.status;
     }, function (val) {
       showAns.value = val;
-      console.log(val);
     });
     var showAns = (0,_vue_reactivity__WEBPACK_IMPORTED_MODULE_7__.ref)(false);
     var store = (0,vuex__WEBPACK_IMPORTED_MODULE_8__.useStore)();
@@ -26918,7 +26917,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
   /* TEXT */
   )]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createTextVNode)(" " + (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)($setup.studentPoint), 1
   /* TEXT */
-  ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <my-button\n                :loding=\"loding\"\n                type=\"button\"\n                @click=\"send\"\n                class=\"w-full md:w-24 mr-auto z-10\"\n            >\n                ثبت نمره\n            </my-button> ")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(vue__WEBPACK_IMPORTED_MODULE_0__.Transition, {
+  ), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <my-button\n                :loding=\"loding\"\n                type=\"button\"\n                @click=\"send\"\n                class=\"z-10 w-full mr-auto md:w-24\"\n            >\n                ثبت نمره\n            </my-button> ")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createVNode)(vue__WEBPACK_IMPORTED_MODULE_0__.Transition, {
     "enter-active-class": "transition duration-200 ease-out origin-top ",
     "enter-from-class": "origin-top transform scale-y-0 opacity-0 ",
     "enter-to-class": "origin-top transform scale-y-100 opacity-100 ",
