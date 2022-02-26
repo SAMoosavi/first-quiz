@@ -64,12 +64,30 @@ export default createStore({
                 ...state.pointsOfStudents[studentId],
                 [questionId]: point,
             };
+
+            localStorage.setItem(`${studentId},${questionId}`, point);
+
+            let quizPoint = 0;
+            for (const questionId in state.pointsOfStudents[studentId]) {
+                const point = state.pointsOfStudents[studentId][questionId];
+                quizPoint += parseFloat(point) ? parseFloat(point) : 0;
+            }
+            quizPoint = quizPoint.toFixed(2);
+            state.pointOfStudents[studentId] = quizPoint;
+            localStorage.setItem(`${studentId},*`, quizPoint);
         },
         pointQuestion(state, { studentId, questionId, point }) {
+            let pVal = state.pointsOfStudents[studentId][questionId];
+            let val = point;
             state.pointsOfStudents[studentId][questionId] = point;
-        },
-        pointStudents(state, { studentId, point }) {
-            state.pointOfStudents[studentId] = point;
+            localStorage.setItem(`${studentId},${questionId}`, val);
+
+            let quizPoint = state.pointOfStudents[studentId];
+            quizPoint -= parseFloat(pVal) ? parseFloat(pVal) : 0;
+            quizPoint += parseFloat(val) ? parseFloat(val) : 0;
+            quizPoint = quizPoint.toFixed(2);
+            state.pointOfStudents[studentId] = quizPoint;
+            localStorage.setItem(`${studentId},*`, quizPoint);
         },
         removePoint(state, studentId) {
             delete state.pointsOfStudents[studentId];
