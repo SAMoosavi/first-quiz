@@ -80,9 +80,9 @@ import CountdownTimer from "@/component/CountdownTimer.vue";
 import MyButton from "@/component/Button.vue";
 import MyButtonDanger from "@/component/ButtonDanger.vue";
 
-import LongAnswer from "@/Pages/Student/Type/LongAnswer.vue";
-import ShortAnswer from "@/Pages/Student/Type/ShortAnswer.vue";
-import TestAnswer from "@/Pages/Student/Type/TestAnswer.vue";
+import LongAnswer from "@/Pages/Student/TypeQuiz/LongAnswer.vue";
+import ShortAnswer from "@/Pages/Student/TypeQuiz/ShortAnswer.vue";
+import TestAnswer from "@/Pages/Student/TypeQuiz/TestAnswer.vue";
 
 import { ref } from "@vue/reactivity";
 import { useStore } from "vuex";
