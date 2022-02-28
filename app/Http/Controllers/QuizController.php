@@ -87,7 +87,7 @@ class QuizController extends Controller
         }
         $quiz =  Question::find($request->answer[0]['id'])->quiz;
 
-        StudentQuiz::where('user_id', '=', $userId)->where('quiz_id', '=', $quiz->id)->get()[0]->update([
+        StudentQuiz::where('user_id', '=', $userId)->where('quiz_id', '=', $quiz->id)->first()->update([
             'end' => date("Y-m-d H:i:s"),
         ]);
         return Redirect::route('dashboard');
@@ -96,7 +96,8 @@ class QuizController extends Controller
     public function showStudent(Quiz $uuid)
     {
         $quiz = $uuid;
-        if ($quiz->user_id != Auth::user()->id) {
+        $user = User::find(auth()->id());
+        if ($quiz->user_id != $user->id) {
             $now = strtotime(date("Y-m-d H:i:s"));
 
             if (!!$quiz->start && $now < strtotime($quiz->start)) {
@@ -110,19 +111,45 @@ class QuizController extends Controller
 
                 return Inertia::render('Student/NotStart', ['uuid' => $uuid, 'now' => $now, 'start' => $now, 'time' => $time]);
             } elseif (!!$quiz->end && $now > strtotime($quiz->end)) {
-                dd('finished time');
+                $studentQuiz = StudentQuiz::where('user_id', '=', $user->id)->where('quiz_id', '=', $quiz->id)->first();
+                $questions = $quiz->questions->map(function ($question) {
+                    $ans  = Answer::where('question_id', '=', $question->id)->where('user_id', '=', auth()->id())->first();
+                    return [
+                        'id' => $question->id,
+                        'questions' => $question->questions,
+                        'type' => $question->type,
+                        'option' => json_decode($question->option),
+                        'answer' => $question->answer,
+                        'point' => $question->point,
+                        'quiz_id' => $question->quiz_id,
+                        'answerStudent' => $ans->answer,
+                        'pointStudent' => $ans->point,
+                    ];
+                });
+                return Inertia::render('Student/ResultQuiz', ['quiz' => $quiz, 'questions' =>  $questions, 'studentQuiz' => $studentQuiz]);
             } else {
-                $user = User::find(auth()->id());
 
                 if (!StudentQuiz::where('user_id', '=', $user->id)->where('quiz_id', '=', $quiz->id)->get()->isEmpty()) {
-                    $studentQuiz = StudentQuiz::where('user_id', '=', $user->id)->where('quiz_id', '=', $quiz->id)->get()[0];
+                    $studentQuiz = StudentQuiz::where('user_id', '=', $user->id)->where('quiz_id', '=', $quiz->id)->first();
                     if (!$studentQuiz->end) {
                         $quiz->questions;
-
                         return Inertia::render('Student/ShowQuiz', ['quiz' => $quiz, 'start' => strtotime($studentQuiz->start), 'now' => $now]);
                     } else {
-                        dd($studentQuiz);
-                        // return Inertia::render('Student/ShowQuiz', ['quiz' => $quiz]);
+                        $questions = $quiz->questions->map(function ($question) {
+                            $ans  = Answer::where('question_id', '=', $question->id)->where('user_id', '=', auth()->id())->first();
+                            return [
+                                'id' => $question->id,
+                                'questions' => $question->questions,
+                                'type' => $question->type,
+                                'option' => json_decode($question->option),
+                                'answer' => $question->answer,
+                                'point' => $question->point,
+                                'quiz_id' => $question->quiz_id,
+                                'answerStudent' => $ans->answer,
+                                'pointStudent' => $ans->point,
+                            ];
+                        });
+                        return Inertia::render('Student/ResultQuiz', ['quiz' => $quiz, 'questions' =>  $questions, 'studentQuiz' => $studentQuiz]);
                     }
                 } else {
                     $quiz->questions;
