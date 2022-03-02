@@ -87,7 +87,9 @@ class QuizController extends Controller
         }
         $quiz =  Question::find($request->answer[0]['id'])->quiz;
 
-        StudentQuiz::where('user_id', '=', $userId)->where('quiz_id', '=', $quiz->id)->first()->update([
+        $studentQuiz = StudentQuiz::where('user_id', '=', $userId)->where('quiz_id', '=', $quiz->id)->first();
+        $studentQuiz->update([
+            'start' => $studentQuiz->created_at,
             'end' => date("Y-m-d H:i:s"),
         ]);
         return Redirect::route('dashboard');

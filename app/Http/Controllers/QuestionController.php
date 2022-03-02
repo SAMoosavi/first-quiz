@@ -40,7 +40,9 @@ class QuestionController extends Controller
                 ]);
                 $pointQuiz += $point;
             }
-            StudentQuiz::where('user_id', '=', $userId)->where('quiz_id', '=', $request->id)->update([
+            $studentQuiz  = StudentQuiz::where('user_id', '=', $userId)->where('quiz_id', '=', $request->id)->first();
+            $studentQuiz->update([
+                'start' =>  $studentQuiz->created_at,
                 'point' => $pointQuiz,
             ]);
         }
