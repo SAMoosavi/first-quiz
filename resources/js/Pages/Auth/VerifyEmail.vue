@@ -19,7 +19,7 @@
             شما ارسال خواهیم کرد.
         </div>
 
-        <form @submit.prevent="submit">
+        <form @submit.prevent="submit" novalidate>
             <div class="flex items-center justify-between mt-4">
                 <Button
                     class="mr-4"
