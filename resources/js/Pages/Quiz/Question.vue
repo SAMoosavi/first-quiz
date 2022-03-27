@@ -24,7 +24,7 @@
             <div
                 class="flex flex-auto gap-3 px-2 md:hidden group-hover:px-4 md:group-hover:flex lg:group-hover:flex-col"
             >
-                <Button :type="button" @click="add" :loding="lodAdd">
+                <Button type="button" @click="add" :loding="lodAdd">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         class="w-6 h-6"
@@ -40,7 +40,7 @@
                         />
                     </svg>
                 </Button>
-                <Button :type="button" @click="remove" :loding="lodRemove">
+                <Button type="button" @click="remove" :loding="lodRemove">
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         class="w-6 h-6"
